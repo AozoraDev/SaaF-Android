@@ -16,10 +16,19 @@ import androidx.core.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.content.Intent;
+import android.provider.MediaStore;
+import android.database.Cursor;
+import android.net.Uri;
+import android.app.Activity;
+import android.widget.TextView;
+import com.aozoradev.saaf.PathUtil;
+import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Button button;
+    private TextView textView;
     private AlertDialog.Builder dialog;
     private ListView listView;
     
@@ -32,6 +41,21 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
         } else {
             initializeLogic();
+        }
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            String path = null;
+            try {
+            path = PathUtil.getPath(MainActivity.this, uri);
+            } catch (URISyntaxException err) {
+                return; //idk what should i do
+            }
+            textView.setText(path);
         }
     }
     
@@ -63,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private void initialize(Bundle _savedInstanceState) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         button = (Button) findViewById(R.id.button);
+        textView = (TextView) findViewById(R.id.textView);
         listView = (ListView) findViewById(R.id.listView);
         setSupportActionBar(toolbar);
         listView.setVisibility(View.GONE);
@@ -79,6 +104,15 @@ public class MainActivity extends AppCompatActivity {
                 });
             dialog.create().show();
         }
+        
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseFile.setType("*/*");
+                chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+                startActivityForResult(chooseFile, 200);
+            }
+        });
     }
     
     private void readZip () {
