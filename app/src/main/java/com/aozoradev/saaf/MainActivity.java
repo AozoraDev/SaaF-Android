@@ -21,16 +21,22 @@ import android.provider.MediaStore;
 import android.database.Cursor;
 import android.net.Uri;
 import android.app.Activity;
-import android.widget.TextView;
 import com.aozoradev.saaf.PathUtil;
 import java.net.URISyntaxException;
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipEntry;
+import java.io.IOException;
+import java.util.ArrayList;
+import android.widget.ArrayAdapter;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Button button;
-    private TextView textView;
     private AlertDialog.Builder dialog;
     private ListView listView;
+    private ArrayList<String> listItems = new ArrayList<String>();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +57,25 @@ public class MainActivity extends AppCompatActivity {
             Uri uri = data.getData();
             String path = null;
             try {
-            path = PathUtil.getPath(MainActivity.this, uri);
+                path = PathUtil.getPath(MainActivity.this, uri);
             } catch (URISyntaxException err) {
                 return; //idk what should i do
             }
-            textView.setText(path);
+            
+            try {
+                readOswOrZipIGuess(path);
+                if (listItems.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Failed to load the file", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+                listView.setAdapter(adapter);
+                listView.setVisibility(View.VISIBLE);
+                button.setVisibility(View.GONE);
+            } catch (IOException err) {
+                err.printStackTrace();
+                return;
+            }
         }
     }
     
@@ -87,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
     private void initialize(Bundle _savedInstanceState) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         button = (Button) findViewById(R.id.button);
-        textView = (TextView) findViewById(R.id.textView);
         listView = (ListView) findViewById(R.id.listView);
         setSupportActionBar(toolbar);
         listView.setVisibility(View.GONE);
@@ -115,7 +134,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     
-    private void readZip () {
-        
+    private void readOswOrZipIGuess (String fileName) throws IOException {
+        try (FileInputStream fis = new FileInputStream(fileName);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        ZipInputStream zis = new ZipInputStream(bis)) { 
+            ZipEntry ze;
+            while ((ze = zis.getNextEntry()) != null) {
+                listItems.add(ze.getName());
+            }
+        }
     }
 }
