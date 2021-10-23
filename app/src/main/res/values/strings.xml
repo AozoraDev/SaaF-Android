@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">SaaF Android</string>
-    <string name="close_app">Close App</string>
-    <string name="copy_error">Copy Error</string>
 </resources>

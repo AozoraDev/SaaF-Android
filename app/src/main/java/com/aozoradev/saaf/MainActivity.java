@@ -1,43 +1,34 @@
 package com.aozoradev.saaf;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
-import android.content.Context;
 import android.widget.Button;
 import android.widget.ListView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import java.util.ArrayList;
+import com.aozoradev.saaf.ReadOsw;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import androidx.core.app.ActivityCompat;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 import android.content.Intent;
-import android.provider.MediaStore;
-import android.database.Cursor;
-import android.net.Uri;
-import android.app.Activity;
-import com.aozoradev.saaf.PathUtil;
-import java.net.URISyntaxException;
-import java.io.FileInputStream;
-import java.io.BufferedInputStream;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipEntry;
-import java.io.IOException;
-import java.util.ArrayList;
 import android.widget.ArrayAdapter;
+import java.net.URISyntaxException;
+import android.net.Uri;
+import android.widget.Toast;
+import android.app.Activity;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Button button;
-    private AlertDialog.Builder dialog;
     private ListView listView;
     private ArrayList<String> listItems = new ArrayList<String>();
-    
+    private AlertDialog.Builder dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,13 +50,14 @@ public class MainActivity extends AppCompatActivity {
             try {
                 path = PathUtil.getPath(MainActivity.this, uri);
             } catch (URISyntaxException err) {
-                return; //idk what should i do
+                err.printStackTrace();
+                return;
             }
             
             try {
-                readOswOrZipIGuess(path);
+                ReadOsw.load(path, listItems);
                 if (listItems.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Failed to load the file", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
                     return;
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
@@ -87,23 +79,6 @@ public class MainActivity extends AppCompatActivity {
         }
 	}
     
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 0, 0, "Dark Mode").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        return true;
-	}
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case 0 :
-                Toast.makeText(this, "Still working on it", Toast.LENGTH_SHORT).show();
-            break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    
     private void initialize(Bundle _savedInstanceState) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         button = (Button) findViewById(R.id.button);
@@ -114,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     
     private void initializeLogic () {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            dialog = new AlertDialog.Builder(this).setCancelable(false).setMessage("This app requires storage access to work properly. Please grant storage permission.");
+            dialog = new AlertDialog.Builder(MainActivity.this).setCancelable(false).setMessage("This app requires storage access to work properly. Please grant storage permission.");
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface _dialog, int _which) {
@@ -124,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.create().show();
         }
         
-        button.setOnClickListener(new View.OnClickListener() {
+      button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
                 chooseFile.setType("*/*");
@@ -132,16 +107,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(chooseFile, 200);
             }
         });
-    }
-    
-    private void readOswOrZipIGuess (String fileName) throws IOException {
-        try (FileInputStream fis = new FileInputStream(fileName);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-        ZipInputStream zis = new ZipInputStream(bis)) { 
-            ZipEntry ze;
-            while ((ze = zis.getNextEntry()) != null) {
-                listItems.add(ze.getName());
-            }
-        }
     }
 }
