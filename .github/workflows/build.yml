@@ -27,7 +27,7 @@ jobs:
     - name: Store generated apk file
       uses: actions/upload-artifact@v2
       with:
-        name: wbwwb-android
+        name: SaaF-Android
         path: |
             ./app/build/outputs/apk/debug/SaaF-Android-debug.apk
             ./app/build/outputs/apk/debug/output-metadata.json
