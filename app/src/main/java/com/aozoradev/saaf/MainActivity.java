@@ -25,6 +25,7 @@ import android.app.Activity;
 import java.io.IOException;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 
 public class MainActivity extends AppCompatActivity {
   private Toolbar toolbar;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
         String toolbarTitle = Util.getStation(this, nodeName, "station");
         RadioAdapter adapter = new RadioAdapter(radio);
+        
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setVisibility(View.VISIBLE);
@@ -103,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
     button = (Button) findViewById(R.id.button);
     recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
     setSupportActionBar(toolbar);
+    RecyclerView.ItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+    recyclerView.addItemDecoration(divider);
     recyclerView.setVisibility(View.GONE);
   }
 
