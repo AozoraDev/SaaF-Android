@@ -1,37 +1,33 @@
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent"
+  android:orientation="vertical">
+	<com.google.android.material.appbar.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay">
+		<androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+      android:background="?attr/colorPrimary" />
+	</com.google.android.material.appbar.AppBarLayout>
+	<RelativeLayout
     android:layout_width="match_parent"
-    android:orientation="vertical"
->
-<com.google.android.material.appbar.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay">
-<androidx.appcompat.widget.Toolbar
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:id="@+id/toolbar"
-    app:popupTheme="@style/AppTheme.PopupOverlay"
-    android:background="?attr/colorPrimary" />
-</com.google.android.material.appbar.AppBarLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_vertical|center_horizontal">
-<ListView
+    android:layout_height="match_parent">
+		<androidx.recyclerview.widget.RecyclerView
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:id="@+id/listView">
-
-</ListView>        
-<Button
+    android:id="@+id/recyclerView"/>
+		<Button
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     android:text="Open OSW"
-    android:id="@+id/button"/>
-</LinearLayout>
+    android:id="@+id/button"
+    android:layout_centerInParent="true"/>
+	</RelativeLayout>
 </LinearLayout>
