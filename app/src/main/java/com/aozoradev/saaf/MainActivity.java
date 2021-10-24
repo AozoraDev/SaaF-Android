@@ -11,6 +11,7 @@ import com.aozoradev.saaf.Util;
 import com.aozoradev.saaf.Radio;
 import com.aozoradev.saaf.RadioAdapter;
 import androidx.core.content.ContextCompat;
+import java.util.Arrays;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.app.AlertDialog;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
   private AlertDialog.Builder dialog;
+  private String[] stationName = { "AA.osw", "ADVERTS.osw", "AMBIENCE.osw", "BEATS.osw", "CH.osw", "CO.osw", "CR.osw", "CUTSCENE.osw", "DS.osw", "HC.osw", "MH.osw", "MR.osw", "NJ.osw", "RE.osw", "RG.osw", "TK.osw" };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +72,22 @@ public class MainActivity extends AppCompatActivity {
       }
 
       DocumentFile df = DocumentFile.fromSingleUri(getApplicationContext(), uri);
-      String nodeName = df.getName().replaceAll(".osw", "");
+      String nodeName = df.getName();
 
       try {
-        radio = Radio.createRadioList(this, path, nodeName);
-        if (radio.isEmpty()) {
+        radio = Radio.createRadioList(this, path, nodeName.replaceAll(".osw", ""));
+        boolean isEqual = Arrays.stream(stationName).anyMatch(nodeName::equals);
+        
+        if (isEqual == false) {
           Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
           return;
         }
-        String toolbarTitle = Util.getStation(this, nodeName, "station");
+        else if (radio.isEmpty()) {
+          Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
+          return;
+        }
+        
+        String toolbarTitle = Util.getStation(this, nodeName.replaceAll(".osw", ""), "station");
         RadioAdapter adapter = new RadioAdapter(radio);
         
         recyclerView.setAdapter(adapter);
@@ -106,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
     setSupportActionBar(toolbar);
     RecyclerView.ItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+    recyclerView.setHasFixedSize(true);
     recyclerView.addItemDecoration(divider);
     recyclerView.setVisibility(View.GONE);
   }

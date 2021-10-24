@@ -49,7 +49,7 @@ public class Radio {
             String _artist = "track" + index + ".artist";
             String title = prefs.node(nodeName).get(_title, null);
             String artist = prefs.node(nodeName).get(_artist, null);
-            songs.add(new Radio(title, artist));
+            songs.add(new Radio(title, (artist == null ? "-" : artist)));
           }
         } finally {
           if (metaStream != null) {

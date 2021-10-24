@@ -11,14 +11,23 @@ import com.aozoradev.saaf.Radio;
 
 public class RadioAdapter extends
     RecyclerView.Adapter<RadioAdapter.ViewHolder> {
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title;
         public TextView artist;
+        private Context context;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(Context context, View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             artist = (TextView) itemView.findViewById(R.id.artist);
+            this.context = context;
+            itemView.setOnClickListener(this);
+        }
+        
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            // Will do something on here in the next update
         }
     }
     
@@ -33,7 +42,7 @@ public class RadioAdapter extends
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View radioView = inflater.inflate(R.layout.list_adapter, parent, false);
-        ViewHolder viewHolder = new ViewHolder(radioView);
+        ViewHolder viewHolder = new ViewHolder(context, radioView);
         
         return viewHolder;
     }
