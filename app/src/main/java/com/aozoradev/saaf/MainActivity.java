@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.widget.Toast;
 import android.app.Activity;
 import java.io.IOException;
+import androidx.documentfile.provider.DocumentFile;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -42,31 +43,43 @@ public class MainActivity extends AppCompatActivity {
     }
     
     @Override
+    public void onBackPressed() {
+      super.onBackPressed();
+      finishAffinity();
+      int pid = android.os.Process.myPid();
+      android.os.Process.killProcess(pid);
+    }
+    
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
             String path = null;
             try {
-                path = PathUtil.getPath(MainActivity.this, uri);
+              path = PathUtil.getPath(MainActivity.this, uri);
             } catch (URISyntaxException err) {
-                err.printStackTrace();
-                return;
+              err.printStackTrace();
+              return;
             }
             
+            DocumentFile df = DocumentFile.fromSingleUri(getApplicationContext(), uri);
+            String nodeName = df.getName().replaceAll(".osw", "");
+            
             try {
-                ReadOsw.load(getApplicationContext(), path, listItems);
-                if (listItems.isEmpty()) {
-                    Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
-                listView.setAdapter(adapter);
-                listView.setVisibility(View.VISIBLE);
-                button.setVisibility(View.GONE);
+              ReadOsw.load(this, path, listItems, nodeName);
+              if (listItems.isEmpty()) {
+                Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
+                  return;
+              }
+              String toolbarTitle = ReadOsw.getName(this, nodeName, "station");
+              ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+              listView.setAdapter(adapter);
+              listView.setVisibility(View.VISIBLE);
+              button.setVisibility(View.GONE);
+              getSupportActionBar().setTitle(toolbarTitle);
             } catch (IOException err) {
                 err.printStackTrace();
-                return;
             }
         }
     }
