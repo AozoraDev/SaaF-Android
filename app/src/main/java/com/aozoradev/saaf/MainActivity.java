@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             }
             
             try {
-                ReadOsw.load(path, listItems);
+                ReadOsw.load(getApplicationContext(), path, listItems);
                 if (listItems.isEmpty()) {
                     Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
                     return;
