@@ -1,4 +1,7 @@
 #!/bin/bash
+trap "exit" INT
+set -e
+
 bash gradlew assembleDebug --no-daemon --info
 
 #Check if build on Termux using ugly way
@@ -14,18 +17,18 @@ if [ $PREFIX == "/data/data/com.termux/files/usr" ] ; then
     echo "App installed"
   fi
   confirm() {
-    read -r -p "${1:-You want to open the app? [y/N] (default: y)} " response
+    read -p "You want to open the app? [y/N] (default: y) " response
     case "$response" in
-      [yY][eE][sS]|[yY]) 
-        true
+      [yY]*) 
+        am start --user 0 -n com.aozoradev.saaf/com.aozoradev.saaf.MainActivity
         ;;
-      [nN][oO][nN])
-        false
+      [nN]*)
+        exit 1
         ;;
       *)
-        true
+        am start --user 0 -n com.aozoradev.saaf/com.aozoradev.saaf.MainActivity
         ;;
     esac
   }
-  confirm && am start --user 0 -n com.aozoradev.saaf/com.aozoradev.saaf.MainActivity
+  confirm
 fi
