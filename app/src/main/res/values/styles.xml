@@ -8,6 +8,6 @@
 		<item name="colorControlHighlight">@color/colorControlHighlight</item>
 		<item name="colorControlNormal">@color/colorControlNormal</item>
     </style>
-	<style 	name="AppTheme.AppBarOverlay"	parent="ThemeOverlay.AppCompat.DayNight.ActionBar"/>
-	<style 	name="AppTheme.PopupOverlay"	parent="ThemeOverlay.AppCompat.DayNight"/>
+	<style 	name="AppTheme.AppBarOverlay"	parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+	<style 	name="AppTheme.PopupOverlay"	parent="Theme.AppCompat.DayNight"/>
 </resources>

@@ -27,6 +27,11 @@ import java.io.IOException;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
   private Toolbar toolbar;
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
   private AlertDialog.Builder dialog;
+  private SharedPreferences sharedPref;
+  private static boolean isDarkModeEnabled;
   private static final String[] stationName = { "AA.osw", "ADVERTS.osw", "AMBIENCE.osw", "BEATS.osw", "CH.osw", "CO.osw", "CR.osw", "CUTSCENE.osw", "DS.osw", "HC.osw", "MH.osw", "MR.osw", "NJ.osw", "RE.osw", "RG.osw", "TK.osw" };
 
   @Override
@@ -72,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
+    System.exit(0);
   }
 
   @Override
@@ -124,6 +132,33 @@ public class MainActivity extends AppCompatActivity {
       initializeLogic();
     }
   }
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.menu, menu);
+    menu.findItem(R.id.darkMode).setChecked(isDarkModeEnabled);
+    return true;
+  }
+  
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+        case R.id.darkMode:
+            SharedPreferences.Editor editor = sharedPref.edit();
+            if (isDarkModeEnabled == true) {
+              item.setChecked(false);
+              editor.putBoolean("darkMode", false).apply();
+            } else if (isDarkModeEnabled == false) {
+              item.setChecked(true);
+              editor.putBoolean("darkMode", true).apply();
+            }
+            Toast.makeText(this, "The changes will take effect after the restart", Toast.LENGTH_SHORT).show();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+    }
+  }
 
   private void initialize(Bundle _savedInstanceState) {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -134,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setHasFixedSize(true);
     recyclerView.addItemDecoration(divider);
     recyclerView.setVisibility(View.GONE);
+    sharedPref = getApplicationContext().getSharedPreferences("data", Context.MODE_PRIVATE);
+    isDarkModeEnabled = sharedPref.getBoolean("darkMode", false);
   }
 
   private void initializeLogic() {
