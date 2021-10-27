@@ -146,10 +146,11 @@ public class MainActivity extends AppCompatActivity {
     switch (item.getItemId()) {
         case R.id.darkMode:
             SharedPreferences.Editor editor = sharedPref.edit();
-            if (isDarkModeEnabled == true) {
+            boolean isChecked = item.isChecked();
+            if (isChecked == true) {
               item.setChecked(false);
               editor.putBoolean("darkMode", false).apply();
-            } else if (isDarkModeEnabled == false) {
+            } else if (isChecked == false) {
               item.setChecked(true);
               editor.putBoolean("darkMode", true).apply();
             }
