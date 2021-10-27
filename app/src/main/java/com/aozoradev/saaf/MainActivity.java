@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
       initializeLogic();
     }
   }
+  
+  private void exitApp() {
+    super.onBackPressed();
+    finish();
+  }
 
   @Override
   public void onBackPressed() {
@@ -57,13 +62,16 @@ public class MainActivity extends AppCompatActivity {
     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface _dialog, int _which) {
-            finish();
-            int pid = android.os.Process.myPid();
-            android.os.Process.killProcess(pid);
+            exitApp();
         }
     })
     .setNegativeButton("NO", null);
     dialog.create().show();
+  }
+  
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
   }
 
   @Override
@@ -102,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setVisibility(View.VISIBLE);
         button.setVisibility(View.GONE);
-        getSupportActionBar().setTitle(toolbarTitle);
+        getSupportActionBar().setSubtitle(toolbarTitle);
       } catch (IOException err) {
         err.printStackTrace();
       }
