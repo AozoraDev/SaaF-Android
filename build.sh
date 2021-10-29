@@ -2,7 +2,7 @@
 trap "exit" INT
 set -e
 
-bash gradlew assembleDebug --no-daemon --info
+bash gradlew assembleDebug --no-daemon --info --stacktrace
 
 #Check if build on Termux using ugly way
 if [ $PREFIX == "/data/data/com.termux/files/usr" ] ; then

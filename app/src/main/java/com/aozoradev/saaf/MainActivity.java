@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
 import java.util.Arrays;
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
 import androidx.core.app.ActivityCompat;
 import android.content.Intent;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
   private Button button;
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
-  private AlertDialog.Builder dialog;
+  private MaterialAlertDialogBuilder dialog;
   private SharedPreferences sharedPref;
   private static boolean isDarkModeEnabled;
   private static final String[] stationName = { "AA.osw", "ADVERTS.osw", "AMBIENCE.osw", "BEATS.osw", "CH.osw", "CO.osw", "CR.osw", "CUTSCENE.osw", "DS.osw", "HC.osw", "MH.osw", "MR.osw", "NJ.osw", "RE.osw", "RG.osw", "TK.osw" };
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    dialog = new AlertDialog.Builder(MainActivity.this)
+    dialog = new MaterialAlertDialogBuilder(MainActivity.this)
     .setCancelable(true).setMessage("Are you sure you want to close this app?")
     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
         @Override
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         }
     })
     .setNegativeButton("NO", null);
-    dialog.create().show();
+    dialog.show();
   }
   
   @Override
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void initializeLogic() {
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-      dialog = new AlertDialog.Builder(MainActivity.this)
+      dialog = new MaterialAlertDialogBuilder(MainActivity.this)
       .setCancelable(false).setMessage("This app requires storage access to work properly. Please grant storage permission.")
       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
         @Override
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
           }, 1000);
         }
       });
-      dialog.create().show();
+      dialog.show();
     }
 
     button.setOnClickListener(new View.OnClickListener() {
