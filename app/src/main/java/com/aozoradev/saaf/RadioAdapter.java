@@ -9,15 +9,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
+import com.aozoradev.saaf.constant.Constant;
 
 public class RadioAdapter extends
     RecyclerView.Adapter<RadioAdapter.ViewHolder> {
-    private static final String[] itemsOption = { "Play", "Extract" };
-      
+    
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title;
         public TextView artist;
-        public MaterialAlertDialogBuilder dialog;
         private Context context;
         
         public ViewHolder(Context context, View itemView) {
@@ -32,10 +31,18 @@ public class RadioAdapter extends
         public void onClick(View view) {
             int position = getAdapterPosition();
             Radio _radio = mRadio.get(position);
-            String fileName = _radio.getFileName();
-            dialog = new MaterialAlertDialogBuilder(this.context)
-            .setTitle(fileName)
-            .setItems(itemsOption, new DialogInterface.OnClickListener() {
+
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this.context);
+            Context dialogContext = dialog.getContext();
+            LayoutInflater dialogLayoutInflater = LayoutInflater.from(dialogContext);
+            View dialogView = dialogLayoutInflater.inflate(R.layout.custom_title, null);
+            TextView mainTitle = (TextView) dialogView.findViewById(R.id.mainTitle);
+            TextView subTitle = (TextView) dialogView.findViewById(R.id.subTitle);
+            mainTitle.setText(_radio.getTitle());
+            subTitle.setText(_radio.getFileName());
+            
+            dialog.setCustomTitle(dialogView)
+            .setItems(Constant.itemsOption, new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface _dialog, int _which) {
                 switch (_which) {

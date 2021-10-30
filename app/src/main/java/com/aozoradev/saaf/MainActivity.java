@@ -2,6 +2,7 @@ package com.aozoradev.saaf;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.aozoradev.saaf.constant.Constant;
 import com.google.android.material.button.MaterialButton;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -35,11 +36,10 @@ public class MainActivity extends AppCompatActivity {
   private MaterialButton button;
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
-  private MaterialAlertDialogBuilder dialog;
+  private MaterialAlertDialogBuilder backPressedDialog;
   private SharedPreferences sharedPref;
   private static boolean isDarkModeEnabled;
-  private static final String[] stationName = { "AA.osw", "ADVERTS.osw", "AMBIENCE.osw", "BEATS.osw", "CH.osw", "CO.osw", "CR.osw", "CUTSCENE.osw", "DS.osw", "HC.osw", "MH.osw", "MR.osw", "NJ.osw", "RE.osw", "RG.osw", "TK.osw" };
-
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -61,16 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    dialog = new MaterialAlertDialogBuilder(MainActivity.this)
-    .setCancelable(true).setMessage("Are you sure you want to close this app?")
-    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface _dialog, int _which) {
-            exitApp();
-        }
-    })
-    .setNegativeButton("NO", null);
-    dialog.create().show();
+    backPressedDialog.show();
   }
   
   @Override
@@ -84,20 +75,13 @@ public class MainActivity extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
       Uri uri = data.getData();
-      String path = null;
-      try {
-        path = PathUtil.getPath(MainActivity.this, uri);
-      } catch (URISyntaxException err) {
-        err.printStackTrace();
-        return;
-      }
 
       DocumentFile df = DocumentFile.fromSingleUri(getApplicationContext(), uri);
       String nodeName = df.getName();
 
       try {
-        radio = Radio.createRadioList(this, path, nodeName.replaceAll(".osw", ""));
-        boolean isEqual = Arrays.stream(stationName).anyMatch(nodeName::equals);
+        radio = Radio.createRadioList(this, uri, nodeName.replaceAll(".osw", ""));
+        boolean isEqual = Arrays.stream(Constant.stationName).anyMatch(nodeName::equals);
         
         if (isEqual == false) {
           Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
@@ -163,6 +147,15 @@ public class MainActivity extends AppCompatActivity {
     button = (MaterialButton) findViewById(R.id.button);
     recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
     setSupportActionBar(toolbar);
+    backPressedDialog = new MaterialAlertDialogBuilder(MainActivity.this)
+    .setCancelable(true).setMessage("Are you sure you want to close this app?")
+    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface _dialog, int _which) {
+            exitApp();
+        }
+    })
+    .setNegativeButton("NO", null);
     RecyclerView.ItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
     recyclerView.setHasFixedSize(true);
     recyclerView.addItemDecoration(divider);
@@ -173,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void initializeLogic() {
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-      dialog = new MaterialAlertDialogBuilder(MainActivity.this)
+      new MaterialAlertDialogBuilder(MainActivity.this)
       .setCancelable(false).setMessage("This app requires storage access to work properly. Please grant storage permission.")
       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
         @Override
@@ -182,8 +175,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
           }, 1000);
         }
-      });
-      dialog.create().show();
+      }).show();
     }
 
     button.setOnClickListener(new View.OnClickListener() {

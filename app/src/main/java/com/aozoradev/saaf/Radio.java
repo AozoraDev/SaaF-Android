@@ -10,6 +10,7 @@ import org.ini4j.IniPreferences;
 import java.util.prefs.Preferences;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
+import android.net.Uri;
 
 public class Radio {
   private String mTitle;
@@ -36,7 +37,7 @@ public class Radio {
 
   private static int index = 0;
 
-  public static ArrayList < Radio > createRadioList(Context context, String fileName, String nodeName) throws IOException {
+  public static ArrayList < Radio > createRadioList(Context context, Uri uri, String nodeName) throws IOException {
     ArrayList < Radio > songs = new ArrayList < Radio > ();
 
     FileInputStream fis = null;
@@ -45,19 +46,19 @@ public class Radio {
     InputStream metaStream = null;
 
     try {
-      fis = new FileInputStream(fileName);
+      fis = new FileInputStream(Util.getPath(context, uri));
       bis = new BufferedInputStream(fis);
       zis = new ZipInputStream(bis);
       metaStream = context.getAssets().open("meta.ini");
       Preferences prefs = new IniPreferences(metaStream);
-      while (zis.getNextEntry() != null) {
+      ZipEntry ze;
+      while ((ze = zis.getNextEntry()) != null) {
         index = ++index;
-        ZipEntry zipEntry = new ZipEntry(zis.getNextEntry());
         String _title = "track" + index + ".title";
         String _artist = "track" + index + ".artist";
         String title = prefs.node(nodeName).get(_title, null);
         String artist = prefs.node(nodeName).get(_artist, null);
-        String _fileName = zipEntry.getName();
+        String _fileName = ze.getName();
         songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName));
       }
     } finally {
