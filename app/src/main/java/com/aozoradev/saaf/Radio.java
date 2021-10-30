@@ -9,14 +9,17 @@ import android.content.Context;
 import org.ini4j.IniPreferences;
 import java.util.prefs.Preferences;
 import java.io.InputStream;
+import java.util.zip.ZipEntry;
 
 public class Radio {
   private String mTitle;
   private String mArtist;
+  private String mFileName;
 
-  public Radio(String title, String artist) {
+  public Radio(String title, String artist, String fileName) {
     mTitle = title;
     mArtist = artist;
+    mFileName = fileName;
   }
 
   public String getTitle() {
@@ -25,6 +28,10 @@ public class Radio {
 
   public String getArtist() {
     return mArtist;
+  }
+  
+  public String getFileName() {
+    return mFileName;
   }
 
   private static int index = 0;
@@ -45,13 +52,16 @@ public class Radio {
       Preferences prefs = new IniPreferences(metaStream);
       while (zis.getNextEntry() != null) {
         index = ++index;
+        ZipEntry zipEntry = new ZipEntry(zis.getNextEntry());
         String _title = "track" + index + ".title";
         String _artist = "track" + index + ".artist";
         String title = prefs.node(nodeName).get(_title, null);
         String artist = prefs.node(nodeName).get(_artist, null);
-        songs.add(new Radio(title, (artist == null ? "-" : artist)));
+        String _fileName = zipEntry.getName();
+        songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName));
       }
     } finally {
+      index = 0;
       if (metaStream != null) {
         metaStream.close();
       }

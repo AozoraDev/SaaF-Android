@@ -2,7 +2,7 @@ package com.aozoradev.saaf;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
+import com.google.android.material.button.MaterialButton;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
@@ -32,7 +32,7 @@ import android.content.SharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
   private Toolbar toolbar;
-  private Button button;
+  private MaterialButton button;
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
   private MaterialAlertDialogBuilder dialog;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         }
     })
     .setNegativeButton("NO", null);
-    dialog.show();
+    dialog.create().show();
   }
   
   @Override
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void initialize(Bundle _savedInstanceState) {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
-    button = (Button) findViewById(R.id.button);
+    button = (MaterialButton) findViewById(R.id.button);
     recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
     setSupportActionBar(toolbar);
     RecyclerView.ItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
           }, 1000);
         }
       });
-      dialog.show();
+      dialog.create().show();
     }
 
     button.setOnClickListener(new View.OnClickListener() {

@@ -7,15 +7,19 @@ import java.util.List;
 import android.view.ViewGroup;
 import android.content.Context;
 import android.view.LayoutInflater;
-import com.aozoradev.saaf.Radio;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import android.content.DialogInterface;
 
 public class RadioAdapter extends
     RecyclerView.Adapter<RadioAdapter.ViewHolder> {
+    private static final String[] itemsOption = { "Play", "Extract" };
+      
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title;
         public TextView artist;
+        public MaterialAlertDialogBuilder dialog;
         private Context context;
-
+        
         public ViewHolder(Context context, View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
@@ -27,7 +31,24 @@ public class RadioAdapter extends
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            // Will do something on here in the next update
+            Radio _radio = mRadio.get(position);
+            String fileName = _radio.getFileName();
+            dialog = new MaterialAlertDialogBuilder(this.context)
+            .setTitle(fileName)
+            .setItems(itemsOption, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface _dialog, int _which) {
+                switch (_which) {
+                  case 0:
+                    //TODO
+                  break;
+                  case 1:
+                    // TODO
+                  break;
+                }
+              }
+            });
+            dialog.create().show();
         }
     }
     
