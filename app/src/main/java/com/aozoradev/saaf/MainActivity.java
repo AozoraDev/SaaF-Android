@@ -1,28 +1,31 @@
 package com.aozoradev.saaf;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import com.aozoradev.saaf.constant.Constant;
 import com.google.android.material.button.MaterialButton;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-import java.util.ArrayList;
-import androidx.core.content.ContextCompat;
-import java.util.Arrays;
-import android.Manifest;
-import android.content.pm.PackageManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.app.ActivityCompat;
-import android.content.Intent;
-import android.widget.ArrayAdapter;
-import java.net.URISyntaxException;
-import android.net.Uri;
-import android.app.Activity;
-import java.io.IOException;
 import androidx.documentfile.provider.DocumentFile;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.net.URISyntaxException;
+
+import android.view.View;
+import android.os.Bundle;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.content.Intent;
+import android.widget.ArrayAdapter;
+import android.net.Uri;
+import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
           return;
         }
         
-        String toolbarTitle = Util.getStation(this, nodeName.replaceAll(".osw", ""), "station");
+        String toolbarTitle = Util.getStation(this, nodeName.replaceAll(".osw", ""));
         RadioAdapter adapter = new RadioAdapter(radio);
         
         recyclerView.setAdapter(adapter);

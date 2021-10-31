@@ -1,15 +1,17 @@
 package com.aozoradev.saaf;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.aozoradev.saaf.constant.Constant;
+
+import java.util.List;
+
 import android.view.View;
 import android.widget.TextView;
-import java.util.List;
 import android.view.ViewGroup;
 import android.content.Context;
 import android.view.LayoutInflater;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import android.content.DialogInterface;
-import com.aozoradev.saaf.constant.Constant;
 
 public class RadioAdapter extends
     RecyclerView.Adapter<RadioAdapter.ViewHolder> {
@@ -42,20 +44,17 @@ public class RadioAdapter extends
             subTitle.setText(_radio.getFileName());
             
             dialog.setCustomTitle(dialogView)
-            .setItems(Constant.itemsOption, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface _dialog, int _which) {
-                switch (_which) {
-                  case 0:
-                    //TODO
-                  break;
-                  case 1:
-                    // TODO
-                  break;
-                }
+            .setItems(Constant.itemsOption, (_dialog, _which) -> {
+              switch (_which) {
+                case 0:
+                  Util.playRadio(context, _radio.getPath(), _radio.getFileName());
+                break;
+                case 1:
+                  // TODO
+                break;
               }
             });
-            dialog.create().show();
+            dialog.show();
         }
     }
     

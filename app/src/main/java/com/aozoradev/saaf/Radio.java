@@ -1,17 +1,19 @@
 package com.aozoradev.saaf;
 
+import android.content.Context;
+import android.net.Uri;
+import androidx.documentfile.provider.DocumentFile;
+
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.util.zip.ZipInputStream;
-import android.content.Context;
-import org.ini4j.IniPreferences;
 import java.util.prefs.Preferences;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
-import android.net.Uri;
-import androidx.documentfile.provider.DocumentFile;
+
+import org.ini4j.IniPreferences;
 import com.anggrayudi.storage.extension.UriUtils;
 import com.anggrayudi.storage.file.DocumentFileUtils;
 
@@ -19,11 +21,13 @@ public class Radio {
   private String mTitle;
   private String mArtist;
   private String mFileName;
+  private String mPath;
 
-  public Radio(String title, String artist, String fileName) {
+  public Radio(String title, String artist, String fileName, String path) {
     mTitle = title;
     mArtist = artist;
     mFileName = fileName;
+    mPath = path;
   }
 
   public String getTitle() {
@@ -36,6 +40,10 @@ public class Radio {
   
   public String getFileName() {
     return mFileName;
+  }
+  
+  public String getPath() {
+    return mPath;
   }
 
   private static int index = 0;
@@ -65,7 +73,7 @@ public class Radio {
         String title = prefs.node(nodeName).get(_title, null);
         String artist = prefs.node(nodeName).get(_artist, null);
         String _fileName = ze.getName();
-        songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName));
+        songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path));
       }
       index = 0;
     }
