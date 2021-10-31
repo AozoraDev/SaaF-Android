@@ -6,6 +6,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.aozoradev.saaf.constant.Constant;
 
 import java.util.List;
+import java.io.IOException;
 
 import android.view.View;
 import android.widget.TextView;
@@ -47,7 +48,12 @@ public class RadioAdapter extends
             .setItems(Constant.itemsOption, (_dialog, _which) -> {
               switch (_which) {
                 case 0:
-                  Util.playRadio(context, _radio.getPath(), _radio.getFileName());
+                  try {
+                    Util.playRadio(context, _radio);
+                  } catch (IOException err) {
+                    Util.toast(context, err.getMessage());
+                    err.printStackTrace();
+                  }
                 break;
                 case 1:
                   // TODO
