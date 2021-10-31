@@ -14,7 +14,6 @@ import android.net.Uri;
 import androidx.documentfile.provider.DocumentFile;
 import com.anggrayudi.storage.extension.UriUtils;
 import com.anggrayudi.storage.file.DocumentFileUtils;
-import com.anggrayudi.storage.file.DocumentFileCompat;
 
 public class Radio {
   private String mTitle;
@@ -50,8 +49,13 @@ public class Radio {
     InputStream metaStream = null;
     
     // Get path bullshit
-    DocumentFile df = DocumentFileCompat.fromUri(context, uri);
-    String path = DocumentFileUtils.getAbsolutePath(df, context);
+    String path = null;
+    if(UriUtils.isExternalStorageDocument(uri)) {
+      DocumentFile df = UriUtils.toDocumentFile(uri, context);
+      path = DocumentFileUtils.getAbsolutePath(df, context);
+    } else {
+      path = uri.getPath();
+    }
     
     try {
       fis = new FileInputStream(path);
