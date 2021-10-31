@@ -42,11 +42,6 @@ public class Radio {
 
   public static ArrayList < Radio > createRadioList(Context context, Uri uri, String nodeName) throws IOException {
     ArrayList < Radio > songs = new ArrayList < Radio > ();
-
-    FileInputStream fis = null;
-    BufferedInputStream bis = null;
-    ZipInputStream zis = null;
-    InputStream metaStream = null;
     
     // Get path bullshit
     String path = null;
@@ -57,11 +52,10 @@ public class Radio {
       path = uri.getPath();
     }
     
-    try {
-      fis = new FileInputStream(path);
-      bis = new BufferedInputStream(fis);
-      zis = new ZipInputStream(bis);
-      metaStream = context.getAssets().open("meta.ini");
+    try (FileInputStream fis = new FileInputStream(path);
+    BufferedInputStream bis = new BufferedInputStream(fis);
+    ZipInputStream zis = new ZipInputStream(bis);
+    InputStream metaStream = context.getAssets().open("meta.ini")) {
       Preferences prefs = new IniPreferences(metaStream);
       ZipEntry ze;
       while ((ze = zis.getNextEntry()) != null) {
@@ -73,20 +67,7 @@ public class Radio {
         String _fileName = ze.getName();
         songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName));
       }
-    } finally {
       index = 0;
-      if (metaStream != null) {
-        metaStream.close();
-      }
-      if (zis != null) {
-        zis.close();
-      }
-      if (bis != null) {
-        bis.close();
-      }
-      if (fis != null) {
-        fis.close();
-      }
     }
     return songs;
   }

@@ -13,7 +13,6 @@ import java.util.Arrays;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import android.content.DialogInterface;
 import androidx.core.app.ActivityCompat;
 import android.content.Intent;
 import android.widget.ArrayAdapter;
@@ -51,11 +50,6 @@ public class MainActivity extends AppCompatActivity {
     } else {
       initializeLogic();
     }
-  }
-  
-  private void exitApp() {
-    super.onBackPressed();
-    finish();
   }
 
   @Override
@@ -149,12 +143,7 @@ public class MainActivity extends AppCompatActivity {
     setSupportActionBar(toolbar);
     backPressedDialog = new MaterialAlertDialogBuilder(MainActivity.this)
     .setCancelable(true).setMessage("Are you sure you want to close this app?")
-    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface _dialog, int _which) {
-            exitApp();
-        }
-    })
+    .setPositiveButton("YES", (_dialog, _which) -> finish())
     .setNegativeButton("NO", null);
     RecyclerView.ItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
     recyclerView.setHasFixedSize(true);
@@ -168,23 +157,14 @@ public class MainActivity extends AppCompatActivity {
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
       new MaterialAlertDialogBuilder(MainActivity.this)
       .setCancelable(false).setMessage("This app requires storage access to work properly. Please grant storage permission.")
-      .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface _dialog, int _which) {
-          ActivityCompat.requestPermissions(MainActivity.this, new String[] {
-            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-          }, 1000);
-        }
-      }).show();
+      .setPositiveButton("OK", (_dialog, _which) -> ActivityCompat.requestPermissions(MainActivity.this, Constant.permissions, 1000)).show();
     }
 
-    button.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        chooseFile.setType("*/*");
-        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-        startActivityForResult(chooseFile, 200);
-      }
+    button.setOnClickListener(v -> {
+      Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+      chooseFile.setType("*/*");
+      chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+      startActivityForResult(chooseFile, 200);
     });
   }
 }
