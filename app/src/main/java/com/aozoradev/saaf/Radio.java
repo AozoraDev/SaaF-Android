@@ -11,6 +11,10 @@ import java.util.prefs.Preferences;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import android.net.Uri;
+import androidx.documentfile.provider.DocumentFile;
+import com.anggrayudi.storage.extension.UriUtils;
+import com.anggrayudi.storage.file.DocumentFileUtils;
+import com.anggrayudi.storage.file.DocumentFileCompat;
 
 public class Radio {
   private String mTitle;
@@ -44,9 +48,13 @@ public class Radio {
     BufferedInputStream bis = null;
     ZipInputStream zis = null;
     InputStream metaStream = null;
-
+    
+    // Get path bullshit
+    DocumentFile df = DocumentFileCompat.fromUri(context, uri);
+    String path = DocumentFileUtils.getAbsolutePath(df, context);
+    
     try {
-      fis = new FileInputStream(Util.getPath(context, uri));
+      fis = new FileInputStream(path);
       bis = new BufferedInputStream(fis);
       zis = new ZipInputStream(bis);
       metaStream = context.getAssets().open("meta.ini");

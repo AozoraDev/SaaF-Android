@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.widget.ArrayAdapter;
 import java.net.URISyntaxException;
 import android.net.Uri;
-import android.widget.Toast;
 import android.app.Activity;
 import java.io.IOException;
 import androidx.documentfile.provider.DocumentFile;
@@ -84,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
         boolean isEqual = Arrays.stream(Constant.stationName).anyMatch(nodeName::equals);
         
         if (isEqual == false) {
-          Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
+          Util.toast(this, "Failed to load the file");
           return;
         }
         else if (radio.isEmpty()) {
-          Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
+          Util.toast(this, "Failed to load the file");
           return;
         }
         
@@ -101,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         button.setVisibility(View.GONE);
         getSupportActionBar().setSubtitle(toolbarTitle);
       } catch (IOException err) {
+        Util.toast(this, err.getMessage());
         err.printStackTrace();
       }
     }
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
               item.setChecked(true);
               editor.putBoolean("darkMode", true).apply();
             }
-            Toast.makeText(this, "The changes will take effect after the restart", Toast.LENGTH_SHORT).show();
+            Util.toast(this, "The changes will take effect after the restart");
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
     button.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         chooseFile.setType("*/*");
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         startActivityForResult(chooseFile, 200);
