@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
 
     defaultConfig {
         applicationId "com.aozoradev.saaf"
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

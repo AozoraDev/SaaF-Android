@@ -17,13 +17,13 @@ Since [AozoraDev](https://github.com/AozoraDev) likes to copy-paste arbitrary co
 Of course! Your contribution will be very valuable for this project. \
 \
 How to contribution? \
-You can do pull requests in the form of fixes or improvisations for this project. \
+You can open a pull request in the form of fixes or improvisations for this project. \
 Support me through [Donation](#Donation) or join [Shumi Project discord server](https://discord.gg/nVXqAJD) also a contribution.
 ## Building
-Just clone this repo then open your "Your CPU heater" aka Android Studio lol. \
+Just clone this repo then open your "CPU heater" aka Android Studio lol. \
 \
 Or if you like working with Notepad or something like that, you can type `./gradlew.bat assembleDebug` (for Windows) or `./gradlew assembleDebug` (for Linux) on your command line. \
-Make sure you have OpenJDK 17 and Android-SDK installed (OpenJDK 11 can also be used as long as you delete the debug.jks file).
+Make sure you have OpenJDK 11 and Android-SDK installed (OpenJDK 11 can also be used as long as you delete the debug.jks file).
 ## Building (Termux)
 You can also build this app on Android. \
 Make sure you have [Termux](https://github.com/termux/termux-app) (F-Droid version, not Play Store version) and [Termux-NDK by Lzhiyong](https://github.com/Lzhiyong/termux-ndk) installed then type `bash build.sh` in Termux.
