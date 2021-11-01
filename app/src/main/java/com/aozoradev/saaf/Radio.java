@@ -22,12 +22,14 @@ public class Radio {
   private String mArtist;
   private String mFileName;
   private String mPath;
+  private String mStation;
 
-  public Radio(String title, String artist, String fileName, String path) {
+  public Radio(String title, String artist, String fileName, String path, String station) {
     mTitle = title;
     mArtist = artist;
     mFileName = fileName;
     mPath = path;
+    mStation = station;
   }
 
   public String getTitle() {
@@ -44,6 +46,10 @@ public class Radio {
   
   public String getPath() {
     return mPath;
+  }
+  
+  public String getStation() {
+    return mStation;
   }
 
   private static int index = 0;
@@ -68,12 +74,11 @@ public class Radio {
       ZipEntry ze;
       while ((ze = zis.getNextEntry()) != null) {
         index = ++index;
-        String _title = "track" + index + ".title";
-        String _artist = "track" + index + ".artist";
-        String title = prefs.node(nodeName).get(_title, null);
-        String artist = prefs.node(nodeName).get(_artist, null);
+        String title = prefs.node(nodeName).get("track" + index + ".title", null);
+        String artist = prefs.node(nodeName).get("track" + index + ".artist", null);
         String _fileName = ze.getName();
-        songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path));
+        String _station = prefs.node(nodeName).get("station", null);
+        songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path, _station));
       }
       index = 0;
     }

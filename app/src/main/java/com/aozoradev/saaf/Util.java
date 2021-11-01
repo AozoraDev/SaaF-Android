@@ -9,12 +9,11 @@ import java.io.IOException;
 import java.util.prefs.Preferences;
 import java.io.InputStream;
 
-import android.app.Dialog;
+import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ImageView;
 import android.media.MediaPlayer;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -45,44 +44,47 @@ public class Util {
       mediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor(), assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
       mediaPlayer.prepareAsync();
       
-      MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+      MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
       LayoutInflater dialogLayoutInflater = LayoutInflater.from(context);
       View dialogView = dialogLayoutInflater.inflate(R.layout.media_player, null);
       TextView _radio = (TextView) dialogView.findViewById(R.id.radio);
       TextView _artist = (TextView) dialogView.findViewById(R.id.artist);
-      ImageView _icon = (ImageView) dialogView.findViewById(R.id.play);
-      dialog.setView(dialogView);
-      Dialog _dialog = dialog.show();
-      _dialog.setCanceledOnTouchOutside(true);
+      builder.setView(dialogView);
+      builder.setTitle(radio.getStation());
+      builder.setPositiveButton("Close", null);
+      builder.setNegativeButton("Pause", null);
+      AlertDialog dialog = builder.show();
+      dialog.setCanceledOnTouchOutside(true);
       
       mediaPlayer.setOnPreparedListener(mp -> {
         _radio.setText(radio.getTitle());
         _artist.setText(radio.getArtist());
-        _icon.setImageResource(R.drawable.pause);
         mediaPlayer.start();
         
-        _icon.setOnClickListener(l -> {
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(l -> {
           if (mediaPlayer.isPlaying()) {
-            _icon.setImageResource(R.drawable.play);
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText("Play");
             mediaPlayer.pause();
           } else {
-            _icon.setImageResource(R.drawable.pause);
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText("Pause");
             mediaPlayer.start();
           }
         });
       });
       
       mediaPlayer.setOnCompletionListener(mp -> {
-        mediaPlayer.release();
-        mediaPlayer = null;
-        _dialog.dismiss();
+        dialog.dismiss();
       });
       
-      _dialog.setOnCancelListener(d -> {
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        mediaPlayer = null;
+      dialog.setOnDismissListener(d -> {
+        stopAudio(mediaPlayer);
       });
     }
+  }
+  
+  private static void stopAudio (MediaPlayer mp) {
+    mp.stop();
+    mp.release();
+    mp = null;
   }
 }

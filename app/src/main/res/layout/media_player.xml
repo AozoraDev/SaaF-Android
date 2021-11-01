@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="40dp"
+    android:padding="25dp"
     android:gravity="center"
     android:orientation="vertical"
     android:layout_height="wrap_content"
@@ -28,12 +28,7 @@
     android:layout_width="wrap_content"
     android:text="Loading..."/>
   </LinearLayout>
-  <ImageView
-    android:background="?android:attr/selectableItemBackground"
-    android:id="@+id/play"
-    android:layout_height="40dp"
-    android:layout_width="40dp"
-    android:src="@drawable/play"
-    android:clickable="true"
-    android:scaleType="fitCenter"/>
+  <SeekBar
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"/>
 </LinearLayout>
