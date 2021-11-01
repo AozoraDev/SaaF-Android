@@ -36,8 +36,7 @@ public class RadioAdapter extends
             Radio _radio = mRadio.get(position);
 
             MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this.context);
-            Context dialogContext = dialog.getContext();
-            LayoutInflater dialogLayoutInflater = LayoutInflater.from(dialogContext);
+            LayoutInflater dialogLayoutInflater = LayoutInflater.from(this.context);
             View dialogView = dialogLayoutInflater.inflate(R.layout.custom_title, null);
             TextView mainTitle = (TextView) dialogView.findViewById(R.id.mainTitle);
             TextView subTitle = (TextView) dialogView.findViewById(R.id.subTitle);
@@ -50,6 +49,12 @@ public class RadioAdapter extends
                 case 0:
                   try {
                     Util.playRadio(context, _radio);
+                  } catch (NullPointerException err) {
+                    Util.toast(context, err.getMessage());
+                    err.printStackTrace();
+                  } catch (IllegalArgumentException err) {
+                    Util.toast(context, err.getMessage());
+                    err.printStackTrace();
                   } catch (IOException err) {
                     Util.toast(context, err.getMessage());
                     err.printStackTrace();

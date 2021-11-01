@@ -53,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
     } else {
       initializeLogic();
     }
+    
+    if (savedInstanceState != null && savedInstanceState.containsKey("mps")) {
+      Constant.isStarted = savedInstanceState.getBoolean("mps");
+    } else {
+      Constant.isStarted = false;
+    }
   }
 
   @Override
@@ -82,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
         if (isEqual == false) {
           Util.toast(this, "Failed to load the file");
           return;
-        }
-        else if (radio.isEmpty()) {
+        } else if (radio.isEmpty()) {
           Util.toast(this, "Failed to load the file");
           return;
         }
@@ -169,5 +174,11 @@ public class MainActivity extends AppCompatActivity {
       chooseFile = Intent.createChooser(chooseFile, "Choose a file");
       startActivityForResult(chooseFile, 200);
     });
+  }
+  
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    outState.putBoolean("mps", Constant.isStarted);
+    super.onSaveInstanceState(outState);
   }
 }
