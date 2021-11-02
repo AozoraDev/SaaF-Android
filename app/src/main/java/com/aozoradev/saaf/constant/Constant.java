@@ -3,6 +3,7 @@ package com.aozoradev.saaf.constant;
 import android.Manifest;
 
 public class Constant {
+  public static String stationCode;
   public static boolean isStarted = false;
   public static final String[] permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
   public static final String[] itemsOption = { "Play", "Extract" };

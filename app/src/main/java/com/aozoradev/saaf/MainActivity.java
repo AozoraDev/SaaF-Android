@@ -1,7 +1,6 @@
 package com.aozoradev.saaf;
 
 import com.aozoradev.saaf.constant.Constant;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +23,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.net.Uri;
 import android.app.Activity;
 import android.view.Menu;
@@ -34,7 +34,7 @@ import android.content.SharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
   private Toolbar toolbar;
-  private MaterialButton button;
+  private Button button;
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
   private MaterialAlertDialogBuilder backPressedDialog;
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
       try {
         radio = Radio.createRadioList(this, uri, nodeName.replaceAll(".osw", ""));
-        boolean isEqual = Arrays.stream(Constant.stationName).anyMatch(nodeName::equals);
+        boolean isEqual = Arrays.asList(Constant.stationName).contains(nodeName);
         
         if (isEqual == false) {
           Util.toast(this, "Failed to load the file");
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
           return;
         }
         
+        Constant.stationCode = nodeName.replaceAll(".osw", "");
         String toolbarTitle = Util.getStation(this, nodeName.replaceAll(".osw", ""));
         RadioAdapter adapter = new RadioAdapter(radio);
         
@@ -126,27 +127,25 @@ public class MainActivity extends AppCompatActivity {
   
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-        case R.id.darkMode:
-            SharedPreferences.Editor editor = sharedPref.edit();
-            boolean isChecked = item.isChecked();
-            if (isChecked == true) {
-              item.setChecked(false);
-              editor.putBoolean("darkMode", false).apply();
-            } else if (isChecked == false) {
-              item.setChecked(true);
-              editor.putBoolean("darkMode", true).apply();
-            }
-            Util.toast(this, "The changes will take effect after the restart");
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+    if (item.getItemId() == R.id.darkMode) {
+      SharedPreferences.Editor editor = sharedPref.edit();
+      boolean isChecked = item.isChecked();
+      if (isChecked == true) {
+        item.setChecked(false);
+        editor.putBoolean("darkMode", false).apply();
+      } else if (isChecked == false) {
+        item.setChecked(true);
+        editor.putBoolean("darkMode", true).apply();
+      }
+      Util.toast(this, "The changes will take effect after the restart");
+      return true;
     }
+    return super.onOptionsItemSelected(item);
   }
 
   private void initialize(Bundle _savedInstanceState) {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
-    button = (MaterialButton) findViewById(R.id.button);
+    button = (Button) findViewById(R.id.button);
     recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
     setSupportActionBar(toolbar);
     backPressedDialog = new MaterialAlertDialogBuilder(MainActivity.this)

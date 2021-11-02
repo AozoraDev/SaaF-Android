@@ -10,6 +10,8 @@ import java.util.prefs.Preferences;
 import java.io.InputStream;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
 import android.view.View;
 import android.view.LayoutInflater;
 import android.widget.TextView;
@@ -49,10 +51,13 @@ public class Util {
       View dialogView = dialogLayoutInflater.inflate(R.layout.media_player, null);
       TextView _radio = (TextView) dialogView.findViewById(R.id.radio);
       TextView _artist = (TextView) dialogView.findViewById(R.id.artist);
+      
       builder.setView(dialogView);
       builder.setTitle(radio.getStation());
+      builder.setIcon(ContextCompat.getDrawable(context, R.drawable.utp));
       builder.setPositiveButton("Close", null);
       builder.setNegativeButton("Pause", null);
+      
       AlertDialog dialog = builder.show();
       dialog.setCanceledOnTouchOutside(true);
       

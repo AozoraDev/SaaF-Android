@@ -2,8 +2,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/darkMode"
-        app:actionViewClass="com.google.android.material.button.MaterialCheckBox"
         android:checkable="true"
-        android:title="Dark Mode">
+        android:title="@string/dark_mode">
     </item>
 </menu>

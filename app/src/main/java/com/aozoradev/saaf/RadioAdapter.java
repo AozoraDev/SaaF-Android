@@ -8,6 +8,7 @@ import com.aozoradev.saaf.constant.Constant;
 import java.util.List;
 import java.io.IOException;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.TextView;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class RadioAdapter extends
             itemView.setOnClickListener(this);
         }
         
+        @SuppressLint("InflateParams")
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
