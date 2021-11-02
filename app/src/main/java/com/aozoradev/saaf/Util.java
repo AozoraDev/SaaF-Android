@@ -45,6 +45,8 @@ public class Util {
       View dialogView = dialogLayoutInflater.inflate(R.layout.media_player, null);
       TextView _radio = (TextView) dialogView.findViewById(R.id.radio);
       TextView _artist = (TextView) dialogView.findViewById(R.id.artist);
+      TextView _current = (TextView) dialogView.findViewById(R.id.current);
+      TextView _max = (TextView) dialogView.findViewById(R.id.max);
       SeekBar seekBar = (SeekBar) dialogView.findViewById(R.id.seekbar);
       
       builder.setView(dialogView);
@@ -60,6 +62,7 @@ public class Util {
       
       mediaPlayer.setOnPreparedListener(mp -> {
         seekBar.setMax(mp.getDuration());
+        _max.setText(timerConversion((long) mp.getDuration()));
         _radio.setText(radio.getTitle());
         _artist.setText(radio.getArtist());
         mediaPlayer.start();
@@ -88,7 +91,7 @@ public class Util {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
           @Override
           public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            // Do nothing
+            _current.setText(timerConversion((long) progress));
           }
           @Override
           public void onStartTrackingTouch(SeekBar seekBar) {
@@ -117,5 +120,21 @@ public class Util {
     mp.stop();
     mp.release();
     mp = null;
+  }
+  
+  // https://www.11zon.com/zon/android/how-to-play-audio-file-in-android-programmatically.php
+  private static String timerConversion(long value) {
+    String audioTime;
+    int dur = (int) value;
+    int hrs = (dur / 3600000);
+    int mns = (dur / 60000) % 60000;
+    int scs = dur % 60000 / 1000;
+    
+    if (hrs > 0) {
+      audioTime = String.format("%02d:%02d:%02d", hrs, mns, scs);
+    } else {
+      audioTime = String.format("%02d:%02d", mns, scs);
+    }
+    return audioTime;
   }
 }
