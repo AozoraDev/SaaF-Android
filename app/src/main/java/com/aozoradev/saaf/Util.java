@@ -76,10 +76,28 @@ public class Util {
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(l -> {
           if (mediaPlayer.isPlaying()) {
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText("Play");
+            mHandler.removeCallbacks(runnable);
             mediaPlayer.pause();
           } else {
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText("Pause");
+            mHandler.postDelayed(runnable, 100);
             mediaPlayer.start();
+          }
+        });
+        
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+          @Override
+          public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            // Do nothing
+          }
+          @Override
+          public void onStartTrackingTouch(SeekBar seekBar) {
+            mHandler.removeCallbacks(runnable);
+          }
+          @Override
+          public void onStopTrackingTouch(SeekBar seekBar) {
+            mp.seekTo(seekBar.getProgress());
+            mHandler.postDelayed(runnable, 100);
           }
         });
       });
