@@ -59,7 +59,7 @@ public class Util {
       mHandler = new Handler();
       
       mediaPlayer.setOnPreparedListener(mp -> {
-        seekBar.setMax(mediaPlayer.getDuration());
+        seekBar.setMax(mp.getDuration());
         _radio.setText(radio.getTitle());
         _artist.setText(radio.getArtist());
         mediaPlayer.start();
@@ -68,11 +68,10 @@ public class Util {
           @Override
           public void run() {
             seekBar.setProgress(mp.getCurrentPosition());
-            mHandler.postDelayed(runnable, 500);
+            mHandler.postDelayed(runnable, 100);
           }
         };
-        seekBar.setProgress(mp.getCurrentPosition());
-        mHandler.postDelayed(runnable, 500);
+        mHandler.postDelayed(runnable, 100);
         
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(l -> {
           if (mediaPlayer.isPlaying()) {
