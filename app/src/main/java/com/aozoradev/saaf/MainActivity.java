@@ -53,12 +53,6 @@ public class MainActivity extends AppCompatActivity {
     } else {
       initializeLogic();
     }
-    
-    if (savedInstanceState != null && savedInstanceState.containsKey("mps")) {
-      Constant.isStarted = savedInstanceState.getBoolean("mps");
-    } else {
-      Constant.isStarted = false;
-    }
   }
 
   @Override
@@ -93,15 +87,13 @@ public class MainActivity extends AppCompatActivity {
           return;
         }
         
-        Constant.stationCode = nodeName.replaceAll(".osw", "");
-        String toolbarTitle = Util.getStation(this, nodeName.replaceAll(".osw", ""));
         RadioAdapter adapter = new RadioAdapter(radio);
         
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setVisibility(View.VISIBLE);
         button.setVisibility(View.GONE);
-        getSupportActionBar().setSubtitle(toolbarTitle);
+        getSupportActionBar().setSubtitle(Constant.station);
       } catch (IOException err) {
         Util.toast(this, err.getMessage());
         err.printStackTrace();
@@ -173,11 +165,5 @@ public class MainActivity extends AppCompatActivity {
       chooseFile = Intent.createChooser(chooseFile, "Choose a file");
       startActivityForResult(chooseFile, 200);
     });
-  }
-  
-  @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    outState.putBoolean("mps", Constant.isStarted);
-    super.onSaveInstanceState(outState);
   }
 }

@@ -16,20 +16,19 @@ import java.util.zip.ZipEntry;
 import org.ini4j.IniPreferences;
 import com.anggrayudi.storage.extension.UriUtils;
 import com.anggrayudi.storage.file.DocumentFileUtils;
+import com.aozoradev.saaf.constant.Constant;
 
 public class Radio {
   private String mTitle;
   private String mArtist;
   private String mFileName;
   private String mPath;
-  private String mStation;
 
-  public Radio(String title, String artist, String fileName, String path, String station) {
+  public Radio(String title, String artist, String fileName, String path) {
     mTitle = title;
     mArtist = artist;
     mFileName = fileName;
     mPath = path;
-    mStation = station;
   }
 
   public String getTitle() {
@@ -46,10 +45,6 @@ public class Radio {
   
   public String getPath() {
     return mPath;
-  }
-  
-  public String getStation() {
-    return mStation;
   }
 
   private static int index = 0;
@@ -77,8 +72,8 @@ public class Radio {
         String title = prefs.node(nodeName).get("track" + index + ".title", null);
         String artist = prefs.node(nodeName).get("track" + index + ".artist", null);
         String _fileName = ze.getName();
-        String _station = prefs.node(nodeName).get("station", null);
-        songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path, _station));
+        Constant.station = prefs.node(nodeName).get("station", null);
+        songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path));
       }
       index = 0;
     }
