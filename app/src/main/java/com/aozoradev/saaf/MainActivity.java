@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.net.URISyntaxException;
 
-import android.view.View;
 import android.os.Bundle;
+import android.os.Build;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.net.Uri;
 import android.app.Activity;
+import android.view.View;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
   private MaterialAlertDialogBuilder backPressedDialog;
-  private static boolean isDarkModeEnabled;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     initialize(savedInstanceState);
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-      ActivityCompat.requestPermissions(MainActivity.this, Constant.permissions, 1000);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        ActivityCompat.requestPermissions(MainActivity.this, Constant.permissionsv2, 1000);
+      } else {
+        ActivityCompat.requestPermissions(MainActivity.this, Constant.permissions, 1000);
+      }
     } else {
       initializeLogic();
     }

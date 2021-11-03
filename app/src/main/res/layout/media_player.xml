@@ -38,16 +38,15 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
       <TextView
-        android:layout_alignParentStart="true"
         android:id="@+id/current"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="--/--"/>
+        android:text="@string/no_time"/>
      <TextView
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:id="@+id/max"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="--/--"/>
+        android:text="@string/no_time"/>
   </RelativeLayout>
 </LinearLayout>

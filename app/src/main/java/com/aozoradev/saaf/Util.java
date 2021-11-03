@@ -5,13 +5,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.aozoradev.saaf.constant.Constant;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import android.os.Handler;
 import android.view.View;
-import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SeekBar;
@@ -41,8 +41,7 @@ public class Util {
       mediaPlayer.prepareAsync();
       
       MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-      LayoutInflater dialogLayoutInflater = LayoutInflater.from(context);
-      View dialogView = dialogLayoutInflater.inflate(R.layout.media_player, null);
+      View dialogView = View.inflate(context, R.layout.media_player, null);
       TextView _radio = (TextView) dialogView.findViewById(R.id.radio);
       TextView _artist = (TextView) dialogView.findViewById(R.id.artist);
       TextView _current = (TextView) dialogView.findViewById(R.id.current);
@@ -78,11 +77,11 @@ public class Util {
         
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(l -> {
           if (mediaPlayer.isPlaying()) {
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText("Play");
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText(context.getString(R.string.play));
             mHandler.removeCallbacks(runnable);
             mediaPlayer.pause();
           } else {
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText("Pause");
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText(context.getString(R.string.pause));
             mHandler.postDelayed(runnable, 100);
             mediaPlayer.start();
           }
@@ -131,9 +130,9 @@ public class Util {
     int scs = dur % 60000 / 1000;
     
     if (hrs > 0) {
-      audioTime = String.format("%02d:%02d:%02d", hrs, mns, scs);
+      audioTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hrs, mns, scs);
     } else {
-      audioTime = String.format("%02d:%02d", mns, scs);
+      audioTime = String.format(Locale.getDefault(), "%02d:%02d", mns, scs);
     }
     return audioTime;
   }

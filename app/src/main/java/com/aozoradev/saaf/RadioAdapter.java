@@ -36,8 +36,7 @@ public class RadioAdapter extends
             Radio _radio = mRadio.get(position);
 
             MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this.context);
-            LayoutInflater dialogLayoutInflater = LayoutInflater.from(this.context);
-            View dialogView = dialogLayoutInflater.inflate(R.layout.custom_title, null);
+            View dialogView = View.inflate(this.context, R.layout.custom_title, null);
             TextView mainTitle = (TextView) dialogView.findViewById(R.id.mainTitle);
             TextView subTitle = (TextView) dialogView.findViewById(R.id.subTitle);
             mainTitle.setText(_radio.getTitle());
@@ -79,7 +78,6 @@ public class RadioAdapter extends
     public RadioAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
         View radioView = inflater.inflate(R.layout.list_adapter, parent, false);
         ViewHolder viewHolder = new ViewHolder(context, radioView);
         
