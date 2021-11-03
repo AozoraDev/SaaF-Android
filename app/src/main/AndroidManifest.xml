@@ -18,6 +18,7 @@
         android:theme="@style/AppTheme">
         <activity 
             android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +27,7 @@
         </activity>
         <activity
         android:exported="true"
+        android:configChanges="keyboardHidden|orientation|screenSize"
         android:name=".UncaughtExceptionActivity" />
         <provider
           android:name="androidx.core.content.FileProvider"

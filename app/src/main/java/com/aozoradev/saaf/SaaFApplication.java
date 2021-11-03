@@ -3,7 +3,6 @@ package com.aozoradev.saaf;
 import androidx.multidex.MultiDex;
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatDelegate;
 import android.util.Log;
 import android.app.PendingIntent;
@@ -14,27 +13,16 @@ import android.app.AlarmManager;
 public class SaaFApplication extends Application {
   public void onCreate() {
     super.onCreate();
-    
-    Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler()
-    {
+    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+    Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler() {
       @Override
-      public void uncaughtException (Thread thread, Throwable e)
-      {
+      public void uncaughtException (Thread thread, Throwable e) {
         handleUncaughtException (thread, e);
       }
     });
-    
-    SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("data", Context.MODE_PRIVATE);
-    boolean isDarkMode = sharedPref.getBoolean("darkMode", false);
-    if (isDarkMode == true) {
-      AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-    } else {
-      AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-    }
   }
   
-  private void handleUncaughtException (Thread thread, Throwable e)
-  {
+  private void handleUncaughtException (Thread thread, Throwable e) {
     Intent intent = new Intent(getApplicationContext(), UncaughtExceptionActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra("error", Log.getStackTraceString(e));

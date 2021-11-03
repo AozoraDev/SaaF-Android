@@ -30,7 +30,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Context;
-import android.content.SharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
   private Toolbar toolbar;
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
   private MaterialAlertDialogBuilder backPressedDialog;
-  private SharedPreferences sharedPref;
   private static boolean isDarkModeEnabled;
   
   @Override
@@ -106,32 +104,6 @@ public class MainActivity extends AppCompatActivity {
       initializeLogic();
     }
   }
-  
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.menu, menu);
-    menu.findItem(R.id.darkMode).setChecked(isDarkModeEnabled);
-    return true;
-  }
-  
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.darkMode) {
-      SharedPreferences.Editor editor = sharedPref.edit();
-      boolean isChecked = item.isChecked();
-      if (isChecked == true) {
-        item.setChecked(false);
-        editor.putBoolean("darkMode", false).apply();
-      } else if (isChecked == false) {
-        item.setChecked(true);
-        editor.putBoolean("darkMode", true).apply();
-      }
-      Util.toast(this, "The changes will take effect after the restart");
-      return true;
-    }
-    return super.onOptionsItemSelected(item);
-  }
 
   private void initialize(Bundle _savedInstanceState) {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -146,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setHasFixedSize(true);
     recyclerView.addItemDecoration(divider);
     recyclerView.setVisibility(View.GONE);
-    sharedPref = getApplicationContext().getSharedPreferences("data", Context.MODE_PRIVATE);
-    isDarkModeEnabled = sharedPref.getBoolean("darkMode", false);
   }
 
   private void initializeLogic() {
