@@ -13,7 +13,6 @@ import android.app.AlarmManager;
 public class SaaFApplication extends Application {
   public void onCreate() {
     super.onCreate();
-    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler() {
       @Override
       public void uncaughtException (Thread thread, Throwable e) {

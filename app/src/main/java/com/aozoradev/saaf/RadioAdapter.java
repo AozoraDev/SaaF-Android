@@ -8,7 +8,6 @@ import com.aozoradev.saaf.constant.Constant;
 import java.util.List;
 import java.io.IOException;
 
-import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.TextView;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import android.view.LayoutInflater;
 public class RadioAdapter extends
     RecyclerView.Adapter<RadioAdapter.ViewHolder> {
     
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView artist;
         private Context context;
@@ -28,12 +27,11 @@ public class RadioAdapter extends
             title = (TextView) itemView.findViewById(R.id.title);
             artist = (TextView) itemView.findViewById(R.id.artist);
             this.context = context;
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(v -> clickAndHold());
+            itemView.setOnLongClickListener(v -> clickAndHold());
         }
         
-        @SuppressLint("InflateParams")
-        @Override
-        public void onClick(View view) {
+        public boolean clickAndHold() {
             int position = getAdapterPosition();
             Radio _radio = mRadio.get(position);
 
@@ -68,6 +66,7 @@ public class RadioAdapter extends
               }
             });
             dialog.show();
+            return true;
         }
     }
     
