@@ -1,38 +1,40 @@
-![image](https://repository-images.githubusercontent.com/374664892/2808cf99-1094-4c91-b785-1f695165bd2f) \
-[![Discord](https://discordapp.com/api/guilds/727819855222407239/widget.png?style=shield)](https://discord.gg/nVXqAJD) [![Build Status](https://github.com/Shumi-Project/SaaF-Android/workflows/Build/badge.svg)](https://github.com/Shumi-Project/SaaF-Android/actions)
-## What is SaaF?
-SaaF stands for San Andreas Audio Fixer. \
-SaaF was first created by Nick7 in 2013 for PC with the aim of fixing GTA:SA Mobile radio files or creating IDX file for updated OSW file. \
-\
-I, [AozoraDev](https://github.com/AozoraDev), have a desire to create a "pocket" version of SaaF with additional features. \
-And here it is, **SaaF Android**. \
-\
-**Note:** \
-This app is still under development.
-## Installation
-As I said, the app is still under development but you can try the debug version which is updated every time there is a new commit. \
-You can go to [Actions](https://github.com/Shumi-Project/SaaF-Android/actions), select the new commit, download the zip file in the artifact, then extract it.
-## Contribution
-Since [AozoraDev](https://github.com/AozoraDev) likes to copy-paste arbitrary code on Stackoverflow, you can do a contribution to improve this project. \
-Of course! Your contribution will be very valuable for this project. \
-\
-How to contribution? \
-You can open a pull request in the form of fixes or improvisations for this project. \
-Support me through [Donation](#Donation) or join [Shumi Project discord server](https://discord.gg/nVXqAJD) also a contribution.
-## Building
-Just clone this repo then open your "CPU heater" aka Android Studio lol. \
-\
-Or if you like working with Notepad or something like that, you can type `./gradlew.bat assembleDebug` (for Windows) or `./gradlew assembleDebug` (for Linux) on your command line. \
-Make sure you have OpenJDK 11 and Android-SDK installed (OpenJDK 11 can also be used as long as you delete the debug.jks file).
-## Building (Termux)
-You can also build this app on Android. \
-Make sure you have [Termux](https://github.com/termux/termux-app) (F-Droid version, not Play Store version) and [Termux-NDK by Lzhiyong](https://github.com/Lzhiyong/termux-ndk) installed then type `bash build.sh` in Termux.
-## Donation
-For now, I only accept donation from Indonesian because i don't have Paypal. \
-Why? Due to country age restrictions.
-- [Saweria](https://saweria.co/AozoraDev)
-- [Trakteer](https://trakteer.id/AozoraDev)
+<p>
+  <img src="https://repository-images.githubusercontent.com/374664892/2808cf99-1094-4c91-b785-1f695165bd2f" alt="image" />
+  <br/>
+  <a href="https://discord.gg/nVXqAJD">
+    <img src="https://discordapp.com/api/guilds/727819855222407239/widget.png?style=shield" alt="Discord" />
+  </a>
+  <a href="https://github.com/Shumi-Project/SaaF-Android/actions">
+    <img src="https://github.com/Shumi-Project/SaaF-Android/workflows/Build/badge.svg" alt="Build Status" />
+  </a>
+</p>
 
-## License
-SaaF-Android is licensed under the [GNU General Public License version 3](https://opensource.org/licenses/GPL-3.0). \
-Please see the LICENSE file for more information.
+<h2 id="installation">Installation</h2>
+<p>
+  This app is still under development but you can try the debug version in the workflows.
+  <br/>
+  Just <a href="../../actions">click this</a>, click the latest commit, then download the artifact.
+</p>
+
+## Developing
+Make sure your platform has installed:
+- Any Java IDE that uses Gradle (like Android Studio)
+- OpenJDK 11
+- Android SDK
+- Chrome or Firefox to open Stackoverflow if you're having coding issues (optional)
+
+## Building
+If you have Android Studio, just clone this repo and open it in Android Studio.
+
+Or if you like coding using Notepad, just type `./gradlew.bat assembleDebug` (for Windows) or `./gradlew assembleDebug` (for Linux).
+
+<h2 id="donation">Donation</h2>
+<ul>
+<li><a href="https://saweria.co/AozoraDev">Saweria</a></li>
+<li><a href="https://trakteer.id/AozoraDev">Trakteer</a></li>
+</ul>
+
+<h2 id="license">License</h2>
+<p>SaaF-Android is licensed under the <a href="https://opensource.org/licenses/GPL-3.0">GNU General Public License version 3</a>.
+<br/>
+Please see the LICENSE file for more information.</p>
