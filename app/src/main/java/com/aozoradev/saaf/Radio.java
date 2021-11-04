@@ -73,6 +73,7 @@ public class Radio {
         String artist = prefs.node(nodeName).get("track" + index + ".artist", null);
         String _fileName = ze.getName();
         Constant.station = prefs.node(nodeName).get("station", null);
+        Constant.stationInt = context.getResources().getIdentifier(nodeName.toLowerCase(), "drawable", context.getPackageName());
         songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path));
       }
       index = 0;

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 
 public class Constant {
   public static String station;
+  public static int stationInt = 0;
   @SuppressLint("InlinedApi")
   public static final int BUFFER_SIZE = 4096;
   public static final String[] permissionsv2 = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.MANAGE_EXTERNAL_STORAGE };

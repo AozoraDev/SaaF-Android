@@ -78,7 +78,7 @@ public class Util {
       
       builder.setView(dialogView);
       builder.setTitle(Constant.station);
-      builder.setIcon(ContextCompat.getDrawable(context, R.drawable.utp));
+      builder.setIcon((Constant.stationInt != 0) ? Constant.stationInt : R.drawable.utp);
       builder.setPositiveButton("Close", null);
       builder.setNegativeButton("Pause", null);
       
