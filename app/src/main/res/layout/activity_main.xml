@@ -26,6 +26,7 @@
         <Button
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
+    android:visibility="gone"
     android:text="@string/open_osw"
     android:id="@+id/button"
     style="?attr/materialButtonOutlinedStyle"
