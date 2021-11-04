@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
       new MaterialAlertDialogBuilder(MainActivity.this)
       .setCancelable(false).setMessage("This app requires storage access to work properly. Please grant storage permission.")
       .setPositiveButton("OK", (_dialog, _which) -> ActivityCompat.requestPermissions(MainActivity.this, Constant.permissions, 1000)).show();
+      return;
     }
     button.setVisibility(View.VISIBLE);
     button.setOnClickListener(v -> {
