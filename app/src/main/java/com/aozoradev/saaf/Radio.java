@@ -47,8 +47,6 @@ public class Radio {
     return mPath;
   }
 
-  private static int index = 0;
-
   public static ArrayList < Radio > createRadioList(Context context, Uri uri, String nodeName) throws IOException {
     ArrayList < Radio > songs = new ArrayList < Radio > ();
     
@@ -68,15 +66,14 @@ public class Radio {
       Preferences prefs = new IniPreferences(metaStream);
       ZipEntry ze;
       while ((ze = zis.getNextEntry()) != null) {
-        index = ++index;
+        String _fileName = ze.getName();
+        int index = Integer.parseInt(_fileName.replaceAll(".mp3", "").replaceAll("[^0-9]", ""));
         String title = prefs.node(nodeName).get("track" + index + ".title", null);
         String artist = prefs.node(nodeName).get("track" + index + ".artist", null);
-        String _fileName = ze.getName();
         Constant.station = prefs.node(nodeName).get("station", null);
         Constant.stationInt = context.getResources().getIdentifier(nodeName.toLowerCase(), "drawable", context.getPackageName());
         songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path));
       }
-      index = 0;
     }
     return songs;
   }
