@@ -5,12 +5,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.aozoradev.saaf.constant.Constant;
 
 import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.util.Locale;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import android.os.Handler;
+import android.os.Environment;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +32,29 @@ public class Util {
   
   public static void toast (Context context, String string) {
     Toast.makeText(context, string, Toast.LENGTH_LONG).show();
+  }
+  
+  public static void extract (Context context, Radio radio) throws IOException {
+    if (zipFile == null) {
+      zipFile = new ZipResourceFile(radio.getPath());
+      // If zipFile already called, we don't need to call it again
+    }
+    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + Constant.station);
+    if (!file.exists()) {
+      file.mkdirs();
+    }
+    String fn = radio.getFileName();
+    
+    try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + "/" + fn);
+    BufferedOutputStream bos = new BufferedOutputStream(fos);
+    InputStream is = zipFile.getInputStream(fn)) {
+      byte[] bytesIn = new byte[Constant.BUFFER_SIZE];
+      int read = 0;
+      while ((read = is.read(bytesIn)) != -1) {
+        bos.write(bytesIn, 0, read);
+      }
+      Util.toast(context, fn + " has been extracted to " + file.getAbsolutePath());
+    }
   }
   
   public static void playRadio (Context context, Radio radio) throws IOException, IllegalArgumentException {

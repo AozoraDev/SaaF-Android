@@ -11,8 +11,8 @@ import java.io.IOException;
 import android.view.View;
 import android.widget.TextView;
 import android.view.ViewGroup;
-import android.content.Context;
 import android.view.LayoutInflater;
+import android.content.Context;
 
 public class RadioAdapter extends
     RecyclerView.Adapter<RadioAdapter.ViewHolder> {
@@ -60,7 +60,12 @@ public class RadioAdapter extends
                   }
                 break;
                 case 1:
-                  // TODO
+                  try {
+                    Util.extract(context, _radio);
+                  } catch (IOException err) {
+                    Util.toast(context, err.getMessage());
+                    err.printStackTrace();
+                  }
                 break;
               }
             });
