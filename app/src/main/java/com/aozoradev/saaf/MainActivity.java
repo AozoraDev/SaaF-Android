@@ -42,13 +42,14 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
   private Button button;
+  private Menu mainMenu;
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
   private AlertDialog backPressedDialog, loading, closeFile;
   private ExecutorService executor;
   private Handler handler;
   private DocumentFile df;
-  private static boolean canBack = false;
+  private boolean canBack = false;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.menu, menu);
+    mainMenu = menu;
     return true;
   }
   
@@ -69,16 +71,12 @@ public class MainActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.create_idx:
-        if (!canBack) {
-          Toast.makeText(MainActivity.this, "No OSW file have been loaded yet", Toast.LENGTH_LONG).show();
-        } else {
-          try {
-            OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, MainActivity.this));
-            Toast.makeText(MainActivity.this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
-          } catch (IOException err) {
-            Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-            err.printStackTrace();
-          }
+        try {
+          OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, MainActivity.this));
+          Toast.makeText(MainActivity.this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
+        } catch (IOException err) {
+          Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+          err.printStackTrace();
         }
       return true;
       case R.id.about:
@@ -114,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
     button.setVisibility(View.VISIBLE);
     recyclerView.setVisibility(View.GONE);
     getSupportActionBar().setSubtitle(null);
+    mainMenu.findItem(R.id.create_idx).setEnabled(false).setVisible(false);
   }
 
   @Override
@@ -130,21 +129,26 @@ public class MainActivity extends AppCompatActivity {
         df = DocumentFile.fromSingleUri(getApplicationContext(), uri);
         String nodeName = df.getName();
         try {
+          boolean isEqual = Arrays.asList(Constant.stationName).contains(nodeName);
+          if (!isEqual) {
+            handler.post(() -> {
+              Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
+              loading.dismiss();
+            });
+            return;
+          }
           radio = Radio.createRadioList(MainActivity.this, uri, nodeName.replaceAll(".osw", ""));
         } catch (IOException err) {
           handler.post(() -> {
-            Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-            loading.dismiss();
+            if (err.getMessage() == null) {
+              Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
+              loading.dismiss();
+            } else {
+              Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+              loading.dismiss();
+            }
           });
           err.printStackTrace();
-          return;
-        }
-        boolean isEqual = Arrays.asList(Constant.stationName).contains(nodeName);
-        if ((isEqual == false) || (radio.isEmpty())) {
-          handler.post(() -> {
-            Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
-            loading.dismiss();
-          });
           return;
         }
         
@@ -161,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
           .setPositiveButton("Yes", (_which, _dialog) -> lmaoTheFileIsClosedBruhLmao())
           .setNegativeButton("No", null)
           .create();
+          mainMenu.findItem(R.id.create_idx).setEnabled(true).setVisible(true);
           loading.dismiss();
         });
       });
