@@ -1,7 +1,9 @@
 package com.aozoradev.saaf;
 
 import com.aozoradev.saaf.constant.Constant;
+import com.aozoradev.saaf.utils.OSWUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.anggrayudi.storage.file.DocumentFileUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,7 +13,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.DividerItemDecoration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,48 +25,77 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.os.Build;
 import android.os.Looper;
+import android.os.Environment;
 import android.graphics.drawable.ColorDrawable;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 import android.net.Uri;
 import android.app.Activity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.content.Context;
 
 public class MainActivity extends AppCompatActivity {
   private Button button;
   private RecyclerView recyclerView;
   private ArrayList<Radio> radio;
-  private AlertDialog backPressedDialog;
-  private AlertDialog loading;
+  private AlertDialog backPressedDialog, loading, closeFile;
   private ExecutorService executor;
   private Handler handler;
+  private DocumentFile df;
+  private static boolean canBack = false;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     initialize(savedInstanceState);
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        ActivityCompat.requestPermissions(MainActivity.this, Constant.permissionsv2, 1000);
-      } else {
-        ActivityCompat.requestPermissions(MainActivity.this, Constant.permissions, 1000);
-      }
-    } else {
-      initializeLogic();
+    initializeLogic();
+  }
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.menu, menu);
+    return true;
+  }
+  
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.create_idx:
+        if (!canBack) {
+          Toast.makeText(MainActivity.this, "No OSW file have been loaded yet", Toast.LENGTH_LONG).show();
+        } else {
+          try {
+            OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, MainActivity.this));
+            Toast.makeText(MainActivity.this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
+          } catch (IOException err) {
+            Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+            err.printStackTrace();
+          }
+        }
+      return true;
+      case R.id.about:
+        // TODO
+      return true;
+      default:
+      return super.onOptionsItemSelected(item);
     }
   }
 
   @Override
   public void onBackPressed() {
-    backPressedDialog.show();
+    if (canBack) {
+      closeFile.show();
+    } else {
+      backPressedDialog.show();
+    }
   }
   
   @Override
@@ -75,21 +105,35 @@ public class MainActivity extends AppCompatActivity {
     executor.shutdownNow();
     System.exit(0);
   }
+  
+  private void lmaoTheFileIsClosedBruhLmao() {
+    canBack = false;
+    Constant.zipFile = null;
+    radio.clear();
+    recyclerView.getAdapter().notifyDataSetChanged();
+    button.setVisibility(View.VISIBLE);
+    recyclerView.setVisibility(View.GONE);
+    getSupportActionBar().setSubtitle(null);
+  }
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == 1000) {
+      initializeLogic();
+    }
+    
     if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
       executor.execute(() -> {
         handler.post(() -> loading.show());
         Uri uri = data.getData();
-        DocumentFile df = DocumentFile.fromSingleUri(getApplicationContext(), uri);
+        df = DocumentFile.fromSingleUri(getApplicationContext(), uri);
         String nodeName = df.getName();
         try {
           radio = Radio.createRadioList(MainActivity.this, uri, nodeName.replaceAll(".osw", ""));
         } catch (IOException err) {
           handler.post(() -> {
-            Util.toast(MainActivity.this, err.getMessage());
+            Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
             loading.dismiss();
           });
           err.printStackTrace();
@@ -98,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isEqual = Arrays.asList(Constant.stationName).contains(nodeName);
         if ((isEqual == false) || (radio.isEmpty())) {
           handler.post(() -> {
-            Util.toast(MainActivity.this, "Failed to load the file");
+            Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
             loading.dismiss();
           });
           return;
@@ -111,6 +155,12 @@ public class MainActivity extends AppCompatActivity {
           recyclerView.setVisibility(View.VISIBLE);
           button.setVisibility(View.GONE);
           getSupportActionBar().setSubtitle(Constant.station);
+          canBack = true;
+          closeFile = new MaterialAlertDialogBuilder(MainActivity.this)
+          .setMessage("Do you want to close " + nodeName + "?")
+          .setPositiveButton("Yes", (_which, _dialog) -> lmaoTheFileIsClosedBruhLmao())
+          .setNegativeButton("No", null)
+          .create();
           loading.dismiss();
         });
       });
@@ -122,6 +172,35 @@ public class MainActivity extends AppCompatActivity {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     if (requestCode == 1000) {
       initializeLogic();
+    }
+  }
+  
+  // https://stackoverflow.com/a/66366102
+  private boolean checkPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      return Environment.isExternalStorageManager();
+    } else {
+      int result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+      int result1 = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+      return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
+    }
+  }
+  
+  // https://stackoverflow.com/a/66366102
+  private void requestPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      try {
+        Intent intent = new Intent("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
+        startActivityForResult(intent, 1000);
+      } catch (Exception e) {
+        Intent intent = new Intent();
+        intent.setAction("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
+        startActivityForResult(intent, 1000);
+      }
+    } else {
+      ActivityCompat.requestPermissions(MainActivity.this, Constant.permissions, 1000);
     }
   }
 
@@ -144,9 +223,7 @@ public class MainActivity extends AppCompatActivity {
     .create();
     loading.getWindow().setBackgroundDrawable(new ColorDrawable(0));
     
-    RecyclerView.ItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
     recyclerView.setHasFixedSize(true);
-    recyclerView.addItemDecoration(divider);
     recyclerView.setVisibility(View.GONE);
     
     executor = Executors.newSingleThreadExecutor();
@@ -154,12 +231,13 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void initializeLogic() {
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+    if (!checkPermission()) {
       new MaterialAlertDialogBuilder(MainActivity.this)
       .setCancelable(false).setMessage("This app requires storage access to work properly. Please grant storage permission.")
-      .setPositiveButton("OK", (_dialog, _which) -> ActivityCompat.requestPermissions(MainActivity.this, Constant.permissions, 1000)).show();
+      .setPositiveButton("OK", (_dialog, _which) -> requestPermission()).show();
       return;
     }
+    
     button.setVisibility(View.VISIBLE);
     button.setOnClickListener(v -> {
       Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);

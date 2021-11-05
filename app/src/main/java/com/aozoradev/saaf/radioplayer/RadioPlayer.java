@@ -1,70 +1,54 @@
-package com.aozoradev.saaf;
+package com.aozoradev.saaf.radioplayer;
 
-import com.google.android.vending.expansion.zipfile.ZipResourceFile;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.aozoradev.saaf.constant.Constant;
+import com.aozoradev.saaf.Radio;
+import com.aozoradev.saaf.R;
 
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.InputStream;
 import java.util.Locale;
+import java.io.IOException;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 
 import android.os.Handler;
-import android.os.Environment;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.SeekBar;
-import android.media.MediaPlayer;
-import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.view.View;
+import android.media.MediaPlayer;
+import android.widget.TextView;
+import android.widget.SeekBar;
+import android.content.Context;
 
-public class Util {
+public class RadioPlayer {
   private static MediaPlayer mediaPlayer;
-  private static ZipResourceFile zipFile;
   private static Runnable runnable;
   private static Handler mHandler;
   
-  public static void toast (Context context, String string) {
-    Toast.makeText(context, string, Toast.LENGTH_LONG).show();
+  private static void stop (MediaPlayer mp) {
+    mp.stop();
+    mp.release();
+    mp = null;
   }
   
-  public static void extract (Context context, Radio radio) throws IOException {
-    if (zipFile == null) {
-      zipFile = new ZipResourceFile(radio.getPath());
-      // If zipFile already called, we don't need to call it again
-    }
-    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + Constant.station);
-    if (!file.exists()) {
-      file.mkdirs();
-    }
-    String fn = radio.getFileName();
+  // https://www.11zon.com/zon/android/how-to-play-audio-file-in-android-programmatically.php
+  private static String timerConversion(long value) {
+    String audioTime;
+    int dur = (int) value;
+    int hrs = (dur / 3600000);
+    int mns = (dur / 60000) % 60000;
+    int scs = dur % 60000 / 1000;
     
-    try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + "/" + fn);
-    BufferedOutputStream bos = new BufferedOutputStream(fos);
-    InputStream is = zipFile.getInputStream(fn)) {
-      byte[] bytesIn = new byte[Constant.BUFFER_SIZE];
-      int read = 0;
-      while ((read = is.read(bytesIn)) != -1) {
-        bos.write(bytesIn, 0, read);
-      }
-      Util.toast(context, fn + " has been extracted to " + file.getAbsolutePath());
+    if (hrs > 0) {
+      audioTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hrs, mns, scs);
+    } else {
+      audioTime = String.format(Locale.getDefault(), "%02d:%02d", mns, scs);
     }
+    return audioTime;
   }
   
-  public static void playRadio (Context context, Radio radio) throws IOException, IllegalArgumentException {
-    if (zipFile == null) {
-      zipFile = new ZipResourceFile(radio.getPath());
-      // If zipFile already called, we don't need to call it again
-    }
+  public static void play (Context context, Radio radio) throws IOException, IllegalArgumentException{
     mediaPlayer = new MediaPlayer();
     
-    try (AssetFileDescriptor assetFileDescriptor = zipFile.getAssetFileDescriptor(radio.getFileName())) {
+    try (AssetFileDescriptor assetFileDescriptor = Constant.zipFile.getAssetFileDescriptor(radio.getFileName())) {
       mediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor(), assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
       mediaPlayer.prepareAsync();
       
@@ -90,6 +74,7 @@ public class Util {
       mediaPlayer.setOnPreparedListener(mp -> {
         seekBar.setMax(mp.getDuration());
         _max.setText(timerConversion((long) mp.getDuration()));
+        _current.setText(timerConversion((long) mp.getCurrentPosition()));
         _radio.setText(radio.getTitle());
         _artist.setText(radio.getArtist());
         mediaPlayer.start();
@@ -98,10 +83,10 @@ public class Util {
           @Override
           public void run() {
             seekBar.setProgress(mp.getCurrentPosition());
-            mHandler.postDelayed(runnable, 100);
+            mHandler.postDelayed(runnable, 500);
           }
         };
-        mHandler.postDelayed(runnable, 100);
+        mHandler.postDelayed(runnable, 500);
         
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(l -> {
           if (mediaPlayer.isPlaying()) {
@@ -110,7 +95,7 @@ public class Util {
             mediaPlayer.pause();
           } else {
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText(context.getString(R.string.pause));
-            mHandler.postDelayed(runnable, 100);
+            mHandler.postDelayed(runnable, 500);
             mediaPlayer.start();
           }
         });
@@ -137,31 +122,9 @@ public class Util {
       });
       
       dialog.setOnDismissListener(d -> {
-        stopAudio(mediaPlayer);
+        stop(mediaPlayer);
         mHandler.removeCallbacks(runnable);
       });
     }
-  }
-  
-  private static void stopAudio (MediaPlayer mp) {
-    mp.stop();
-    mp.release();
-    mp = null;
-  }
-  
-  // https://www.11zon.com/zon/android/how-to-play-audio-file-in-android-programmatically.php
-  private static String timerConversion(long value) {
-    String audioTime;
-    int dur = (int) value;
-    int hrs = (dur / 3600000);
-    int mns = (dur / 60000) % 60000;
-    int scs = dur % 60000 / 1000;
-    
-    if (hrs > 0) {
-      audioTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hrs, mns, scs);
-    } else {
-      audioTime = String.format(Locale.getDefault(), "%02d:%02d", mns, scs);
-    }
-    return audioTime;
   }
 }

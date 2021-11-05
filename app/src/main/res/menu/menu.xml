@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item
+    android:id="@+id/create_idx"
+    android:title="@string/create_idx">
+  </item>
+  <item
+    android:id="@+id/about"
+    android:title="@string/about">
+  </item>
+</menu> 

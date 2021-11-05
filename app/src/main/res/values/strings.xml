@@ -2,7 +2,8 @@
     <string name="app_name">SaaF Android</string>
     <string name="open_osw">Open OSW</string>
     <string name="loading">Loading&#8230;</string>
-    <string name="dark_mode">Dark Mode</string>
+    <string name="create_idx">Create IDX</string>
+    <string name="about">About</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="no_time">--:--</string>

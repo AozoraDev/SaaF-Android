@@ -4,12 +4,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.aozoradev.saaf.constant.Constant;
+import com.aozoradev.saaf.utils.OSWUtil;
+import com.aozoradev.saaf.radioplayer.RadioPlayer;
 
 import java.util.List;
 import java.io.IOException;
 
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.content.Context;
@@ -47,23 +50,23 @@ public class RadioAdapter extends
               switch (_which) {
                 case 0:
                   try {
-                    Util.playRadio(context, _radio);
+                    RadioPlayer.play(context, _radio);
                   } catch (NullPointerException err) {
-                    Util.toast(context, err.getMessage());
+                    Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     err.printStackTrace();
                   } catch (IllegalArgumentException err) {
-                    Util.toast(context, err.getMessage());
+                    Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     err.printStackTrace();
                   } catch (IOException err) {
-                    Util.toast(context, err.getMessage());
+                    Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     err.printStackTrace();
                   }
                 break;
                 case 1:
                   try {
-                    Util.extract(context, _radio);
+                    OSWUtil.extract(context, _radio);
                   } catch (IOException err) {
-                    Util.toast(context, err.getMessage());
+                    Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     err.printStackTrace();
                   }
                 break;
