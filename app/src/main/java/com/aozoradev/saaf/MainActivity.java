@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.net.URISyntaxException;
@@ -125,30 +124,24 @@ public class MainActivity extends AppCompatActivity {
     if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
       executor.execute(() -> {
         handler.post(() -> loading.show());
+        
         Uri uri = data.getData();
         df = DocumentFile.fromSingleUri(getApplicationContext(), uri);
         String nodeName = df.getName();
+        
         try {
-          boolean isEqual = Arrays.asList(Constant.stationName).contains(nodeName);
-          if (!isEqual) {
-            handler.post(() -> {
-              Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
-              loading.dismiss();
-            });
-            return;
-          }
           radio = Radio.createRadioList(MainActivity.this, uri, nodeName.replaceAll(".osw", ""));
         } catch (IOException err) {
           handler.post(() -> {
-            if (err.getMessage() == null) {
+            if (err.getMessage() == "ErrorLolAmogusSussyBalls") {
               Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
               loading.dismiss();
             } else {
               Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
               loading.dismiss();
+              err.printStackTrace();
             }
           });
-          err.printStackTrace();
           return;
         }
         

@@ -4,14 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import androidx.documentfile.provider.DocumentFile;
 
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.util.zip.ZipInputStream;
 import java.util.prefs.Preferences;
-import java.io.InputStream;
 import java.util.zip.ZipEntry;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 import org.ini4j.IniPreferences;
 import com.google.android.vending.expansion.zipfile.ZipResourceFile;
@@ -49,6 +50,11 @@ public class Radio {
   }
 
   public static ArrayList < Radio > createRadioList(Context context, Uri uri, String nodeName) throws IOException {
+    boolean isEqual = Arrays.asList(Constant.stationName).contains(nodeName + ".osw");
+    if (!isEqual) {
+      throw new IOException ("ErrorLolAmogusSussyBalls");
+    }
+    
     ArrayList < Radio > songs = new ArrayList < Radio > ();
     
     // Get path bullshit
@@ -73,6 +79,9 @@ public class Radio {
         String title = prefs.node(nodeName).get("track" + index + ".title", null);
         String artist = prefs.node(nodeName).get("track" + index + ".artist", null);
         songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path));
+      }
+      if (songs.isEmpty()) {
+        throw new IOException ("ErrorLolAmogusSussyBalls");
       }
       
       // Add some data to Constant
