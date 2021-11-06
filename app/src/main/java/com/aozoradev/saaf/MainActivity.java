@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     System.exit(0);
   }
   
-  private void lmaoTheFileIsClosedBruhLmao() {
+  private void lmaoTheFileIsClosedBruhLmaoAmogusSussyBakaSusAmogusWhenTheImposterIsSusLmaoFortniteCard() {
     canBack = false;
     Constant.zipFile = null;
     radio.clear();
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
           canBack = true;
           closeFile = new MaterialAlertDialogBuilder(MainActivity.this)
           .setMessage("Do you want to close " + nodeName + "?")
-          .setPositiveButton("Yes", (_which, _dialog) -> lmaoTheFileIsClosedBruhLmao())
+          .setPositiveButton("Yes", (_which, _dialog) -> lmaoTheFileIsClosedBruhLmaoAmogusSussyBakaSusAmogusWhenTheImposterIsSusLmaoFortniteCard())
           .setNegativeButton("No", null)
           .create();
           mainMenu.findItem(R.id.create_idx).setEnabled(true).setVisible(true);
