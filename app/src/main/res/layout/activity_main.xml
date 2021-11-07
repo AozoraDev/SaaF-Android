@@ -22,6 +22,7 @@
         <androidx.recyclerview.widget.RecyclerView
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:scrollbars="vertical"
     android:id="@+id/recyclerView"/>
         <Button
     android:layout_height="wrap_content"
