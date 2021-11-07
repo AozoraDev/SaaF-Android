@@ -43,15 +43,15 @@
     <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Aozora"
+            android:text="@string/about_name"
             android:textSize="15sp"
             android:textStyle="bold"
             android:gravity="center"/>
 		<TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="(Owner of Shumi Project)"
-            android:textSize="10sp"
+            android:text="@string/about_title"
+            android:textSize="11sp"
             android:gravity="center"/>
 		<LinearLayout
     android:layout_width="match_parent"
@@ -60,35 +60,43 @@
     android:gravity="center"
     android:layout_marginTop="12dp">
 			<ImageView
+			      android:contentDescription="@string/discord"
             android:layout_height="30dp"
             android:layout_width="30dp"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:focusable="true"
             android:layout_margin="10dp"
             android:src="@drawable/discord"/>
 			<ImageView
+			      android:contentDescription="@string/github"
             android:layout_height="30dp"
             android:layout_width="30dp"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:focusable="true"
             android:layout_margin="10dp"
             android:src="@drawable/github"/>
 			<ImageView
+			      android:contentDescription="@string/youtube"
             android:layout_height="30dp"
             android:layout_width="30dp"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:focusable="true"
             android:layout_margin="10dp"
             android:src="@drawable/youtube"/>
 			<ImageView
+			      android:contentDescription="@string/twitter"
             android:layout_height="30dp"
             android:layout_width="30dp"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:focusable="true"
             android:layout_margin="10dp"
             android:src="@drawable/twitter"/>
 		</LinearLayout>

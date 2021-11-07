@@ -68,23 +68,23 @@ public class MainActivity extends AppCompatActivity {
   
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.create_idx:
-        try {
-          OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, MainActivity.this));
-          Toast.makeText(MainActivity.this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
-        } catch (IOException err) {
-          Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-          err.printStackTrace();
-        }
+    if (item.getItemId() == R.id.create_idx) {
+      try {
+        OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, MainActivity.this));
+        Toast.makeText(MainActivity.this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
+      } catch (IOException err) {
+        Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+        err.printStackTrace();
+      }
       return true;
-      case R.id.about:
-        Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
-        startActivity(intent);
+    } else if (item.getItemId() == R.id.about) {
+      Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+      startActivity(intent);
       return true;
-      default:
-      return super.onOptionsItemSelected(item);
+    } else if (item.getItemId() == R.id.show_vi) {
+      //TODO
     }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
     canBack = false;
     Constant.zipFile = null;
     radio.clear();
+    recyclerView.getAdapter().notifyItemRangeRemoved(0, radio.size());
     recyclerView.getAdapter().notifyDataSetChanged();
     button.setVisibility(View.VISIBLE);
     recyclerView.setVisibility(View.GONE);

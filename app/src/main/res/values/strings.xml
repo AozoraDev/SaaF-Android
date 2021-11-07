@@ -5,6 +5,14 @@
     <string name="create_idx">Create IDX</string>
     <string name="about">About</string>
     <string name="play">Play</string>
+    <string name="discord">Discord</string>
+    <string name="youtube">Youtube</string>
+    <string name="github">Github</string>
+    <string name="twitter">Twitter</string>
     <string name="pause">Pause</string>
     <string name="no_time">--:--</string>
+    <string name="slash">/</string>
+    <string name="show_vi">Show Visualizer</string>
+    <string name="about_name">Aozora</string>
+    <string name="about_title">(Owner of Shumi Project)</string>
 </resources>

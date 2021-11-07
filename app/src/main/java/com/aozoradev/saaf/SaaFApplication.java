@@ -8,12 +8,14 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Process;
 import android.os.Build;
+import androidx.appcompat.app.AppCompatDelegate;
 import android.app.AlarmManager;
 import android.annotation.SuppressLint;
 
 public class SaaFApplication extends Application {
   public void onCreate() {
     super.onCreate();
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler() {
       @Override
       public void uncaughtException (Thread thread, Throwable e) {

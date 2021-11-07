@@ -38,9 +38,9 @@ public class RadioPlayer {
     int scs = dur % 60000 / 1000;
     
     if (hrs > 0) {
-      audioTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hrs, mns, scs);
+      audioTime = String.format(Locale.US, "%02d:%02d:%02d", hrs, mns, scs);
     } else {
-      audioTime = String.format(Locale.getDefault(), "%02d:%02d", mns, scs);
+      audioTime = String.format(Locale.US, "%02d:%02d", mns, scs);
     }
     return audioTime;
   }

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
+import java.util.Locale;
 import java.util.zip.ZipInputStream;
 import java.util.prefs.Preferences;
 import java.util.zip.ZipEntry;
@@ -87,7 +88,7 @@ public class Radio {
       // Add some data to Constant
       Constant.zipFile = new ZipResourceFile(path);
       Constant.station = prefs.node(nodeName).get("station", null);
-      Constant.stationInt = context.getResources().getIdentifier(nodeName.toLowerCase(), "drawable", context.getPackageName());
+      Constant.stationInt = context.getResources().getIdentifier(nodeName.toLowerCase(Locale.US), "drawable", context.getPackageName());
     }
     return songs;
   }

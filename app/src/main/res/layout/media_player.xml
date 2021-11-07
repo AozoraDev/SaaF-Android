@@ -42,8 +42,14 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/no_time"/>
+      <TextView
+        android:id="@+id/slash"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toEndOf="@id/current"
+        android:text="@string/slash"/>
      <TextView
-        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@id/slash"
         android:id="@+id/max"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
