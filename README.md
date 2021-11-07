@@ -16,6 +16,16 @@
   Just <a href="../../actions">click this</a>, click the latest commit, then download the artifact.
 </p>
 
+## Compatibility
+SaaF Android can work on Android 4.0 - Android 12.  
+
+Even so, SaaF Android has not been tested on several versions of Android.  
+The following is a list of Androids that have been tested:
+- Android 11 (Vivo Y12s)
+- Android 8.1 (Vivo Y91C)
+
+Let me know if this app works on Android which is not listed.
+
 ## Developing
 Make sure your platform has installed:
 - Any Java IDE that uses Gradle (like Android Studio)
