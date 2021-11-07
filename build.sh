@@ -9,11 +9,11 @@ if [ $PREFIX == "/data/data/com.termux/files/usr" ] ; then
   echo "Termux detected! Checking root access..."
   if [ !su ] ; then
     echo "No root detected! Installing the app using non-root method..."
-    termux-open ./app/build/outputs/apk/debug/SaaF-Android-debug.apk
+    termux-open ./app/build/outputs/apk/debug/SaaF-Android.apk
     echo "App installed"
   else
     echo "Root detected! Installing the app using root method"
-    tsudo pm install ./app/build/outputs/apk/debug/SaaF-Android-debug.apk
+    tsudo pm install ./app/build/outputs/apk/debug/SaaF-Android.apk
     echo "App installed"
   fi
   confirm() {

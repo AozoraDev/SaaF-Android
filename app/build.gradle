@@ -40,7 +40,7 @@ android {
     
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = new File("SaaF-Android-debug.apk")
+            outputFileName = new File("SaaF-Android.apk")
         }
     }
     

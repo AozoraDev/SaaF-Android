@@ -79,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
         }
       return true;
       case R.id.about:
-        // TODO
+        Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+        startActivity(intent);
       return true;
       default:
       return super.onOptionsItemSelected(item);

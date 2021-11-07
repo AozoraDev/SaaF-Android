@@ -2,7 +2,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.aozoradev.saaf">
+    package="com.aozoradev.saaf"
+    name="SaaF Android">
     
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -30,6 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+        android:exported="true"
+        android:configChanges="keyboardHidden|orientation|screenSize"
+        android:name=".AboutActivity" />
         <activity
         android:exported="true"
         android:configChanges="keyboardHidden|orientation|screenSize"

@@ -5,16 +5,13 @@
     <item name="colorAccent">@color/colorAccent</item>
 		<item name="colorControlHighlight">@color/colorControlHighlight</item>
 		<item name="colorControlNormal">@color/colorControlNormal</item>
-		<item name="checkboxStyle">@style/Widget.App.CheckBox</item>
   </style>
   
   <style 	name="AppTheme.AppBarOverlay"	parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
-  
-	<style 	name="AppTheme.PopupOverlay"	parent="ThemeOverlay.MaterialComponents.Dark">
-		<item name="checkboxStyle">@style/Widget.App.CheckBox</item>
-	</style>
+	<style 	name="AppTheme.PopupOverlay"	parent="ThemeOverlay.MaterialComponents.Dark"/>
 	
-  <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
-    <item name="buttonTint">@color/button_tint</item>
+  <style name="circle">
+    <item name="cornerFamily">rounded</item>
+    <item name="cornerSize">50%</item>
   </style>
 </resources>

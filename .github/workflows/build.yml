@@ -29,5 +29,5 @@ jobs:
       with:
         name: SaaF-Android
         path: |
-            ./app/build/outputs/apk/debug/SaaF-Android-debug.apk
+            ./app/build/outputs/apk/debug/SaaF-Android.apk
             ./app/build/outputs/apk/debug/output-metadata.json
