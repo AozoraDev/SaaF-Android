@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
       startActivity(intent);
       return true;
     } else if (item.getItemId() == R.id.show_vi) {
-      //TODO
+      Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_LONG).show();
     }
     return super.onOptionsItemSelected(item);
   }

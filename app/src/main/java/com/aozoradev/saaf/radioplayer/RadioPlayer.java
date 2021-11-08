@@ -29,7 +29,7 @@ public class RadioPlayer {
     mp = null;
   }
   
-  // https://www.11zon.com/zon/android/how-to-play-audio-file-in-android-programmatically.php
+  // https://www.11zon.com/zon/android/how-to-play-audio-file-in-android-programmatically.php (Timer Conversion)
   private static String timerConversion(long value) {
     String audioTime;
     int dur = (int) value;
@@ -45,6 +45,7 @@ public class RadioPlayer {
     return audioTime;
   }
   
+  // Code below is not from 11zon.com, okay? got it? cool kthxcya.
   public static void play (Context context, Radio radio) throws IOException, IllegalArgumentException{
     mediaPlayer = new MediaPlayer();
     

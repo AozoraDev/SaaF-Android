@@ -3,8 +3,11 @@ package com.aozoradev.saaf;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.MenuItem;
 import android.os.Bundle;
+import android.net.Uri;
+import android.view.View;
+import android.view.MenuItem;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.widget.TextView;
 
@@ -29,6 +32,17 @@ public class AboutActivity extends AppCompatActivity {
       return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+  
+  public void openItOkayLmao(View view) {
+    String url = (String) view.getTag();
+
+    Intent intent = new Intent();
+    intent.setAction(Intent.ACTION_VIEW);
+    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+    intent.setData(Uri.parse(url));
+
+    startActivity(intent);
   }
   
   private void initialize(Bundle _savedInstanceState) {

@@ -68,6 +68,8 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_margin="10dp"
+            android:onClick="openItOkayLmao"
+            android:tag="https://discord.gg/nVXqAJD"
             android:src="@drawable/discord"/>
 			<ImageView
 			      android:contentDescription="@string/github"
@@ -78,6 +80,8 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_margin="10dp"
+            android:onClick="openItOkayLmao"
+            android:tag="https://github.com/AozoraDev"
             android:src="@drawable/github"/>
 			<ImageView
 			      android:contentDescription="@string/youtube"
@@ -88,6 +92,8 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_margin="10dp"
+            android:onClick="openItOkayLmao"
+            android:tag="https://youtube.com/channel/UCPr4OvX7bnVE4pI9cN47cGg"
             android:src="@drawable/youtube"/>
 			<ImageView
 			      android:contentDescription="@string/twitter"
@@ -98,6 +104,8 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_margin="10dp"
+            android:onClick="openItOkayLmao"
+            android:tag="https://twitter.com/AozoraDev"
             android:src="@drawable/twitter"/>
 		</LinearLayout>
 	</LinearLayout>
