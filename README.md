@@ -39,6 +39,13 @@ If you have Android Studio, just clone this repo and open it in Android Studio.
 
 Or if you like coding using Notepad, just type `./gradlew.bat assembleDebug` (for Windows) or `./gradlew assembleDebug` (for Linux).
 
+## Dependencies Used
+- AndroidX [(lICENSE)](https://opensource.org/licenses/Apache-2.0)
+- Material Components [(LICENSE)](https://opensource.org/licenses/Apache-2.0)
+- SimpleStorage [(LICENSE)](https://opensource.org/licenses/Apache-2.0)
+- Ini4J [(LICENSE)](https://opensource.org/licenses/Apache-2.0)
+- Better APK Expansion: ZipFile [(LICENSE)](https://opensource.org/licenses/Apache-2.0)
+
 <h2 id="donation">Donation</h2>
 <ul>
 <li><a href="https://saweria.co/AozoraDev">Saweria</a></li>
