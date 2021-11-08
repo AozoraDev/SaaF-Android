@@ -23,6 +23,7 @@ Even so, SaaF Android has not been tested on several versions of Android.
 The following is a list of Androids that have been tested:
 - Android 11 (Vivo Y12s)
 - Android 8.1 (Vivo Y91C)
+- Android 4.0 (NoxPlayer 6.2.7.0)
 
 Let me know if this app works on Android which is not listed.
 

@@ -3,6 +3,7 @@ package com.aozoradev.saaf;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.MenuItem;
 import android.os.Bundle;
 import android.content.pm.ApplicationInfo;
 import android.widget.TextView;
@@ -21,9 +22,19 @@ public class AboutActivity extends AppCompatActivity {
     finish();
   }
   
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == android.R.id.home) {
+      onBackPressed();
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+  
   private void initialize(Bundle _savedInstanceState) {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     
     StringBuilder sb = new StringBuilder();
     sb.append(getString(R.string.app_name));
