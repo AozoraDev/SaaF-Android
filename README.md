@@ -21,7 +21,8 @@ SaaF Android can work on Android 4.0 - Android 12.
 
 Even so, SaaF Android has not been tested on several versions of Android.  
 The following is a list of Androids that have been tested:
-- Android 11 (Vivo Y12s)
+- Android 11 (Vivo Y12s & Samsung Galaxy S21 Ultra)
+- Android 9.0 (Google Pixel 3)
 - Android 8.1 (Vivo Y91C)
 - Android 4.0 (NoxPlayer 6.2.7.0)
 
