@@ -19,7 +19,8 @@ import org.ini4j.IniPreferences;
 import com.google.android.vending.expansion.zipfile.ZipResourceFile;
 import com.anggrayudi.storage.extension.UriUtils;
 import com.anggrayudi.storage.file.DocumentFileUtils;
-import com.aozoradev.saaf.constant.Constant;
+import com.aozoradev.saaf.variables.Constant;
+import com.aozoradev.saaf.variables.Static;
 
 public class Radio {
   private String mTitle;
@@ -85,10 +86,10 @@ public class Radio {
         throw new IOException ("ErrorLolAmogusSussyBalls");
       }
       
-      // Add some data to Constant
-      Constant.zipFile = new ZipResourceFile(path);
-      Constant.station = prefs.node(nodeName).get("station", null);
-      Constant.stationInt = context.getResources().getIdentifier(nodeName.toLowerCase(Locale.US), "drawable", context.getPackageName());
+      // Add some data to global variable
+      Static.zipFile = new ZipResourceFile(path);
+      Static.station = prefs.node(nodeName).get("station", null);
+      Static.stationInt = context.getResources().getIdentifier(nodeName.toLowerCase(Locale.US), "drawable", context.getPackageName());
     }
     return songs;
   }

@@ -1,6 +1,7 @@
 package com.aozoradev.saaf;
 
-import com.aozoradev.saaf.constant.Constant;
+import com.aozoradev.saaf.variables.Constant;
+import com.aozoradev.saaf.variables.Static;
 import com.aozoradev.saaf.utils.OSWUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.anggrayudi.storage.file.DocumentFileUtils;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
   
   private void lmaoTheFileIsClosedBruhLmaoAmogusSussyBakaSusAmogusWhenTheImposterIsSusLmaoFortniteCard() {
     canBack = false;
-    Constant.zipFile = null;
+    Static.zipFile = null;
     radio.clear();
     recyclerView.getAdapter().notifyItemRangeRemoved(0, radio.size());
     recyclerView.getAdapter().notifyDataSetChanged();
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
           recyclerView.setLayoutManager(new LinearLayoutManager(this));
           recyclerView.setVisibility(View.VISIBLE);
           button.setVisibility(View.GONE);
-          getSupportActionBar().setSubtitle(Constant.station);
+          getSupportActionBar().setSubtitle(Static.station);
           canBack = true;
           closeFile = new MaterialAlertDialogBuilder(MainActivity.this)
           .setMessage("Do you want to close " + nodeName + "?")

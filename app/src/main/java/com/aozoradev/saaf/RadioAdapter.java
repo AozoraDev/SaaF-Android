@@ -3,7 +3,7 @@ package com.aozoradev.saaf;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.aozoradev.saaf.constant.Constant;
+import com.aozoradev.saaf.variables.Constant;
 import com.aozoradev.saaf.utils.OSWUtil;
 import com.aozoradev.saaf.radioplayer.RadioPlayer;
 

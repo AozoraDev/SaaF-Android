@@ -1,7 +1,7 @@
 package com.aozoradev.saaf.radioplayer;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.aozoradev.saaf.constant.Constant;
+import com.aozoradev.saaf.variables.Static;
 import com.aozoradev.saaf.Radio;
 import com.aozoradev.saaf.R;
 
@@ -49,7 +49,7 @@ public class RadioPlayer {
   public static void play (Context context, Radio radio) throws IOException, IllegalArgumentException{
     mediaPlayer = new MediaPlayer();
     
-    try (AssetFileDescriptor assetFileDescriptor = Constant.zipFile.getAssetFileDescriptor(radio.getFileName())) {
+    try (AssetFileDescriptor assetFileDescriptor = Static.zipFile.getAssetFileDescriptor(radio.getFileName())) {
       mediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor(), assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
       mediaPlayer.prepareAsync();
       
@@ -63,8 +63,8 @@ public class RadioPlayer {
       
       builder.setView(dialogView);
       builder.setCancelable(false);
-      builder.setTitle(Constant.station);
-      builder.setIcon((Constant.stationInt != 0) ? Constant.stationInt : R.drawable.utp);
+      builder.setTitle(Static.station);
+      builder.setIcon((Static.stationInt != 0) ? Static.stationInt : R.drawable.utp);
       builder.setPositiveButton("Close", null);
       builder.setNegativeButton("Pause", null);
       

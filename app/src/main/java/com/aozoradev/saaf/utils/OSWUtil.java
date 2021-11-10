@@ -1,6 +1,7 @@
 package com.aozoradev.saaf.utils;
 
-import com.aozoradev.saaf.constant.Constant;
+import com.aozoradev.saaf.variables.Constant;
+import com.aozoradev.saaf.variables.Static;
 import com.aozoradev.saaf.Radio;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public class OSWUtil {
   }
   
   public static void extract (Context context, Radio radio) throws IOException {
-    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + Constant.station);
+    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + Static.station);
     if (!file.exists()) {
       file.mkdirs();
     }
@@ -38,7 +39,7 @@ public class OSWUtil {
     
     try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + "/" + fn);
     BufferedOutputStream bos = new BufferedOutputStream(fos);
-    InputStream is = Constant.zipFile.getInputStream(fn)) {
+    InputStream is = Static.zipFile.getInputStream(fn)) {
       byte[] bytesIn = new byte[Constant.BUFFER_SIZE];
       int read = 0;
       while ((read = is.read(bytesIn)) != -1) {
