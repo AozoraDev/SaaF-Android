@@ -11,7 +11,10 @@
 
 <h2 id="installation">Installation</h2>
 <p>
-  This app is still under development but you can try the debug version in the workflows.
+  Get the latest release in the <a href="../../releases/latest">Release</a>.
+  <br/>
+  <br/>
+  You can also try the debug version in the workflows.
   <br/>
   Just <a href="../../actions">click this</a>, click the latest commit, then download the artifact.
 </p>
@@ -38,7 +41,12 @@ Make sure your platform has installed:
 ## Building
 If you have Android Studio, just clone this repo and open it in Android Studio.
 
-Or if you like coding using Notepad, just type `./gradlew.bat assembleDebug` (for Windows) or `./gradlew assembleDebug` (for Linux).
+Or if you like coding using Notepad, just type `gradlew.bat assembleDebug` (for Windows) or `./gradlew assembleDebug` (for Linux).
+
+## TODO
+- Added visualizer to `RadioPlayer`.
+- Complete the `About` activity.
+- Made it work like radio in GTA SA.
 
 ## Dependencies Used
 - AndroidX: MultiDex, DocumentFile, & AppCompat [(LICENSE)](https://opensource.org/licenses/Apache-2.0)
