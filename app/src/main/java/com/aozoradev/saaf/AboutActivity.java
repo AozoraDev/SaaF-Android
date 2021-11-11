@@ -17,6 +17,7 @@ public class AboutActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_about);
     initialize(savedInstanceState);
+    initializeLogic();
   }
   
   @Override
@@ -58,5 +59,12 @@ public class AboutActivity extends AppCompatActivity {
     
     TextView textView = (TextView) findViewById(R.id.textView);
     textView.setText(sb.toString());
+  }
+  
+  private void initializeLogic () {
+    findViewById(R.id.discord).setOnClickListener(v -> openItOkayLmao(v));
+    findViewById(R.id.youtube).setOnClickListener(v -> openItOkayLmao(v));
+    findViewById(R.id.twitter).setOnClickListener(v -> openItOkayLmao(v));
+    findViewById(R.id.github).setOnClickListener(v -> openItOkayLmao(v));
   }
 }
