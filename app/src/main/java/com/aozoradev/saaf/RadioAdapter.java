@@ -23,12 +23,14 @@ public class RadioAdapter extends
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView artist;
+        public TextView file;
         private Context context;
         
         public ViewHolder(Context context, View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             artist = (TextView) itemView.findViewById(R.id.artist);
+            file = (TextView) itemView.findViewById(R.id.file);
             this.context = context;
             itemView.setOnClickListener(v -> clickAndHold());
             itemView.setOnLongClickListener(v -> clickAndHold());
@@ -43,7 +45,7 @@ public class RadioAdapter extends
             TextView mainTitle = (TextView) dialogView.findViewById(R.id.mainTitle);
             TextView subTitle = (TextView) dialogView.findViewById(R.id.subTitle);
             mainTitle.setText(_radio.getTitle());
-            subTitle.setText(_radio.getFileName());
+            subTitle.setText(_radio.getArtist());
             
             dialog.setCustomTitle(dialogView)
             .setItems(Constant.itemsOption, (_dialog, _which) -> {
@@ -100,6 +102,8 @@ public class RadioAdapter extends
         textView1.setText(radio.getTitle());
         TextView textView2 = holder.artist;
         textView2.setText(radio.getArtist());
+        TextView textView3 = holder.file;
+        textView3.setText(radio.getFileName());
     }
 
     @Override
