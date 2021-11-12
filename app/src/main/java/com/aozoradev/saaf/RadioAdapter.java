@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.aozoradev.saaf.variables.Constant;
+import com.aozoradev.saaf.variables.Static;
 import com.aozoradev.saaf.utils.OSWUtil;
 import com.aozoradev.saaf.radioplayer.RadioPlayer;
 
@@ -41,13 +42,8 @@ public class RadioAdapter extends
             Radio _radio = mRadio.get(position);
 
             MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this.context);
-            View dialogView = View.inflate(this.context, R.layout.custom_title, null);
-            TextView mainTitle = (TextView) dialogView.findViewById(R.id.mainTitle);
-            TextView subTitle = (TextView) dialogView.findViewById(R.id.subTitle);
-            mainTitle.setText(_radio.getTitle());
-            subTitle.setText(_radio.getArtist());
-            
-            dialog.setCustomTitle(dialogView)
+            dialog.setTitle(_radio.getTitle())
+            .setIcon((Static.stationInt != 0) ? Static.stationInt : R.drawable.utp)
             .setItems(Constant.itemsOption, (_dialog, _which) -> {
               switch (_which) {
                 case 0:
