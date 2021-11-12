@@ -30,12 +30,7 @@ public class SaaFApplication extends Application {
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra("error", Log.getStackTraceString(e));
 		
-		PendingIntent pendingIntent = null;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-		  pendingIntent = PendingIntent.getActivity(getApplicationContext(), 11111, intent, PendingIntent.FLAG_IMMUTABLE);
-		} else {
-		  pendingIntent = PendingIntent.getActivity(getApplicationContext(), 11111, intent, PendingIntent.FLAG_ONE_SHOT);
-		}
+		PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 11111, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT);
 		
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000, pendingIntent);

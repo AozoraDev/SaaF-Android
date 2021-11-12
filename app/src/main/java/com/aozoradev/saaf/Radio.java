@@ -6,6 +6,7 @@ import androidx.documentfile.provider.DocumentFile;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.util.Locale;
@@ -51,13 +52,12 @@ public class Radio {
     return mPath;
   }
 
-  public static ArrayList < Radio > createRadioList(Context context, Uri uri, String nodeName) throws IOException {
+  public static ArrayList < Radio > createRadioList(Context context, Uri uri, String nodeName) throws IOException, FileNotFoundException {
+    ArrayList < Radio > songs = new ArrayList < Radio > ();
     boolean isEqual = Arrays.asList(Constant.stationName).contains(nodeName + ".osw");
     if (!isEqual) {
-      throw new IOException ("ErrorLolAmogusSussyBalls");
+      return songs;
     }
-    
-    ArrayList < Radio > songs = new ArrayList < Radio > ();
     
     // Get path bullshit
     String path = null;
@@ -81,9 +81,6 @@ public class Radio {
         String title = prefs.node(nodeName).get("track" + index + ".title", null);
         String artist = prefs.node(nodeName).get("track" + index + ".artist", null);
         songs.add(new Radio(title, (artist == null ? "-" : artist), _fileName, path));
-      }
-      if (songs.isEmpty()) {
-        throw new IOException ("ErrorLolAmogusSussyBalls");
       }
       
       // Add some data to global variable

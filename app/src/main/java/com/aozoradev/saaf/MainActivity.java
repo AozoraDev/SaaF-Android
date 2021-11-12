@@ -15,7 +15,6 @@ import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
       try {
         OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, MainActivity.this));
         Toast.makeText(MainActivity.this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
-      } catch (IOException err) {
+      } catch (Exception err) {
         Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
         err.printStackTrace();
       }
@@ -134,16 +133,19 @@ public class MainActivity extends AppCompatActivity {
         
         try {
           radio = Radio.createRadioList(MainActivity.this, uri, nodeName.replaceAll(".osw", ""));
-        } catch (IOException err) {
+        } catch (Exception err) {
           handler.post(() -> {
-            if (err.getMessage() == "ErrorLolAmogusSussyBalls") {
-              Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
-              loading.dismiss();
-            } else {
-              Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-              loading.dismiss();
-              err.printStackTrace();
-            }
+            Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+            loading.dismiss();
+            err.printStackTrace();
+          });
+          return;
+        }
+        
+        if (radio.isEmpty()) {
+          handler.post(() -> {
+            Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
+            loading.dismiss();
           });
           return;
         }

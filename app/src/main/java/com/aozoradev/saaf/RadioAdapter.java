@@ -9,7 +9,6 @@ import com.aozoradev.saaf.utils.OSWUtil;
 import com.aozoradev.saaf.radioplayer.RadioPlayer;
 
 import java.util.List;
-import java.io.IOException;
 
 import android.view.View;
 import android.widget.TextView;
@@ -49,13 +48,7 @@ public class RadioAdapter extends
                 case 0:
                   try {
                     RadioPlayer.play(context, _radio);
-                  } catch (NullPointerException err) {
-                    Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-                    err.printStackTrace();
-                  } catch (IllegalArgumentException err) {
-                    Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-                    err.printStackTrace();
-                  } catch (IOException err) {
+                  } catch (Exception err) {
                     Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     err.printStackTrace();
                   }
@@ -63,7 +56,7 @@ public class RadioAdapter extends
                 case 1:
                   try {
                     OSWUtil.extract(context, _radio);
-                  } catch (IOException err) {
+                  } catch (Exception err) {
                     Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     err.printStackTrace();
                   }
