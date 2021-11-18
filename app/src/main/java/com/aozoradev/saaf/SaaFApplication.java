@@ -1,6 +1,5 @@
 package com.aozoradev.saaf;
 
-import androidx.multidex.MultiDex;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.os.Process;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatDelegate;
 import android.app.AlarmManager;
-import android.annotation.SuppressLint;
 
 public class SaaFApplication extends Application {
   public void onCreate() {
@@ -24,7 +22,6 @@ public class SaaFApplication extends Application {
     });
   }
   
-  @SuppressLint("UnspecifiedImmutableFlag")
   private void handleUncaughtException (Thread thread, Throwable e) {
     Intent intent = new Intent(getApplicationContext(), UncaughtExceptionActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -37,11 +34,5 @@ public class SaaFApplication extends Application {
 		
 		Process.killProcess(Process.myPid());
 		System.exit(1);
-  }
-
-  @Override
-  protected void attachBaseContext(Context base) {
-    super.attachBaseContext(base);
-    MultiDex.install(this);
   }
 }
