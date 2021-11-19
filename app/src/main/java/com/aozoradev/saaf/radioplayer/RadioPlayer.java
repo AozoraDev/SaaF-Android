@@ -19,7 +19,7 @@ import android.widget.SeekBar;
 import android.content.Context;
 
 public class RadioPlayer {
-  private static MediaPlayer mediaPlayer;
+  public static MediaPlayer mediaPlayer;
   private static Runnable runnable;
   private static Handler mHandler;
   

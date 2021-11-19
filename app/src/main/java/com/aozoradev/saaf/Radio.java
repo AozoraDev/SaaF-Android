@@ -6,7 +6,6 @@ import androidx.documentfile.provider.DocumentFile;
 
 import java.io.InputStream;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.util.Locale;
@@ -52,7 +51,7 @@ public class Radio {
     return mPath;
   }
 
-  public static ArrayList < Radio > createRadioList(Context context, Uri uri, String nodeName) throws IOException, FileNotFoundException {
+  public static ArrayList < Radio > createRadioList(Context context, Uri uri, String nodeName) throws IOException {
     ArrayList < Radio > songs = new ArrayList < Radio > ();
     boolean isEqual = Arrays.asList(Constant.stationName).contains(nodeName + ".osw");
     if (!isEqual) {
@@ -61,19 +60,18 @@ public class Radio {
     
     // Get path bullshit
     String path = null;
-    if(UriUtils.isExternalStorageDocument(uri)) {
+    if (UriUtils.isExternalStorageDocument(uri)) {
       DocumentFile df = UriUtils.toDocumentFile(uri, context);
       path = DocumentFileUtils.getAbsolutePath(df, context);
     } else {
       path = uri.getPath();
     }
-    Preferences prefs = null;
     
     try (FileInputStream fis = new FileInputStream(path);
     BufferedInputStream bis = new BufferedInputStream(fis);
     ZipInputStream zis = new ZipInputStream(bis);
     InputStream metaStream = context.getAssets().open("meta.ini")) {
-      prefs = new IniPreferences(metaStream);
+      Preferences prefs = new IniPreferences(metaStream);
       ZipEntry ze;
       while ((ze = zis.getNextEntry()) != null) {
         String _fileName = ze.getName();
@@ -87,7 +85,8 @@ public class Radio {
       Static.zipFile = new ZipResourceFile(path);
       Static.station = prefs.node(nodeName).get("station", null);
       Static.stationInt = context.getResources().getIdentifier(nodeName.toLowerCase(Locale.US), "drawable", context.getPackageName());
+      
+      return songs;
     }
-    return songs;
   }
 }

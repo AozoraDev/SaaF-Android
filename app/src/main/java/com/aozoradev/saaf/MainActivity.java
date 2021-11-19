@@ -135,16 +135,21 @@ public class MainActivity extends AppCompatActivity {
           radio = Radio.createRadioList(MainActivity.this, uri, nodeName.replaceAll(".osw", ""));
         } catch (Exception err) {
           handler.post(() -> {
-            Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-            loading.dismiss();
-            err.printStackTrace();
+            if (err.getMessage() == null) {
+              Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
+              loading.dismiss();
+            } else {
+              Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+              loading.dismiss();
+              err.printStackTrace();
+            }
           });
           return;
         }
         
         if (radio.isEmpty()) {
           handler.post(() -> {
-            Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "This is not a GTASA STREAMS file", Toast.LENGTH_LONG).show();
             loading.dismiss();
           });
           return;
