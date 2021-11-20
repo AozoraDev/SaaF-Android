@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.net.URISyntaxException;
 
 import android.os.Handler;
 import android.os.Bundle;
