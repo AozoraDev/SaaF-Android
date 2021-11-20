@@ -3,6 +3,7 @@ package com.aozoradev.saaf;
 import com.aozoradev.saaf.variables.Constant;
 import com.aozoradev.saaf.variables.Static;
 import com.aozoradev.saaf.utils.OSWUtil;
+import com.aozoradev.saaf.utils.CheckUpdate;
 import com.aozoradev.saaf.radioplayer.RadioPlayer;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.anggrayudi.storage.file.DocumentFileUtils;
@@ -251,6 +252,18 @@ public class MainActivity extends AppCompatActivity {
       .setPositiveButton("OK", (_dialog, _which) -> requestPermission()).show();
       return;
     }
+    
+    executor.execute(() -> {
+      try {
+        CheckUpdate cu = new CheckUpdate(this, Constant.updateURL);
+        handler.post(() -> cu.check());
+      } catch (Exception err) {
+        handler.post(() -> {
+          Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+          err.printStackTrace();
+        });
+      }
+    });
     
     button.setVisibility(View.VISIBLE);
     button.setOnClickListener(v -> {

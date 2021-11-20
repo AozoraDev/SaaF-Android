@@ -1,0 +1,12 @@
+{
+ "versionName": "1.0-alpha2",
+ "versionCode": 1,
+ "changelog": [
+   "- Show the file name in list.",
+   "- Show only audio title when selecting audio.",
+   "- Fix always asking storage permission on Android 10.",
+   "- Pauses the radio player when leaving the app (such as during a phone call).",
+   "- Dismiss radio player when back button is pressed.",
+   "- Checks if there is an update every time you open the app."
+  ]
+}
