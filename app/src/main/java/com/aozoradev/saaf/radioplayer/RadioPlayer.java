@@ -71,13 +71,13 @@ public class RadioPlayer {
       SeekBar seekBar = (SeekBar) dialogView.findViewById(R.id.seekbar);
       
       builder.setView(dialogView);
-      builder.setCancelable(false);
       builder.setTitle(Static.station);
       builder.setIcon((Static.stationInt != 0) ? Static.stationInt : R.drawable.utp);
       builder.setPositiveButton("Close", null);
       builder.setNegativeButton("Pause", null);
       
       dialog = builder.show();
+      dialog.setCanceledOnTouchOutside(false);
       
       mHandler = new Handler();
       
