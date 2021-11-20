@@ -3,6 +3,7 @@ package com.aozoradev.saaf;
 import com.aozoradev.saaf.variables.Constant;
 import com.aozoradev.saaf.variables.Static;
 import com.aozoradev.saaf.utils.OSWUtil;
+import com.aozoradev.saaf.radioplayer.RadioPlayer;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.anggrayudi.storage.file.DocumentFileUtils;
 
@@ -55,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     initialize(savedInstanceState);
     initializeLogic();
+  }
+  
+  @Override
+  protected void onPause() {
+    RadioPlayer.pause(MainActivity.this);
+    super.onPause();
   }
   
   @Override

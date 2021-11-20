@@ -22,11 +22,20 @@ public class RadioPlayer {
   public static MediaPlayer mediaPlayer;
   private static Runnable runnable;
   private static Handler mHandler;
+  private static AlertDialog dialog;
   
-  private static void stop (MediaPlayer mp) {
-    mp.stop();
-    mp.release();
-    mp = null;
+  private static void stop () {
+    mediaPlayer.stop();
+    mediaPlayer.release();
+    mediaPlayer = null;
+  }
+  
+  public static void pause (Context context) {
+    if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+      dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText(context.getString(R.string.play));
+      mHandler.removeCallbacks(runnable);
+      mediaPlayer.pause();
+    }
   }
   
   // https://www.11zon.com/zon/android/how-to-play-audio-file-in-android-programmatically.php (Timer Conversion)
@@ -46,7 +55,7 @@ public class RadioPlayer {
   }
   
   // Code below is not from 11zon.com, okay? got it? cool kthxcya.
-  public static void play (Context context, Radio radio) throws IOException, IllegalArgumentException{
+  public static void play (Context context, Radio radio) throws IOException, IllegalArgumentException {
     mediaPlayer = new MediaPlayer();
     
     try (AssetFileDescriptor assetFileDescriptor = Static.zipFile.getAssetFileDescriptor(radio.getFileName())) {
@@ -68,7 +77,7 @@ public class RadioPlayer {
       builder.setPositiveButton("Close", null);
       builder.setNegativeButton("Pause", null);
       
-      AlertDialog dialog = builder.show();
+      dialog = builder.show();
       
       mHandler = new Handler();
       
@@ -123,7 +132,7 @@ public class RadioPlayer {
       });
       
       dialog.setOnDismissListener(d -> {
-        stop(mediaPlayer);
+        stop();
         mHandler.removeCallbacks(runnable);
       });
     }
