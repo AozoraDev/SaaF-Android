@@ -1,5 +1,6 @@
 package com.aozoradev.saaf;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
@@ -22,12 +23,18 @@ public class SaaFApplication extends Application {
     });
   }
   
+  @SuppressLint("UnspecifiedImmutableFlag")
   private void handleUncaughtException (Thread thread, Throwable e) {
     Intent intent = new Intent(getApplicationContext(), UncaughtExceptionActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra("error", Log.getStackTraceString(e));
 		
-		PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 11111, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT);
+		PendingIntent pendingIntent = null;
+		if (Build.VERSION.SDK_INT >= 23) {
+		  pendingIntent = PendingIntent.getActivity(getApplicationContext(), 11111, intent, PendingIntent.FLAG_IMMUTABLE);
+    } else {
+      pendingIntent = PendingIntent.getActivity(getApplicationContext(), 11111, intent, PendingIntent.FLAG_ONE_SHOT);
+    }
 		
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000, pendingIntent);

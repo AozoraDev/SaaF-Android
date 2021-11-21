@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.Build;
@@ -111,12 +112,15 @@ public class MainActivity extends AppCompatActivity {
     System.exit(0);
   }
   
+  @SuppressLint("NotifyDataSetChanged")
   private void lmaoTheFileIsClosedBruhLmaoAmogusSussyBakaSusAmogusWhenTheImposterIsSusLmaoFortniteCard() {
     canBack = false;
     Static.zipFile = null;
     radio.clear();
     recyclerView.getAdapter().notifyItemRangeRemoved(0, radio.size());
-    recyclerView.getAdapter().notifyDataSetChanged();
+    if (radio.size() > 0) {
+      recyclerView.getAdapter().notifyDataSetChanged();
+    }
     button.setVisibility(View.VISIBLE);
     recyclerView.setVisibility(View.GONE);
     getSupportActionBar().setSubtitle(null);
