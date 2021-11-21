@@ -60,8 +60,11 @@ public class Radio {
     
     // Get path bullshit
     String path = null;
-    if (UriUtils.isExternalStorageDocument(uri)) {
+    if (UriUtils.isExternalStorageDocument(uri) || UriUtils.isDownloadsDocument(uri)) {
       DocumentFile df = UriUtils.toDocumentFile(uri, context);
+      path = DocumentFileUtils.getAbsolutePath(df, context);
+    } else if (UriUtils.isMediaDocument(uri)) {
+      DocumentFile df = UriUtils.toMediaFile(uri, context).toDocumentFile();
       path = DocumentFileUtils.getAbsolutePath(df, context);
     } else {
       path = uri.getPath();
