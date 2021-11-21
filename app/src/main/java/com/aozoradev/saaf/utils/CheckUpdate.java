@@ -25,6 +25,7 @@ public class CheckUpdate {
   private int versionCode;
   private Context context;
   private String url;
+  private String list;
   
   public CheckUpdate (Context context, String url) throws IOException, JSONException {
     if (checkIfInternetAvailable()) {
@@ -38,8 +39,6 @@ public class CheckUpdate {
   }
   
   public String getChangelog () {
-    String list = null;
-    
     try {
       JSONArray changelog = json.getJSONArray("changelog");
       list = changelog.join("\n");
