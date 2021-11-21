@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
   
   @Override
   protected void onPause() {
-    RadioPlayer.pause(MainActivity.this);
+    RadioPlayer.pause(this);
     super.onPause();
   }
   
@@ -77,11 +77,10 @@ public class MainActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == R.id.create_idx) {
       try {
-        OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, MainActivity.this));
-        Toast.makeText(MainActivity.this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
+        OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, this));
+        Toast.makeText(this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
       } catch (Exception err) {
-        Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-        err.printStackTrace();
+        printError(err);
       }
       return true;
     } else if (item.getItemId() == R.id.about) {
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
       startActivity(intent);
       return true;
     } else if (item.getItemId() == R.id.show_vi) {
-      Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_LONG).show();
+      Toast.makeText(this, "Coming soon", Toast.LENGTH_LONG).show();
     }
     return super.onOptionsItemSelected(item);
   }
@@ -139,16 +138,15 @@ public class MainActivity extends AppCompatActivity {
         String nodeName = df.getName();
         
         try {
-          radio = Radio.createRadioList(MainActivity.this, uri, nodeName.replaceAll(".osw", ""));
+          radio = Radio.createRadioList(this, uri, nodeName.replaceAll(".osw", ""));
         } catch (Exception err) {
           handler.post(() -> {
             if (err.getMessage() == null) {
-              Toast.makeText(MainActivity.this, "Failed to load the file", Toast.LENGTH_LONG).show();
+              Toast.makeText(this, "Failed to load the file", Toast.LENGTH_LONG).show();
               loading.dismiss();
             } else {
-              Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+              printError(err);
               loading.dismiss();
-              err.printStackTrace();
             }
           });
           return;
@@ -156,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         
         if (radio.isEmpty()) {
           handler.post(() -> {
-            Toast.makeText(MainActivity.this, "This is not a GTASA STREAMS file", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "This is not a GTASA STREAMS file", Toast.LENGTH_LONG).show();
             loading.dismiss();
           });
           return;
@@ -170,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
           button.setVisibility(View.GONE);
           getSupportActionBar().setSubtitle(Static.station);
           canBack = true;
-          closeFile = new MaterialAlertDialogBuilder(MainActivity.this)
+          closeFile = new MaterialAlertDialogBuilder(this)
           .setMessage("Do you want to close " + nodeName + "?")
           .setPositiveButton("Yes", (_which, _dialog) -> lmaoTheFileIsClosedBruhLmaoAmogusSussyBakaSusAmogusWhenTheImposterIsSusLmaoFortniteCard())
           .setNegativeButton("No", null)
@@ -190,13 +188,18 @@ public class MainActivity extends AppCompatActivity {
     }
   }
   
+  private void printError (Throwable err) {
+    Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+    err.printStackTrace();
+  }
+  
   // https://stackoverflow.com/a/66366102
   private boolean checkPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       return Environment.isExternalStorageManager();
     } else {
-      int result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
-      int result1 = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+      int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+      int result1 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
       return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
     }
   }
@@ -209,13 +212,11 @@ public class MainActivity extends AppCompatActivity {
         intent.addCategory("android.intent.category.DEFAULT");
         intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
         startActivityForResult(intent, 1000);
-      } catch (Exception e) {
-        Intent intent = new Intent();
-        intent.setAction("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
-        startActivityForResult(intent, 1000);
+      } catch (Exception err) {
+        printError(err);
       }
     } else {
-      ActivityCompat.requestPermissions(MainActivity.this, Constant.permissions, 1000);
+      ActivityCompat.requestPermissions(this, Constant.permissions, 1000);
     }
   }
 
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
     recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
     setSupportActionBar(toolbar);
     
-    backPressedDialog = new MaterialAlertDialogBuilder(MainActivity.this)
+    backPressedDialog = new MaterialAlertDialogBuilder(this)
     .setCancelable(true)
     .setMessage("Are you sure you want to close this app?")
     .setPositiveButton("YES", (_which, _dialog) -> finish())
@@ -247,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void initializeLogic() {
     if (!checkPermission()) {
-      new MaterialAlertDialogBuilder(MainActivity.this)
+      new MaterialAlertDialogBuilder(this)
       .setCancelable(false).setMessage("This app requires storage access to work properly. Please grant storage permission.")
       .setPositiveButton("OK", (_dialog, _which) -> requestPermission()).show();
       return;
@@ -259,8 +260,7 @@ public class MainActivity extends AppCompatActivity {
         handler.post(() -> cu.check());
       } catch (Exception err) {
         handler.post(() -> {
-          Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-          err.printStackTrace();
+          printError(err);
         });
       }
     });

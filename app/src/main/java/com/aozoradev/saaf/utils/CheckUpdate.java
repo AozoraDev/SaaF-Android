@@ -12,7 +12,6 @@ import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.util.Scanner;
 
 import com.aozoradev.saaf.BuildConfig;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -48,7 +47,7 @@ public class CheckUpdate {
       err.printStackTrace();
     }
     
-    return list;
+    return list.replaceAll("\"", "");
   }
   
   public String getVersionFull () {
@@ -64,7 +63,7 @@ public class CheckUpdate {
       if (!BuildConfig.VERSION_NAME.equals(versionName)) {
         new MaterialAlertDialogBuilder(context)
         .setTitle("SaaF Android " + getVersionFull() + " is available!")
-        .setMessage(getChangelog().replaceAll("\"", ""))
+        .setMessage(getChangelog())
         .setPositiveButton("Update", (_dialog, _which) -> {
           Intent intent = new Intent();
           intent.setAction(Intent.ACTION_VIEW);
