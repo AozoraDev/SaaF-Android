@@ -16,10 +16,10 @@ import android.widget.Toast;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.content.Context;
+import android.content.ClipboardManager;
+import android.content.ClipData;
 
-public class RadioAdapter extends
-    RecyclerView.Adapter<RadioAdapter.ViewHolder> {
-    
+public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView artist;
@@ -60,6 +60,12 @@ public class RadioAdapter extends
                     Toast.makeText(context, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     err.printStackTrace();
                   }
+                break;
+                case 2:
+                  ClipboardManager copy = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE); 
+                  ClipData clip = ClipData.newPlainText(null, _radio.getTitle());
+                  copy.setPrimaryClip(clip);
+                  Toast.makeText(context, "Title has been copied!", Toast.LENGTH_LONG).show();
                 break;
               }
             });
