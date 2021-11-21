@@ -260,9 +260,7 @@ public class MainActivity extends AppCompatActivity {
         CheckUpdate cu = new CheckUpdate(this, Constant.updateURL);
         handler.post(() -> cu.check());
       } catch (Exception err) {
-        handler.post(() -> {
-          printError(err);
-        });
+        err.printStackTrace();
       }
     });
     
