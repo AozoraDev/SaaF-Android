@@ -4,17 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.Charset;
 
 import com.aozoradev.saaf.BuildConfig;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.OkHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -28,14 +24,12 @@ public class CheckUpdate {
   private String list;
   
   public CheckUpdate (Context context, String url) throws IOException, JSONException {
-    if (checkIfInternetAvailable()) {
-      json = readJsonFromUrl(url);
-      versionName = json.getString("versionName");
-      versionCode = json.getInt("versionCode");
-      
-      this.context = context;
-      this.url = url;
-    }
+    json = readJson(url);
+    
+    versionName = json.getString("versionName");
+    versionCode = json.getInt("versionCode");
+    this.context = context;
+    this.url = url;
   }
   
   public String getChangelog () {
@@ -77,34 +71,13 @@ public class CheckUpdate {
     }
   }
   
-  private boolean checkIfInternetAvailable () {
-    try {
-      URL _url = new URL("https://github.com");
-      URLConnection connection = _url.openConnection();
-      connection.connect();
-      return true;
-    } catch (IOException err) {
-      return false;
-    }
-  }
-  
-  // https://stackoverflow.com/a/28327017
-  private String readAll(Reader rd) throws IOException {
-    StringBuilder sb = new StringBuilder();
-    int cp;
-    while ((cp = rd.read()) != -1) {
-      sb.append((char) cp);
-    }
-    return sb.toString();
-  }
-  
-  // https://stackoverflow.com/a/28327017
-  private JSONObject readJsonFromUrl (String url) throws IOException, JSONException {
-    try (InputStream is = new URL(url).openStream()) {
-      BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-      String jsonText = readAll(rd);
-      JSONObject _json = new JSONObject(jsonText);
-      return _json;
-    }
+  private JSONObject readJson (String url) throws IOException, JSONException {
+    OkHttpClient client = new OkHttpClient();
+    Request request = new Request.Builder().url(url).get().build();
+    Response response = client.newCall(request).execute();
+    JSONObject _json = new JSONObject(response.body().string());
+    
+    response.close();
+    return _json;
   }
 }
