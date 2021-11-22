@@ -46,6 +46,7 @@ android {
     
     lintOptions {
         disable 'UnusedResources', 'IconLauncherShape', 'IconDuplicates'
+        checkDependencies true
         abortOnError false
     }
 }
