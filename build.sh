@@ -17,7 +17,7 @@ if [ $PREFIX == "/data/data/com.termux/files/usr" ] ; then
     echo "App installed"
   fi
   confirm() {
-    read -p "You want to open the app? [y/N] (default: y) " response
+    read -p "You want to open the app? [y/N] " response
     case "$response" in
       [yY]*) 
         am start --user 0 -n com.aozoradev.saaf/com.aozoradev.saaf.MainActivity
@@ -26,7 +26,7 @@ if [ $PREFIX == "/data/data/com.termux/files/usr" ] ; then
         exit 1
         ;;
       *)
-        am start --user 0 -n com.aozoradev.saaf/com.aozoradev.saaf.MainActivity
+        echo "No response. Skipping the app opener..."
         ;;
     esac
   }

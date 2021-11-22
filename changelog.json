@@ -9,6 +9,6 @@
    "- Dismiss radio player when back button is pressed.",
    "- Checks if there is an update every time you open the app.",
    "- Added copy title option when selecting audio.",
-   "- Fix cannot open file from Download/Media."
+   "- Fix the app cannot open the file from Download or Media."
   ]
 }
