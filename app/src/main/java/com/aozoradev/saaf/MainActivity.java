@@ -91,6 +91,20 @@ public class MainActivity extends AppCompatActivity {
     } else if (item.getItemId() == R.id.show_vi) {
       Toast.makeText(this, "Coming soon", Toast.LENGTH_LONG).show();
       return true;
+    } else if (item.getItemId() == R.id.donate) {
+      new MaterialAlertDialogBuilder(this)
+      .setItems(Constant.donateList, (_dialog, _which) -> {
+        switch (_which) {
+          case 0:
+            openItOkayLmao("https://saweria.co/AozoraDev");
+          break;
+          case 1:
+            openItOkayLmao("https://trakteer.id/AozoraDev");
+          break;
+        }
+      })
+      .show();
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }
@@ -191,6 +205,15 @@ public class MainActivity extends AppCompatActivity {
     if (requestCode == 1000) {
       initializeLogic();
     }
+  }
+  
+  private void openItOkayLmao(String url) {
+    Intent intent = new Intent();
+    intent.setAction(Intent.ACTION_VIEW);
+    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+    intent.setData(Uri.parse(url));
+
+    startActivity(intent);
   }
   
   private void printError (Throwable err) {
