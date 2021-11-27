@@ -53,7 +53,6 @@ Or if you like coding using Notepad, just type `gradlew.bat assembleDebug` (for 
 - Material Components [(LICENSE)](https://opensource.org/licenses/Apache-2.0)
 - SimpleStorage ([Source](https://github.com/anggrayudi/SimpleStorage), [License](https://opensource.org/licenses/Apache-2.0))
 - Ini4J ([Source](http://ini4j.sourceforge.net/), [License](https://opensource.org/licenses/Apache-2.0))
-- Better APK Expansion: ZipFile ([Source](https://github.com/auxility/better-apk-expansion), [License](https://opensource.org/licenses/Apache-2.0)
 - OkHttp ([Source](https://github.com/square/okhttp), [License](https://opensource.org/licenses/Apache-2.0))
 
 Also, some icons by Google Fonts and Fontawesome.

@@ -58,6 +58,5 @@ dependencies {
     implementation 'org.ini4j:ini4j:0.5.4'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.anggrayudi:storage:0.13.0'
-    implementation 'com.github.bolein.better-apk-expansion:zip_file:5.0.2'
     implementation 'com.squareup.okhttp3:okhttp:3.12.13'
 }
