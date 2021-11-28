@@ -64,6 +64,6 @@ Also, some icons by Google Fonts and Fontawesome.
 </ul>
 
 <h2 id="license">License</h2>
-<p>SaaF-Android is licensed under the <a href="https://opensource.org/licenses/GPL-3.0">GNU General Public License version 3</a>.
+<p>SaaF-Android is licensed under the <a href="https://opensource.org/licenses/apache-2.0">Apache License 2.0</a>.
 <br/>
 Please see the LICENSE file for more information.</p>
