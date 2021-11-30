@@ -76,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
   
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.create_idx) {
+    int itemId = item.getItemId();
+    
+    if (itemId == R.id.create_idx) {
       try {
         OSWUtil.createIDX(DocumentFileUtils.getAbsolutePath(df, this));
         Toast.makeText(this, df.getName() + ".idx created successfully!", Toast.LENGTH_LONG).show();
@@ -84,14 +86,14 @@ public class MainActivity extends AppCompatActivity {
         printError(err);
       }
       return true;
-    } else if (item.getItemId() == R.id.about) {
+    } else if (itemId == R.id.about) {
       Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
       startActivity(intent);
       return true;
-    } else if (item.getItemId() == R.id.show_vi) {
+    } else if (itemId == R.id.show_vi) {
       Toast.makeText(this, "Coming soon", Toast.LENGTH_LONG).show();
       return true;
-    } else if (item.getItemId() == R.id.donate) {
+    } else if (itemId == R.id.donate) {
       new MaterialAlertDialogBuilder(this)
       .setItems(Constant.donateList, (_dialog, _which) -> {
         switch (_which) {
@@ -101,11 +103,14 @@ public class MainActivity extends AppCompatActivity {
           case 1:
             openItOkayLmao("https://trakteer.id/AozoraDev");
           break;
+          case 2:
+            openItOkayLmao("https://patreon.com/AozoraDev");
         }
       })
       .show();
       return true;
     }
+    
     return super.onOptionsItemSelected(item);
   }
 

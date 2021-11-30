@@ -43,11 +43,6 @@ If you have Android Studio, just clone this repo and open it in Android Studio.
 
 Or if you like coding using Notepad, just type `gradlew.bat assembleDebug` (for Windows) or `./gradlew assembleDebug` (for Linux).
 
-## TODO
-- Added visualizer to `RadioPlayer`.
-- Complete the `About` activity.
-- Made it work like radio in GTA SA.
-
 ## Dependencies Used
 - AndroidX: DocumentFile, & AppCompat [(LICENSE)](https://opensource.org/licenses/Apache-2.0)
 - Material Components [(LICENSE)](https://opensource.org/licenses/Apache-2.0)
@@ -61,6 +56,7 @@ Also, some icons by Google Fonts and Fontawesome.
 <ul>
 <li><a href="https://saweria.co/AozoraDev">Saweria</a></li>
 <li><a href="https://trakteer.id/AozoraDev">Trakteer</a></li>
+<li><a href="https://patreon.com/AozoraDev">Patreon<a></li>
 </ul>
 
 <h2 id="license">License</h2>
