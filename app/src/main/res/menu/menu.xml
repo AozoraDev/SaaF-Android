@@ -9,16 +9,7 @@
     android:visible="false">
   </item>
   <item
-    android:id="@+id/show_vi"
-    android:checkable="true"
-    android:title="@string/show_vi">
-  </item>
-  <item
-    android:id="@+id/donate"
-    android:title="@string/donate">
-  </item>
-  <item
-    android:id="@+id/about"
-    android:title="@string/about">
+    android:id="@+id/settings"
+    android:title="@string/settings">
   </item>
 </menu> 

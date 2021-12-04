@@ -38,6 +38,10 @@
         <activity
         android:exported="true"
         android:configChanges="keyboardHidden|orientation|screenSize"
+        android:name=".SettingsActivity" />
+        <activity
+        android:exported="true"
+        android:configChanges="keyboardHidden|orientation|screenSize"
         android:name=".UncaughtExceptionActivity" />
         <provider
           android:name="androidx.core.content.FileProvider"

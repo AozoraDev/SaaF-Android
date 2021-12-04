@@ -11,8 +11,10 @@
     <string name="twitter">Twitter</string>
     <string name="pause">Pause</string>
     <string name="no_time">--:--</string>
-    <string name="donate">Donate</string>
+    <string name="donate">Donate Me!</string>
     <string name="show_vi">Show Visualizer</string>
     <string name="about_name">Aozora</string>
+    <string name="set_theme">Set Theme</string>
+    <string name="settings">Settings</string>
     <string name="about_title">(Owner of Shumi Project)</string>
 </resources>

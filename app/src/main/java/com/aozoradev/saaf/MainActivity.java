@@ -86,28 +86,9 @@ public class MainActivity extends AppCompatActivity {
         printError(err);
       }
       return true;
-    } else if (itemId == R.id.about) {
-      Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+    } else if (itemId == R.id.settings) {
+      Intent intent = new Intent(this, SettingsActivity.class);
       startActivity(intent);
-      return true;
-    } else if (itemId == R.id.show_vi) {
-      Toast.makeText(this, "Coming soon", Toast.LENGTH_LONG).show();
-      return true;
-    } else if (itemId == R.id.donate) {
-      new MaterialAlertDialogBuilder(this)
-      .setItems(Constant.donateList, (_dialog, _which) -> {
-        switch (_which) {
-          case 0:
-            openItOkayLmao("https://saweria.co/AozoraDev");
-          break;
-          case 1:
-            openItOkayLmao("https://trakteer.id/AozoraDev");
-          break;
-          case 2:
-            openItOkayLmao("https://patreon.com/AozoraDev");
-        }
-      })
-      .show();
       return true;
     }
     
@@ -210,15 +191,6 @@ public class MainActivity extends AppCompatActivity {
     if (requestCode == 1000) {
       initializeLogic();
     }
-  }
-  
-  private void openItOkayLmao(String url) {
-    Intent intent = new Intent();
-    intent.setAction(Intent.ACTION_VIEW);
-    intent.addCategory(Intent.CATEGORY_BROWSABLE);
-    intent.setData(Uri.parse(url));
-
-    startActivity(intent);
   }
   
   private void printError (Throwable err) {
