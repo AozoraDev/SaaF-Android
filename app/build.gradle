@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "31.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.0"
 
     defaultConfig {
-        applicationId "com.aozoradev.saaf"
-        minSdkVersion 19
-        targetSdkVersion 31
-        versionCode 1
-        versionName "1.0-alpha2"
-        vectorDrawables.useSupportLibrary = true
+        applicationId "com.shumiproject.saaf"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 3
+        versionName "1.0"
     }
     
     signingConfigs {
@@ -34,8 +33,8 @@ android {
     }
     
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     
     applicationVariants.all { variant ->
@@ -43,21 +42,9 @@ android {
             outputFileName = new File("SaaF-Android.apk")
         }
     }
-    
-    lintOptions {
-        disable 'UnusedResources', 'IconLauncherShape', 'IconDuplicates'
-        checkDependencies true
-        abortOnError false
-    }
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.documentfile:documentfile:1.0.1'
-    implementation 'androidx.preference:preference:1.1.1'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'org.ini4j:ini4j:0.5.4'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'com.anggrayudi:storage:0.13.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.13'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
 }

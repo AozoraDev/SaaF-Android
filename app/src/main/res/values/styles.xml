@@ -7,11 +7,6 @@
 		<item name="colorControlNormal">@color/colorControlNormal</item>
   </style>
   
-  <style 	name="AppTheme.AppBarOverlay"	parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
-	<style 	name="AppTheme.PopupOverlay"	parent="ThemeOverlay.MaterialComponents.Dark"/>
-	
-  <style name="circle">
-    <item name="cornerFamily">rounded</item>
-    <item name="cornerSize">50%</item>
-  </style>
+  <style name="AppTheme.AppBarOverlay"	parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+	<style name="AppTheme.PopupOverlay"	parent="ThemeOverlay.MaterialComponents.Dark"/>
 </resources>
