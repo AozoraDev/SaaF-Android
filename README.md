@@ -1,12 +1,10 @@
-<a href="https://github.com/Shumi-Project/SaaF-Android/actions">
-	<img src="https://github.com/Shumi-Project/SaaF-Android/workflows/Build/badge.svg" alt="Build Status" />
-</a>
-### !!NOTE!!
+[![Github Actions](https://github.com/Shumi-Project/SaaF-Android/workflows/Build/badge.svg)](https://github.com/Shumi-Project/SaaF-Android/action)
+## !!NOTE!!
 This branch intends on SaaF Android remake because on the main branch, the code is a bit.... messy.
 
 # SaaF Android
 ![SaaF Android](https://repository-images.githubusercontent.com/374664892/2808cf99-1094-4c91-b785-1f695165bd2f)
-<center>An app to view, listen and replace audio in an .osw file from Grand Theft Auto: San Andreas mobile</center>
+An app to view, listen and replace audio in an .osw file from Grand Theft Auto: San Andreas mobile
 ## How does this work
 The audio files in Grand Theft Auto: San Andreas mobile are basically just uncompressed ZIP archives.   
 So it can be opened using a ZIP extractor like ZArchiver.   
