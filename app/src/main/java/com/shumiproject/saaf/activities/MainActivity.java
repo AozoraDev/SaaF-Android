@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.net.Uri;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;
+import android.widget.Toast;
 import android.view.View;
 
 import com.shumiproject.saaf.R;
 import com.shumiproject.saaf.utils.Permission;
-import com.shumiproject.saaf.utils.ToastUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +38,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // AsyncTask deprecated, btw. Do pull request if you have any alt.
-    // TODO
+    private class openOSW extends AsyncTask <Intent, Void, Uri> {
+        protected void onPreExecute() {
+            loading.show();
+        }
+
+        protected Uri doInBackground (Intent... intent) {
+            return intent[0].getData();
+        }
+
+        protected void onPostExecute (Uri uri) {
+            loading.dismiss();
+            Toast.makeText(getApplicationContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        }
+
+    }
     
     // If everything's sets, just start it
     private void letsGo () {
@@ -49,15 +64,24 @@ public class MainActivity extends AppCompatActivity {
                     try { 
                         Permission.requestPermission(this);
                     } catch (Exception err) {
-                        ToastUtils.errorToast(this, err);
+                        Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 })
                 .show();
             return;
         }
+
+        // If permissions are granted, show the button
+        button.setVisibility(View.VISIBLE);
+        button.setOnClickListener(v -> {
+            Intent documentActivity = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            documentActivity.createChooser(documentActivity, "Open OSW");
+            documentActivity.setType("*/*");
+            startActivityForResult(documentActivity, 69);
+        });
     }
 
-    // Initialize some shits b4.. uhh...
+    // Initialize some shit b4.. uhh...
     private void initialize(Bundle savedInstanceState) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // If permissions are granted
         if (requestCode == 1000) {
             letsGo();
         }
@@ -94,8 +119,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // If permissions are granted
         if (requestCode == 1000) {
             letsGo();
+        }
+        
+        // open da file
+        if (requestCode == 69 && resultCode == -1) {
+            new openOSW().execute(data);
         }
     }
 }

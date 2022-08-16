@@ -28,5 +28,14 @@
             android:exported="true"
             android:supportsPictureInPicture="true">
         </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.shumiproject.saaf.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
     </application>
 </manifest>
