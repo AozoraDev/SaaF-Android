@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.util.Arrays;
 
 import com.shumiproject.saaf.R;
 
@@ -69,6 +70,7 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
     // Replace the contents of a view
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        Arrays.sort(list);
         File file = list[position];
         Resources res = viewHolder.context.getResources();
         Drawable folderLogo = ResourcesCompat.getDrawable(res, R.drawable.folder, null);
