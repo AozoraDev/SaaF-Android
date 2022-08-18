@@ -1,9 +1,11 @@
 package com.shumiproject.saaf.activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute (Uri uri) {
             loading.dismiss();
-            Toast.makeText(getApplicationContext(), uri.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, uri.getPath(), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage("This app requires storage access to work properly. Please grant storage permission.")
                 .setPositiveButton("OK", (_dialog, _which) -> {
                     try { 
-                        Permission.requestPermission(this);
+                        Permission.requestPermission(this, activityLauncher);
                     } catch (Exception err) {
                         Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -74,10 +76,9 @@ public class MainActivity extends AppCompatActivity {
         // If permissions are granted, show the button
         button.setVisibility(View.VISIBLE);
         button.setOnClickListener(v -> {
-            Intent documentActivity = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            documentActivity.createChooser(documentActivity, "Open OSW");
-            documentActivity.setType("*/*");
-            startActivityForResult(documentActivity, 69);
+            // Initialize file picker
+            Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
+            activityLauncher.launch(intent);
         });
     }
 
@@ -108,25 +109,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // If permissions are granted
         if (requestCode == 1000) {
             letsGo();
         }
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // If permissions are granted
-        if (requestCode == 1000) {
+    
+    // ActivityResult things.
+    public ActivityResultLauncher<Intent> activityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (ActivityResult result) -> {
+        int resultCode = result.getResultCode();
+        
+        if (resultCode == 69420) {
+            Intent intent = result.getData();
+            String path = intent.getStringExtra("path");
+            
+            Toast.makeText(this, path, Toast.LENGTH_LONG).show();
+        }
+        else if (resultCode == AppCompatActivity.RESULT_OK) {
             letsGo();
         }
-        
-        // open da file
-        if (requestCode == 69 && resultCode == -1) {
-            new openOSW().execute(data);
-        }
-    }
+    });
 }

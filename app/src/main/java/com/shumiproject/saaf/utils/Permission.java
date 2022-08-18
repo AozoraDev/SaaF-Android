@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.Manifest;
 import android.net.Uri;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -27,12 +28,12 @@ public class Permission {
 		}
 	}
 
-	public static void requestPermission (Activity activity) throws Exception {
+	public static void requestPermission (Activity activity, ActivityResultLauncher<Intent> activityLauncher) throws Exception {
     	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         	Intent intent = new Intent("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
         	intent.addCategory("android.intent.category.DEFAULT");
         	intent.setData(Uri.parse(String.format("package:%s", activity.getPackageName())));
-        	activity.startActivityForResult(intent, 1000);
+        	activityLauncher.launch(intent);
     	} else {
       		ActivityCompat.requestPermissions(activity, permissions, 1000);
     	}
