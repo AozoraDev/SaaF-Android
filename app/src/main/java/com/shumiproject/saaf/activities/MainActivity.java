@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private RecyclerView recyclerView;
     private AlertDialog backPressedDialog, loading;
+    private boolean canCloseFile;
     
     // Needed perms
     private final String[] permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
@@ -46,7 +47,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        backPressedDialog.show();
+        if (canCloseFile) {
+            // If file is loaded rn, close it.
+            new MaterialAlertDialogBuilder(this)
+                .setCancelable(true)
+                .setMessage("Do you want to close " + RadioList.stationName + " station?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", (_which, _dialog) -> {
+                    canCloseFile = false;
+                    radio.clear();
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                    recyclerView.setVisibility(View.GONE);
+                    button.setVisibility(View.VISIBLE);
+                    getSupportActionBar().setSubtitle(null);
+                })
+                .create().show();
+        } else {
+            backPressedDialog.show();
+        }
     }
     
     // If everything's sets, just start it
@@ -91,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
         backPressedDialog = new MaterialAlertDialogBuilder(this)
             .setCancelable(true)
+            .setNegativeButton("NO", null)
             .setMessage("Are you sure you want to close this app?")
             .setPositiveButton("YES", (_which, _dialog) -> finish())
-            .setNegativeButton("NO", null)
             .create();
         loading = new AlertDialog.Builder(this)
             .setCancelable(false)
@@ -127,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
                 button.setVisibility(View.GONE);
                 
                 getSupportActionBar().setSubtitle(RadioList.stationName);
+                
+                canCloseFile = true;
             } catch (Exception err) {
                 Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
             }
