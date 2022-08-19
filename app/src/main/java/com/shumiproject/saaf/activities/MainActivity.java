@@ -7,24 +7,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.net.Uri;
+import android.Manifest;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;
 import android.widget.Toast;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import com.shumiproject.saaf.R;
-import com.shumiproject.saaf.utils.Permission;
+import com.shumiproject.saaf.utils.RadioList;
+import com.shumiproject.saaf.activities.adapters.RadioListAdapter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.permissionx.guolindev.PermissionX;
 
 public class MainActivity extends AppCompatActivity {
+    private ArrayList<RadioList> radio;
     private Button button;
     private RecyclerView recyclerView;
     private AlertDialog backPressedDialog, loading;
+    
+    // Needed perms
+    private final String[] permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
+    private final String[] permissions11 = { Manifest.permission.MANAGE_EXTERNAL_STORAGE };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,48 +48,37 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         backPressedDialog.show();
     }
-
-    // AsyncTask deprecated, btw. Do pull request if you have any alt.
-    private class openOSW extends AsyncTask <Intent, Void, Uri> {
-        protected void onPreExecute() {
-            loading.show();
-        }
-
-        protected Uri doInBackground (Intent... intent) {
-            return intent[0].getData();
-        }
-
-        protected void onPostExecute (Uri uri) {
-            loading.dismiss();
-            Toast.makeText(MainActivity.this, uri.getPath(), Toast.LENGTH_LONG).show();
-        }
-
-    }
     
     // If everything's sets, just start it
     private void letsGo () {
-        if (!Permission.checkPermission(this)) {
-            new MaterialAlertDialogBuilder(this)
-                .setCancelable(false)
-                .setMessage("This app requires storage access to work properly. Please grant storage permission.")
-                .setPositiveButton("OK", (_dialog, _which) -> {
-                    try { 
-                        Permission.requestPermission(this, activityLauncher);
-                    } catch (Exception err) {
-                        Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                })
-                .show();
+        // A little hack
+        String[] perms = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ? permissions11 : permissions;
+    
+        if (PermissionX.isGranted(this.getApplicationContext(), perms[0])) {
+            button.setVisibility(View.VISIBLE);
+            button.setOnClickListener(v -> {
+                // Initialize file picker
+                Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
+                activityLauncher.launch(intent);
+            });
             return;
         }
-
-        // If permissions are granted, show the button
-        button.setVisibility(View.VISIBLE);
-        button.setOnClickListener(v -> {
-            // Initialize file picker
-            Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
-            activityLauncher.launch(intent);
-        });
+        
+        PermissionX.init(this)
+            .permissions(perms)
+            .request((allGranted, grantedList, deniedList) -> {
+                if (allGranted) {
+                    letsGo();
+                } else {
+                    new MaterialAlertDialogBuilder(MainActivity.this)
+                        .setCancelable(false)
+                        .setMessage("This app requires storage access to work properly. Please grant storage permission.")
+                        .setPositiveButton("OK", (_dialog, _which) -> {
+                            letsGo();
+                        })
+                    .show();
+                }
+            });
     }
 
     // Initialize some shit b4.. uhh...
@@ -107,28 +106,30 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setVisibility(View.GONE);
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // If permissions are granted
-        if (requestCode == 1000) {
-            letsGo();
-        }
-    }
     
     // ActivityResult things.
+    // Messy...
     public ActivityResultLauncher<Intent> activityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (ActivityResult result) -> {
         int resultCode = result.getResultCode();
         
         if (resultCode == 69420) {
             Intent intent = result.getData();
             String path = intent.getStringExtra("path");
+            String station = intent.getStringExtra("station");
             
-            Toast.makeText(this, path, Toast.LENGTH_LONG).show();
-        }
-        else if (resultCode == AppCompatActivity.RESULT_OK) {
-            letsGo();
+            try {
+                radio = RadioList.createList(MainActivity.this, path, station);
+                RadioListAdapter adapter = new RadioListAdapter(radio);
+                
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setVisibility(View.VISIBLE);
+                button.setVisibility(View.GONE);
+                
+                getSupportActionBar().setSubtitle(RadioList.stationName);
+            } catch (Exception err) {
+                Toast.makeText(MainActivity.this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     });
 }

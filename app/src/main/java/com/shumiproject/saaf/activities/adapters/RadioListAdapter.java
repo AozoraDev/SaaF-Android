@@ -16,13 +16,15 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
     private List<RadioList> mList;
     
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView title;
-        private final TextView artist;
+        private TextView title;
+        private TextView artist;
+        private TextView filename;
 
         public ViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             artist = (TextView) view.findViewById(R.id.artist);
+            filename = (TextView) view.findViewById(R.id.file);
         }
     }
 
@@ -45,6 +47,7 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
         
         viewHolder.title.setText(list.getTitle());
         viewHolder.artist.setText(list.getArtist());
+        viewHolder.filename.setText(list.getFilename());
     }
 
     // Return the size of your dataset

@@ -1,12 +1,26 @@
 package com.shumiproject.saaf.utils;
 
+import android.content.Context;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.prefs.Preferences;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import org.ini4j.IniPreferences;
+
 public class RadioList {
-    private String mTitle;
-    private String mArtist;
+    private String mTitle, mArtist, mFilename;
+    public static String stationName;
     
-    public RadioList(String title, String artist) {
+    public RadioList(String title, String artist, String filename) {
         mTitle = title;
         mArtist = artist;
+        mFilename = filename;
     }
     
     public String getTitle() {
@@ -15,5 +29,38 @@ public class RadioList {
 
     public String getArtist() {
         return mArtist;
+    }
+    
+    public String getFilename() {
+        return mFilename;
+    }
+    
+    public static ArrayList<RadioList> createList(Context context, String path, String station) throws IOException {
+        ArrayList<RadioList> songs = new ArrayList<RadioList>();
+        
+        // Now we do this shit
+        try (ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(path)));
+        InputStream metadata = context.getAssets().open("meta.ini")) {
+            Preferences prefs = new IniPreferences(metadata);
+            ZipEntry ze;
+            
+            // Do loop in every item
+            while ((ze = zis.getNextEntry()) != null) {
+                String filename = ze.getName();
+                int index = Integer.parseInt(filename.replaceAll(".mp3", "").replaceAll("[^0-9]", ""));
+                
+                String title = prefs.node(station).get("track" + index + ".title", null);
+                String _artist = prefs.node(station).get("track" + index + ".artist", null);
+                
+                // Cannot find artist? replace it with "-"
+                String artist = (_artist == null) ? "-" : _artist;
+                
+                songs.add(new RadioList(title, artist, filename));
+            }
+            // Add some to static variable for use later
+            stationName = prefs.node(station).get("station", null);
+            
+            return songs;
+        }
     }
 }

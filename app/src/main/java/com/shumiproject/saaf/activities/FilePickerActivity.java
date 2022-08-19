@@ -75,9 +75,11 @@ public class FilePickerActivity extends AppCompatActivity {
         adapter.setOnItemClickedListener((f) -> {
             if (f.isFile()) {
                 String path = getPath(f);
+                String name = f.getName().replaceAll(".osw", "");
                 
                 Intent intent = getIntent();
                 intent.putExtra("path", path);
+                intent.putExtra("station", name);
                 setResult(69420, intent);
                 finish();
             } else if (f.isDirectory()) {
