@@ -1,8 +1,6 @@
 package com.shumiproject.saaf.activities.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,16 +25,18 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
         private TextView textView;
         private ImageView imageView;
         private Context context;
-        private View view;
         
         public ViewHolder(Context context, View view) {
             super(view);
             
             textView = (TextView) view.findViewById(R.id.textView);
             imageView = (ImageView) view.findViewById(R.id.imageView);
-            
             this.context = context;
-            this.view = view;
+            
+            view.setOnClickListener(v -> {
+                File file = list[getAbsoluteAdapterPosition()];
+                callback.onItemClickedListener(file);
+            });
         }
     }
     
@@ -72,18 +72,14 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Arrays.sort(list);
         File file = list[position];
-        Resources res = viewHolder.context.getResources();
-        Drawable folderLogo = ResourcesCompat.getDrawable(res, R.drawable.folder, null);
-        Drawable fileLogo = ResourcesCompat.getDrawable(res, R.drawable.album, null);
         
         if (file.isDirectory()) {
-            viewHolder.imageView.setImageDrawable(folderLogo);
+            viewHolder.imageView.setImageResource(R.drawable.folder);
         } else if (file.isFile()) {
-            viewHolder.imageView.setImageDrawable(fileLogo);
+            viewHolder.imageView.setImageResource(R.drawable.album);
         }
         
         viewHolder.textView.setText(file.getName());
-        viewHolder.view.setOnClickListener(v -> callback.onItemClickedListener(file));
     }
 
     // Return the size of your dataset

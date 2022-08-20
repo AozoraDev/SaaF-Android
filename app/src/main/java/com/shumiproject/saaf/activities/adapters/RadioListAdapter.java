@@ -14,8 +14,14 @@ import com.shumiproject.saaf.R;
 
 public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.ViewHolder> {
     private List<RadioList> mList;
+    private Callback callback;
     
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public interface Callback {
+        void onItemClicked(View view, RadioList radio);
+        boolean onItemLongClicked(View view, RadioList radio);
+    }
+    
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView artist;
         private TextView filename;
@@ -25,7 +31,23 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
             title = (TextView) view.findViewById(R.id.title);
             artist = (TextView) view.findViewById(R.id.artist);
             filename = (TextView) view.findViewById(R.id.file);
+            
+            view.setOnClickListener(v -> {
+                int position = getAbsoluteAdapterPosition();
+                RadioList radio = mList.get(position);
+                callback.onItemClicked(v, radio);
+            });
+            view.setOnLongClickListener(v -> {
+                int position = getAbsoluteAdapterPosition();
+                RadioList radio = mList.get(position);
+                callback.onItemLongClicked(v, radio);
+                return true;
+            });
         }
+    }
+    
+    public void setCallback(Callback listener) {
+        callback = listener;
     }
 
     // Initialize the adapter

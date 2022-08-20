@@ -80,7 +80,7 @@ public class FilePickerActivity extends AppCompatActivity {
                 Intent intent = getIntent();
                 intent.putExtra("path", path);
                 intent.putExtra("station", name);
-                setResult(69420, intent);
+                setResult(AppCompatActivity.RESULT_OK, intent);
                 finish();
             } else if (f.isDirectory()) {
                 updateRecyclerView(f.getAbsolutePath(), false);
