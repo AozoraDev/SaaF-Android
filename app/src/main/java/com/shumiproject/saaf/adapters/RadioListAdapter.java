@@ -1,4 +1,4 @@
-package com.shumiproject.saaf.activities.adapters;
+package com.shumiproject.saaf.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +57,7 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        viewGroup.setMotionEventSplittingEnabled(false);
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_list, viewGroup, false);
 
         return new ViewHolder(view);

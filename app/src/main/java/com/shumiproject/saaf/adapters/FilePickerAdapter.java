@@ -1,4 +1,4 @@
-package com.shumiproject.saaf.activities.adapters;
+package com.shumiproject.saaf.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -62,6 +62,7 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
+        viewGroup.setMotionEventSplittingEnabled(false);
         View view = LayoutInflater.from(context).inflate(R.layout.layout_filepicker, viewGroup, false);
         
         return new ViewHolder(context, view);

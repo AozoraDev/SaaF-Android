@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import com.shumiproject.saaf.R;
-import com.shumiproject.saaf.activities.adapters.FilePickerAdapter;
+import com.shumiproject.saaf.adapters.FilePickerAdapter;
 
 public class FilePickerActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -27,7 +27,7 @@ public class FilePickerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filepicker);
         initialize(savedInstanceState);
     }
-
+    
     @Override
     public void onBackPressed() {
         // Close the activity if it's on storage dir
