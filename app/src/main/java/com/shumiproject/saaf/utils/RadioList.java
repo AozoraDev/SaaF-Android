@@ -13,12 +13,14 @@ import java.util.prefs.Preferences;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.android.vending.expansion.zipfile.ZipResourceFile;
 import org.ini4j.IniPreferences;
 
 public class RadioList {
     private String mTitle, mArtist, mFilename;
-    public static String stationName;
+    public static String stationName, stationPath, stationCode;
     public static int stationLogo;
+    public static ZipResourceFile osw;
     
     public RadioList(String title, String artist, String filename) {
         mTitle = title;
@@ -44,7 +46,7 @@ public class RadioList {
         ArrayList<RadioList> songs = new ArrayList<RadioList>();
         boolean isEqual = Arrays.asList(stationList).contains(station);
         if (!isEqual) {
-            return songs;
+            throw new IOException("This is not a GTASA audio file");
         }
         
         // Now we do this shit
@@ -68,8 +70,11 @@ public class RadioList {
             // Add some to static variable for use later
             stationName = prefs.node(station).get("station", null);
             stationLogo = context.getResources().getIdentifier(station.toLowerCase(Locale.US), "drawable", context.getPackageName());
-            
-            return songs;
+            stationPath = path;
+            stationCode = station;
+            osw = new ZipResourceFile(path);
         }
+        
+        return songs;
     }
 }

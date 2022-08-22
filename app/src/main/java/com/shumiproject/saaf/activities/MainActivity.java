@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Environment;
 import android.os.Looper;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;
 import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import com.shumiproject.saaf.R;
 import com.shumiproject.saaf.utils.RadioList;
 import com.shumiproject.saaf.utils.OSW;
 import com.shumiproject.saaf.adapters.RadioListAdapter;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.hjq.permissions.Permission;
@@ -38,9 +42,9 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     private Button button;
     private RecyclerView recyclerView;
     private AlertDialog backPressedDialog, loading;
+    private Menu menu;
     private boolean canCloseFile;
     
-    // Async things
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -53,9 +57,33 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     }
     
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        this.menu = menu;
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.create_idx:
+                try {
+                    OSW.createIDX(RadioList.stationPath);
+                    Toast.makeText(this, RadioList.stationCode + ".osw.idx created successfully!", Toast.LENGTH_LONG).show();
+                } catch (Exception err) {
+                    Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            return true;
+        }
+        
+        return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Shutdown the executor to prevent..... memory leaks?
+        // Shutdown the executor and habdler to prevent..... memory leaks?
+        handler.removeCallbacksAndMessages(null);
         executor.shutdownNow();
     }
 
@@ -72,11 +100,15 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                     recyclerView.getAdapter().notifyDataSetChanged();
                     recyclerView.setVisibility(View.GONE);
                     button.setVisibility(View.VISIBLE);
+                    menu.findItem(R.id.create_idx).setEnabled(false).setVisible(false);
                     getSupportActionBar().setSubtitle(null);
                     
-                    // Nullify static vars
+                    // Nullify static vars for no reason
                     // RadioList.stationLogo = null; // Can't nullify int
                     RadioList.stationName = null;
+                    RadioList.stationPath = null;
+                    RadioList.stationCode = null;
+                    RadioList.osw = null;
                 })
                 .show();
         } else {
@@ -86,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     
     // If everything's sets, just start it
     private void letsGo () {
-        if (XXPermissions.isGranted(this, Permission.MANAGE_EXTERNAL_STORAGE)) {
+        if (XXPermissions.isGranted(getApplicationContext(), Permission.MANAGE_EXTERNAL_STORAGE)) {
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(v -> {
                 Intent intent = new Intent(this, FilePickerActivity.class);
@@ -117,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                 RadioListAdapter adapter = new RadioListAdapter(radio);
                 
                 if (radio.isEmpty()) {
-                    throw new Exception("Failed to open the file");
+                    throw new Exception("The file is empty");
                 }
                 canCloseFile = true;
                 
@@ -127,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setVisibility(View.VISIBLE);
                     button.setVisibility(View.GONE);
+                    menu.findItem(R.id.create_idx).setEnabled(true).setVisible(true);
                     adapter.setCallback(new RadioListAdapter.Callback() {
                         @Override
                         public void onItemClicked(View view, RadioList radioList) {
@@ -146,7 +179,11 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                 });
             } catch (Exception err) {
                 handler.post(() -> {
-                    Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+                    if (err.getMessage() == null) {
+                        Toast.makeText(this, "Error: Failed to open the file", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                     loading.dismiss();
                 });
             }
@@ -167,7 +204,16 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                         // TODO
                     break;
                     case 1:
-                        // TODO
+                        try {
+                            OSW.extract(radioList);
+                            String path = Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + RadioList.stationCode;
+                            // Hehe...
+                            path += "/";
+                            
+                            Toast.makeText(this, radioList.getFilename() + " has been extracted to " + path, Toast.LENGTH_LONG).show();
+                        } catch (Exception err) {
+                            Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+                        }
                     break;
                     case 2:
                         Toast.makeText(this, "Coming soon...", Toast.LENGTH_LONG).show();

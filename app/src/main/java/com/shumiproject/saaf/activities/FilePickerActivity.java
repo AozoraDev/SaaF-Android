@@ -8,9 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 import java.io.File;
 
 import com.shumiproject.saaf.R;
@@ -21,11 +25,21 @@ public class FilePickerActivity extends AppCompatActivity {
     private FilePickerAdapter adapter;
     private String savedDir, storagePath;
     
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private Handler handler = new Handler(Looper.getMainLooper());
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filepicker);
         initialize(savedInstanceState);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+        executor.shutdownNow();
     }
     
     @Override
@@ -68,8 +82,9 @@ public class FilePickerActivity extends AppCompatActivity {
         File[] storageList = storage.listFiles((file) -> {
             return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(".osw"));
         });
-        
         adapter = new FilePickerAdapter(storageList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
         
         // Handle click
         adapter.setOnItemClickedListener((f) -> {
@@ -87,28 +102,39 @@ public class FilePickerActivity extends AppCompatActivity {
             }
         });
         
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        
         // Show back button on Toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     
     private void updateRecyclerView (String f, boolean isBack) {
-        File dir = null;
-        
-        if (isBack) dir = new File(f + "/.."); else dir = new File(f);
-        String path = getPath(dir);
-        savedDir = path;
-        
-        File[] anotherFile = dir.listFiles((file) -> {
-            return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(".osw"));
-        });
+        // Why there's executor?
+        // Delaying execution so there will be click animation on recycler. Problem?
+        if (isBack) {
+            File dir = new File(f + "/..");
+            savedDir = getPath(dir);
+            File[] anotherFile = dir.listFiles((file) -> {
+                return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(".osw"));
+            });
+            getSupportActionBar().setSubtitle(getPath(dir));
+             // Update data
+            adapter.updateList(anotherFile);
+            adapter.notifyDataSetChanged();
+        } else {
+            executor.execute(() -> {
+                File dir = new File(f);
+                savedDir = getPath(dir);
+                File[] anotherFile = dir.listFiles((file) -> {
+                    return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(".osw"));
+                });
                 
-        getSupportActionBar().setSubtitle(path);
-        // Update data
-        adapter.updateList(anotherFile);
-        adapter.notifyDataSetChanged();
+                handler.postDelayed(() -> {
+                    getSupportActionBar().setSubtitle(getPath(dir));
+                    // Update data
+                    adapter.updateList(anotherFile);
+                    adapter.notifyDataSetChanged();
+                }, 200);
+            });
+        }
     }
     
     private String getPath (File file) {

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">SaaF Android</string>
     <string name="open_osw">Open OSW</string>
+    <string name="create_idx">Create IDX</string>
+    <string name="play">Play</string>
+    <string name="extract">Extract</string>
+    <string name="replace">Replace</string>
 </resources>

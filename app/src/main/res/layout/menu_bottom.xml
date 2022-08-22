@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="17dp">
+        
+        <ImageView
+            android:id="@+id/station"
+            android:layout_height="60dp"
+            android:layout_marginBottom="7dp"
+            android:layout_width="60dp"
+            android:src="@drawable/utp"/>
+        
+        <TextView
+            android:gravity="center"
+            android:id="@+id/title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Title"
+            android:textSize="17dp"
+            android:textStyle="bold"/>
+        
+        <TextView
+            android:gravity="center"
+            android:id="@+id/artist"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Artist"
+            android:textSize="10dp"/>
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/play"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="12dp">
+        
+        <ImageView
+            android:layout_height="25dp"
+            android:layout_width="25dp"
+            android:src="@drawable/play"/>
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:text="@string/play"
+            android:textStyle="bold"/>
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/extract"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="12dp">
+        
+        <ImageView
+            android:layout_height="25dp"
+            android:layout_width="25dp"
+            android:src="@drawable/download"/>
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:text="@string/extract"
+            android:textStyle="bold"/>
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/replace"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="12dp">
+        
+        <ImageView
+            android:layout_height="25dp"
+            android:layout_width="25dp"
+            android:src="@drawable/refresh"/>
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:text="@string/replace"
+            android:textStyle="bold"/>
+        
+    
+    </LinearLayout>
+    
+
+</LinearLayout>
