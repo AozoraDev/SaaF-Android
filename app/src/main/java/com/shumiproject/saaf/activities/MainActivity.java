@@ -16,6 +16,9 @@ import android.os.Environment;
 import android.os.Looper;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +31,7 @@ import java.util.concurrent.ExecutorService;
 
 import com.shumiproject.saaf.R;
 import com.shumiproject.saaf.utils.RadioList;
+import com.shumiproject.saaf.utils.AudioPlayer;
 import com.shumiproject.saaf.utils.OSW;
 import com.shumiproject.saaf.adapters.RadioListAdapter;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     private AlertDialog backPressedDialog, loading;
     private Menu menu;
     private boolean canCloseFile;
+    private final int DELAY = 200;
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -192,35 +197,54 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     
     // Show menu when item clicked
     private void menuDialog (RadioList radioList) {
-        final String[] menu = { "Play", "Extract", "Replace" };
         int logo = (RadioList.stationLogo != 0) ? RadioList.stationLogo : R.drawable.utp;
         
-        new MaterialAlertDialogBuilder(this)
-            .setTitle(radioList.getTitle())
-            .setIcon(logo)
-            .setItems(menu, (dialog, which) -> {
-                switch(which) {
-                    case 0:
-                        // TODO
-                    break;
-                    case 1:
-                        try {
-                            OSW.extract(radioList);
-                            String path = Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + RadioList.stationCode;
-                            // Hehe...
-                            path += "/";
-                            
-                            Toast.makeText(this, radioList.getFilename() + " has been extracted to " + path, Toast.LENGTH_LONG).show();
-                        } catch (Exception err) {
-                            Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    break;
-                    case 2:
-                        Toast.makeText(this, "Coming soon...", Toast.LENGTH_LONG).show();
-                    break;
+        BottomSheetDialog menuSheet = new BottomSheetDialog(this);
+        menuSheet.setContentView(R.layout.menu_bottom);
+        LinearLayout play = (LinearLayout) menuSheet.findViewById(R.id.play);
+        LinearLayout extract = (LinearLayout) menuSheet.findViewById(R.id.extract);
+        LinearLayout replace = (LinearLayout) menuSheet.findViewById(R.id.replace);
+        ImageView station = (ImageView) menuSheet.findViewById(R.id.station);
+        TextView title = (TextView) menuSheet.findViewById(R.id.title);
+        TextView artist = (TextView) menuSheet.findViewById(R.id.artist);
+        
+        station.setImageResource(logo);
+        title.setText(radioList.getTitle());
+        artist.setText(radioList.getArtist());
+        play.setOnClickListener(v -> {
+            handler.postDelayed(() -> {
+            	try {
+                    AudioPlayer player = new AudioPlayer(this, radioList);
+                    player.play();
+                } catch (Exception err) {
+                	Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                 }
-            })
-            .show();
+            	menuSheet.dismiss();
+            }, DELAY);
+        });
+        extract.setOnClickListener(v -> {
+            handler.postDelayed(() -> {
+            	try {
+                	OSW.extract(radioList);
+                	String path = Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + RadioList.stationCode;
+                	// Hehe... Don't ask.
+                	path += "/";
+                
+            	    Toast.makeText(this, radioList.getFilename() + " has been extracted to " + path, Toast.LENGTH_LONG).show();
+            	} catch (Exception err) {
+            	    Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+            	}
+                menuSheet.dismiss();
+            }, DELAY);
+        });
+        replace.setOnClickListener(v -> {
+            handler.postDelayed(() -> {
+            	Toast.makeText(this, "Coming soon...", Toast.LENGTH_LONG).show();
+                menuSheet.dismiss();
+            }, DELAY);
+        });
+        
+        menuSheet.show();
     }
 
     // Initialize some shit

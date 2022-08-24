@@ -5,15 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@drawable/rounded_corners"
     android:orientation="vertical">
     
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:src="@drawable/grapple"/>
+    
     <LinearLayout
-        android:background="?android:attr/selectableItemBackground"
         android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:padding="17dp">
+        android:padding="13dp">
         
         <ImageView
             android:id="@+id/station"
@@ -27,7 +34,7 @@
             android:id="@+id/title"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Title"
+            android:text="@string/title"
             android:textSize="17dp"
             android:textStyle="bold"/>
         
@@ -36,16 +43,16 @@
             android:id="@+id/artist"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Artist"
-            android:textSize="10dp"/>
+            android:text="@string/artist"
+            android:textSize="13dp"/>
         
     
     </LinearLayout>
     
     <LinearLayout
         android:background="?android:attr/selectableItemBackground"
-        android:id="@+id/play"
         android:gravity="center_vertical"
+        android:id="@+id/play"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:padding="12dp">
@@ -66,8 +73,9 @@
     </LinearLayout>
     
     <LinearLayout
-        android:id="@+id/extract"
+        android:background="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
+        android:id="@+id/extract"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:padding="12dp">
@@ -88,9 +96,9 @@
     </LinearLayout>
     
     <LinearLayout
-        android:id="@+id/replace"
         android:background="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
+        android:id="@+id/replace"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:padding="12dp">
