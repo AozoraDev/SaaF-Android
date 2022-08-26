@@ -23,7 +23,8 @@ import com.shumiproject.saaf.adapters.FilePickerAdapter;
 public class FilePickerActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FilePickerAdapter adapter;
-    private String savedDir, storagePath, extension;
+    private String storagePath, extension;
+    private static String savedDir;
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -75,13 +76,14 @@ public class FilePickerActivity extends AppCompatActivity {
         // Save it so onBackPressed can use it
         String mPath = getPath(storage);
         storagePath = mPath;
-        savedDir = mPath;
+        if (savedDir == null) savedDir = mPath;
         
         toolbar.setTitle("Choose a File");
-        toolbar.setSubtitle(storagePath);
+        toolbar.setSubtitle(savedDir);
         setSupportActionBar(toolbar);
         
-        File[] storageList = storage.listFiles((file) -> {
+        File dir = new File(savedDir);
+        File[] storageList = dir.listFiles((file) -> {
             return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(extension));
         });
         adapter = new FilePickerAdapter(storageList);
