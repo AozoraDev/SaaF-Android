@@ -17,8 +17,8 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
     private Callback callback;
     
     public interface Callback {
-        void onItemClicked(View view, RadioList radio);
-        boolean onItemLongClicked(View view, RadioList radio);
+        void onItemClicked(RadioList radio);
+        boolean onItemLongClicked(RadioList radio);
     }
     
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -35,12 +35,12 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
             view.setOnClickListener(v -> {
                 int position = getAbsoluteAdapterPosition();
                 RadioList radio = mList.get(position);
-                callback.onItemClicked(v, radio);
+                callback.onItemClicked(radio);
             });
             view.setOnLongClickListener(v -> {
                 int position = getAbsoluteAdapterPosition();
                 RadioList radio = mList.get(position);
-                callback.onItemLongClicked(v, radio);
+                callback.onItemLongClicked(radio);
                 return true;
             });
         }

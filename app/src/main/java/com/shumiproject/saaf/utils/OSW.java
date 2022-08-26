@@ -3,7 +3,6 @@ package com.shumiproject.saaf.utils;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
 
 import java.nio.ByteBuffer;
@@ -13,9 +12,14 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import android.os.Environment;
+
+import com.android.vending.expansion.zipfile.ZipResourceFile;
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.model.enums.CompressionLevel;
+import net.lingala.zip4j.model.enums.CompressionMethod;
 
 public class OSW {
     private static class IDX {
@@ -24,28 +28,33 @@ public class OSW {
         String name;
     }
     
+    public static void replace (String path, String filename) throws IOException {
+        File audio = new File(path);
+        
+        try (ZipFile osw = new ZipFile(RadioList.stationPath)) {
+            osw.addFile(audio, parameter(filename));
+            
+            // Update ZipResourceFile
+            RadioList.osw = new ZipResourceFile(RadioList.stationPath);
+        }
+    }
+    
     public static void extract (RadioList radioList) throws IOException {
         String externalPath = Environment.getExternalStorageDirectory().getPath();
-        File file = new File(externalPath + "/SaaFAndroid/" + RadioList.stationName);
-        
+        File file = new File(externalPath + "/SaaFAndroid/" + RadioList.stationCode);
+        String filename = radioList.getFilename();
         if (!file.exists()) {
             file.mkdirs();
         }
         
-        String filename = radioList.getFilename();
-        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file.getAbsolutePath() + "/" + filename));
-        InputStream is = RadioList.osw.getInputStream(filename)) {
-            byte[] bytesIn = new byte[4096];
-            int read = 0;
-            while ((read = is.read(bytesIn)) != -1) {
-                bos.write(bytesIn, 0, read);
-            }
+        try (ZipFile osw = new ZipFile(RadioList.stationPath)) {
+            osw.extractFile(filename, file.getAbsolutePath());
         }
     }
     
     // By LSDsl
     public static void createIDX (String path) throws IOException {
-        ZipFile zipFile = new ZipFile(path);
+        java.util.zip.ZipFile zipFile = new java.util.zip.ZipFile(path);
         ArrayList<Object> arrayList = new ArrayList<Object>();
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
     
@@ -93,5 +102,15 @@ public class OSW {
         
         fileOutputStream.close();
         zipFile.close();
+    }
+    
+    public static ZipParameters parameter (String filename) {
+        ZipParameters parameter = new ZipParameters();
+        parameter.setCompressionLevel(CompressionLevel.NO_COMPRESSION);
+        parameter.setCompressionMethod(CompressionMethod.STORE);
+        parameter.setFileNameInZip(filename);
+        parameter.setUnixMode(true);
+        
+        return parameter;
     }
 }

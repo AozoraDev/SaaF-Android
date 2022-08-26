@@ -96,26 +96,26 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     public void onBackPressed() {
         if (canCloseFile) {
             new MaterialAlertDialogBuilder(this)
-                .setCancelable(true)
-                .setMessage("Do you want to close " + RadioList.stationName + " station?")
-                .setNegativeButton("NO", null)
-                .setPositiveButton("YES", (_which, _dialog) -> {
-                    canCloseFile = false;
-                    radio.clear();
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                    recyclerView.setVisibility(View.GONE);
-                    button.setVisibility(View.VISIBLE);
-                    menu.findItem(R.id.create_idx).setEnabled(false).setVisible(false);
-                    getSupportActionBar().setSubtitle(null);
-                    
-                    // Nullify static vars for no reason
-                    // RadioList.stationLogo = null; // Can't nullify int
-                    RadioList.stationName = null;
-                    RadioList.stationPath = null;
-                    RadioList.stationCode = null;
-                    RadioList.osw = null;
-                })
-                .show();
+            .setCancelable(true)
+            .setMessage("Do you want to close " + RadioList.stationName + " station?")
+            .setNegativeButton("NO", null)
+            .setPositiveButton("YES", (_which, _dialog) -> {
+                canCloseFile = false;
+                radio.clear();
+                recyclerView.getAdapter().notifyDataSetChanged();
+                recyclerView.setVisibility(View.GONE);
+                button.setVisibility(View.VISIBLE);
+                menu.findItem(R.id.create_idx).setEnabled(false).setVisible(false);
+                getSupportActionBar().setSubtitle(null);
+                
+                // Nullify static vars for no reason
+                // RadioList.stationLogo = null; // Can't nullify int
+                RadioList.stationName = null;
+                RadioList.stationPath = null;
+                RadioList.stationCode = null;
+                RadioList.osw = null;
+            })
+            .show();
         } else {
             backPressedDialog.show();
         }
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(v -> {
                 Intent intent = new Intent(this, FilePickerActivity.class);
+                intent.putExtra("extension", ".osw");
                 launcher.launch(intent);
             });
             
@@ -136,63 +137,8 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     
         // Otherwise, ask permission.
         XXPermissions.with(this)
-            .permission(Permission.MANAGE_EXTERNAL_STORAGE)
-            .request(this);
-    }
-    
-    private void open(Intent intent) {
-        // Show loading on first
-        loading.show();
-    
-        executor.execute(() -> {
-            // backend
-            try {
-                String path = intent.getStringExtra("path");
-                String station = intent.getStringExtra("station");
-                
-                radio = RadioList.createList(this, path, station);
-                RadioListAdapter adapter = new RadioListAdapter(radio);
-                
-                if (radio.isEmpty()) {
-                    throw new Exception("The file is empty");
-                }
-                canCloseFile = true;
-                
-                handler.post(() -> {
-                    // frontend
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                    recyclerView.setVisibility(View.VISIBLE);
-                    button.setVisibility(View.GONE);
-                    menu.findItem(R.id.create_idx).setEnabled(true).setVisible(true);
-                    adapter.setCallback(new RadioListAdapter.Callback() {
-                        @Override
-                        public void onItemClicked(View view, RadioList radioList) {
-                            menuDialog(radioList);
-                        }
-                        
-                        @Override
-                        public boolean onItemLongClicked(View view, RadioList radioList) {
-                            menuDialog(radioList);
-                            return true;
-                        }
-                    });
-                    getSupportActionBar().setSubtitle(RadioList.stationName);
-                    
-                    // Dismiss loading if all done.
-                    loading.dismiss();
-                });
-            } catch (Exception err) {
-                handler.post(() -> {
-                    if (err.getMessage() == null) {
-                        Toast.makeText(this, "Error: Failed to open the file", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                    loading.dismiss();
-                });
-            }
-        });
+        .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+        .request(this);
     }
     
     // Show menu when item clicked
@@ -239,7 +185,11 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         });
         replace.setOnClickListener(v -> {
             handler.postDelayed(() -> {
-            	Toast.makeText(this, "Coming soon...", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, FilePickerActivity.class);
+                intent.putExtra("extension", ".mp3");
+                // I'm not gonna add radiolist to top, so i'm gonna do a little hack
+                intent.putExtra("filename", radioList.getFilename());
+                launcher.launch(intent);
                 menuSheet.dismiss();
             }, DELAY);
         });
@@ -256,17 +206,18 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         backPressedDialog = new MaterialAlertDialogBuilder(this)
-            .setCancelable(true)
-            .setNegativeButton("NO", null)
-            .setMessage("Are you sure you want to close this app?")
-            .setPositiveButton("YES", (_which, _dialog) -> finish())
-            .create();
+        .setCancelable(true)
+        .setNegativeButton("NO", null)
+        .setMessage("Are you sure you want to close this app?")
+        .setPositiveButton("YES", (_which, _dialog) -> finish())
+        .create();
+            
         loading = new MaterialAlertDialogBuilder(this)
-            .setCancelable(false)
-            .setView(View.inflate(this, R.layout.loading, null))
-            // Make the background transparent so it's only show loading
-            .setBackground(new ColorDrawable(0))
-            .create();
+        .setCancelable(false)
+        .setView(View.inflate(this, R.layout.loading, null))
+        // Make the background transparent so it's only show loading
+        .setBackground(new ColorDrawable(0))
+        .create();
 
         // Someone said using "setHasFixedSize" can optimize the recyclerview.
         recyclerView.setHasFixedSize(true);
@@ -282,21 +233,103 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     @Override
     public void onDenied(List<String> permissions, boolean never) {
         new MaterialAlertDialogBuilder(this)
-            .setCancelable(false)
-            .setMessage("This app requires storage access to work properly. Please grant storage permission.")
-            .setPositiveButton("OK", (_dialog, _which) -> {
-                letsGo();
-            })
-            .show();
+        .setCancelable(false)
+        .setMessage("This app requires storage access to work properly. Please grant storage permission.")
+        .setPositiveButton("OK", (dialog, which) -> letsGo())
+        .show();
     }
     
-    // activity launcher
+    // activity with result launcher
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (ActivityResult result) -> {
         int resultCode = result.getResultCode();
+        Intent intentResult = result.getData();
+        String path = intentResult.getStringExtra("path");
         
         if (resultCode == AppCompatActivity.RESULT_OK) {
-            Intent intentFilePicker = result.getData();
-            open(intentFilePicker);
+            if (path.endsWith(".osw")) open(intentResult);
+            else if (path.endsWith(".mp3")) replace(intentResult);
         }
     });
+    
+    // Methods with full of brackets
+    // I hate it
+    private void open(Intent intent) {
+        // Show loading on first
+        loading.show();
+    
+        executor.execute(() -> {
+        	try {
+                String path = intent.getStringExtra("path");
+                String station = intent.getStringExtra("station");
+                
+                radio = RadioList.createList(this, path, station);
+            } catch (Exception err) {
+            	handler.post(() -> {
+                    if (err.getMessage() == null) Toast.makeText(this, "Error: Failed to open the file", Toast.LENGTH_LONG).show();
+                    else Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+                    
+                    loading.dismiss();
+                });
+                
+                // Don't execute the code below if error
+                return;
+            }
+            
+            RadioListAdapter adapter = new RadioListAdapter(radio);
+            canCloseFile = true;
+                
+            handler.post(() -> {
+                // frontend
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setVisibility(View.VISIBLE);
+                button.setVisibility(View.GONE);
+                menu.findItem(R.id.create_idx).setEnabled(true).setVisible(true);
+                adapter.setCallback(new RadioListAdapter.Callback() {
+                    @Override
+                    public void onItemClicked(RadioList radioList) {
+                        menuDialog(radioList);
+                    }
+                    
+                    @Override
+                    public boolean onItemLongClicked(RadioList radioList) {
+                        menuDialog(radioList);
+                        return true;
+                    }
+                });
+                getSupportActionBar().setSubtitle(RadioList.stationName);
+                    
+                // Dismiss loading if all done.
+                loading.dismiss();
+            });
+            
+        });
+    }
+    
+    private void replace (Intent intent) {
+        String filename = intent.getStringExtra("filename");
+        String path = intent.getStringExtra("path");
+         
+    	new MaterialAlertDialogBuilder(this)
+        .setMessage("Are you sure you want to replace " + filename + "?")
+        .setNegativeButton("NO", null)
+        .setPositiveButton("YES", (dialog, which) -> {
+            loading.show();
+            executor.execute(() -> {
+    			try {
+            		OSW.replace(path, filename);
+                	handler.post(() -> {
+                        Toast.makeText(this, filename + " have been replaced!", Toast.LENGTH_LONG).show();
+                        loading.dismiss();
+                    });
+                } catch (Exception err) {
+            		handler.post(() -> {
+                        Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+                        loading.dismiss();
+                    });
+                }
+            });
+        })
+        .show();
+    }
 }

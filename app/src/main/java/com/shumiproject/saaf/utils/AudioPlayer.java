@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -59,7 +60,7 @@ public class AudioPlayer {
             playerDialog.setCanceledOnTouchOutside(false);
             playerDialog.show();
             
-            handler = new Handler();
+            handler = new Handler(Looper.getMainLooper());
             
             player.setOnPreparedListener(p -> {
                 anotherPlayButton.setImageResource(R.drawable.pause_circle);
@@ -129,6 +130,7 @@ public class AudioPlayer {
     }
     
     public void release() {
+        player.reset();
         player.release();
         player = null;
         handler.removeCallbacks(runnable);

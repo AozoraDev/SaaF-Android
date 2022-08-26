@@ -2,19 +2,18 @@ package com.shumiproject.saaf.utils;
 
 import android.content.Context;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.prefs.Preferences;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import com.android.vending.expansion.zipfile.ZipResourceFile;
 import org.ini4j.IniPreferences;
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
 
 public class RadioList {
     private String mTitle, mArtist, mFilename;
@@ -49,15 +48,14 @@ public class RadioList {
             throw new IOException("This is not a GTASA audio file");
         }
         
-        // Now we do this shit
-        try (ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(path)));
+        try (ZipFile _osw = new ZipFile(path);
         InputStream metadata = context.getAssets().open("meta.ini")) {
+            List<FileHeader> fileHeaders = _osw.getFileHeaders();
             Preferences prefs = new IniPreferences(metadata);
-            ZipEntry ze;
             
             // Do loop in every item
-            while ((ze = zis.getNextEntry()) != null) {
-                String filename = ze.getName();
+            for (FileHeader fileHeader : fileHeaders) {
+                String filename = fileHeader.getFileName();
                 int index = Integer.parseInt(filename.replaceAll(".mp3", "").replaceAll("[^0-9]", ""));
                 
                 String title = prefs.node(station).get("track" + index + ".title", null);
@@ -67,6 +65,7 @@ public class RadioList {
                 
                 songs.add(new RadioList(title, artist, filename));
             }
+            
             // Add some to static variable for use later
             stationName = prefs.node(station).get("station", null);
             stationLogo = context.getResources().getIdentifier(station.toLowerCase(Locale.US), "drawable", context.getPackageName());

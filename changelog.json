@@ -4,6 +4,7 @@
  "changelog": [
    "- SaaF Android is now owned by Shumi Project. You'll need to download the latest version on Github and delete the version you currently have.",
    "- Added built-in file chooser.",
+   "- Added replace feature.",
    "- Changed menu and player style."
   ]
 }

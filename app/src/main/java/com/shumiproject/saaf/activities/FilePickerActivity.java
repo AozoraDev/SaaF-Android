@@ -23,7 +23,7 @@ import com.shumiproject.saaf.adapters.FilePickerAdapter;
 public class FilePickerActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FilePickerAdapter adapter;
-    private String savedDir, storagePath;
+    private String savedDir, storagePath, extension;
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -69,6 +69,8 @@ public class FilePickerActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         File storage = Environment.getExternalStorageDirectory();
+        Intent intent = getIntent();
+        extension = intent.getStringExtra("extension");
         
         // Save it so onBackPressed can use it
         String mPath = getPath(storage);
@@ -80,7 +82,7 @@ public class FilePickerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         
         File[] storageList = storage.listFiles((file) -> {
-            return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(".osw"));
+            return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(extension));
         });
         adapter = new FilePickerAdapter(storageList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -90,11 +92,13 @@ public class FilePickerActivity extends AppCompatActivity {
         adapter.setOnItemClickedListener((f) -> {
             if (f.isFile()) {
                 String path = getPath(f);
-                String name = f.getName().replaceAll(".osw", "");
+                String filename = intent.getStringExtra("filename");
                 
-                Intent intent = getIntent();
                 intent.putExtra("path", path);
-                intent.putExtra("station", name);
+                if (extension.equals(".osw")) {
+                	String name = f.getName().replaceAll(".osw", "");
+                	intent.putExtra("station", name);
+                } else if (extension.equals(".mp3")) intent.putExtra("filename", filename);
                 setResult(AppCompatActivity.RESULT_OK, intent);
                 finish();
             } else if (f.isDirectory()) {
@@ -113,7 +117,7 @@ public class FilePickerActivity extends AppCompatActivity {
             File dir = new File(f + "/..");
             savedDir = getPath(dir);
             File[] anotherFile = dir.listFiles((file) -> {
-                return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(".osw"));
+                return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(extension));
             });
             getSupportActionBar().setSubtitle(getPath(dir));
              // Update data
@@ -124,7 +128,7 @@ public class FilePickerActivity extends AppCompatActivity {
                 File dir = new File(f);
                 savedDir = getPath(dir);
                 File[] anotherFile = dir.listFiles((file) -> {
-                    return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(".osw"));
+                    return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(extension));
                 });
                 
                 handler.postDelayed(() -> {
