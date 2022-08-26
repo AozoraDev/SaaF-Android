@@ -24,11 +24,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew assembleDebug
+      run: ./gradlew assembleRelease --info
     - name: Store generated apk file
       uses: actions/upload-artifact@v2
       with:
         name: SaaF-Android
         path: |
-            ./app/build/outputs/apk/debug/SaaF-Android.apk
-            ./app/build/outputs/apk/debug/output-metadata.json
+            ./app/build/outputs/apk/release/SaaF-Android.apk
+            ./app/build/outputs/apk/release/output-metadata.json
