@@ -2,10 +2,10 @@ name: Build
 
 on:
   push:
-    branches: [ remake ]
+    branches: [ rework ]
   pull_request:
     types: [ assigned ]
-    branches: [ remake ]
+    branches: [ rework ]
 
 jobs:
   build:
