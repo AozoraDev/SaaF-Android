@@ -6,6 +6,7 @@ import com.shumiproject.saaf.R;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
 
@@ -16,20 +17,19 @@ public class UncaughtExceptionActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		// Get the intent and error log.
 		Intent intent = getIntent();
-		String err = intent.getStringExtra("error");
+		String error = intent.getStringExtra("error");
 
-		// STRINGGGGG!!!!!!!!!!
-		StringBuilder errStr = new StringBuilder();
-		errStr.append("PID: " + Process.myPid());
-		errStr.append("\n\n");
-		errStr.append(err);
+		String err = "PID: " + Process.myPid();
+        err += "\nDevice Name: " + Build.MODEL;
+        err += "\nAndroid Version: " + Build.VERSION.RELEASE;
+        err += "\n\n" + error;
 
 		MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
 		builder.setTitle("Error :(");
-		builder.setMessage(errStr.toString());
+		builder.setMessage(err);
 		builder.setPositiveButton("Close App", (dialog, which) -> {
 			Process.killProcess(Process.myPid());
-      		System.exit(0);
+    		System.exit(1);
 		});
 		builder.setCancelable(false);
 		builder.show();
