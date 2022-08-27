@@ -37,7 +37,6 @@ public class FilePickerActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
-        executor.shutdownNow();
     }
     
     @Override

@@ -261,9 +261,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                 radio = RadioList.createList(this, path, station);
             } catch (Exception err) {
             	handler.post(() -> {
-                    if (err.getMessage() == null) Toast.makeText(this, "Error: Failed to open the file", Toast.LENGTH_LONG).show();
-                    else Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-                    
+                	Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                     loading.dismiss();
                 });
                 
