@@ -13,8 +13,6 @@ import android.os.Looper;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
 import java.io.File;
 
 import com.shumiproject.saaf.R;
@@ -26,7 +24,6 @@ public class FilePickerActivity extends AppCompatActivity {
     private String storagePath, extension;
     private static String savedDir;
     
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
     
     @Override
@@ -60,7 +57,7 @@ public class FilePickerActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-                return true;
+            return true;
         }
         
         return super.onOptionsItemSelected(item);
@@ -90,7 +87,6 @@ public class FilePickerActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         
-        // Handle click
         adapter.setOnItemClickedListener((f) -> {
             if (f.isFile()) {
                 String path = getPath(f);
@@ -113,33 +109,30 @@ public class FilePickerActivity extends AppCompatActivity {
     }
     
     private void updateRecyclerView (String f, boolean isBack) {
-        // Why there's executor?
-        // Delaying execution so there will be click animation on recycler. Problem?
         if (isBack) {
             File dir = new File(f + "/..");
             savedDir = getPath(dir);
             File[] anotherFile = dir.listFiles((file) -> {
                 return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(extension));
             });
+            
             getSupportActionBar().setSubtitle(getPath(dir));
-             // Update data
             adapter.updateList(anotherFile);
             adapter.notifyDataSetChanged();
         } else {
-            executor.execute(() -> {
+            // Why there's handler right there?
+            // Delaying execution so there will be click animation on recycler. Problem?
+            handler.postDelayed(() -> {
                 File dir = new File(f);
                 savedDir = getPath(dir);
                 File[] anotherFile = dir.listFiles((file) -> {
                     return (file.isDirectory() && !file.isHidden()) || (file.isFile() && file.getName().endsWith(extension));
                 });
                 
-                handler.postDelayed(() -> {
-                    getSupportActionBar().setSubtitle(getPath(dir));
-                    // Update data
-                    adapter.updateList(anotherFile);
-                    adapter.notifyDataSetChanged();
-                }, 200);
-            });
+                getSupportActionBar().setSubtitle(getPath(dir));
+                adapter.updateList(anotherFile);
+                adapter.notifyDataSetChanged();
+            }, 200);
         }
     }
     

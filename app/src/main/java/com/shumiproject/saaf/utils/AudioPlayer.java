@@ -60,6 +60,7 @@ public class AudioPlayer {
             playerDialog.setCanceledOnTouchOutside(false);
             playerDialog.show();
             
+            // For looping seekBar
             handler = new Handler(Looper.getMainLooper());
             
             player.setOnPreparedListener(p -> {

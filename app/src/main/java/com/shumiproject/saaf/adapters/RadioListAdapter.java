@@ -50,7 +50,6 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
         callback = listener;
     }
 
-    // Initialize the adapter
     public RadioListAdapter(List<RadioList> list) {
         mList = list;
     }
@@ -63,7 +62,6 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
         return new ViewHolder(view);
     }
 
-    // Replace the contents of a view
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         RadioList list = mList.get(position);
@@ -73,7 +71,6 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
         viewHolder.filename.setText(list.getFilename());
     }
 
-    // Return the size of your dataset
     @Override
     public int getItemCount() {
         return mList.size();

@@ -53,7 +53,6 @@ public class RadioList {
             List<FileHeader> fileHeaders = _osw.getFileHeaders();
             Preferences prefs = new IniPreferences(metadata);
             
-            // Do loop in every item
             for (FileHeader fileHeader : fileHeaders) {
                 String filename = fileHeader.getFileName();
                 int index = Integer.parseInt(filename.replaceAll(".mp3", "").replaceAll("[^0-9]", ""));

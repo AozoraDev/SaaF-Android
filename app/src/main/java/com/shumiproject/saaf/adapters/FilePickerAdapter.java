@@ -40,7 +40,6 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
         }
     }
     
-    // Interfacy callbacky thingy
     public interface Callback {
         void onItemClickedListener(File file);
     }
@@ -49,12 +48,10 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
         callback = listener;
     }
 
-    // Initialize the adapter
     public FilePickerAdapter(File[] _list) {
         list = _list;
     }
     
-    // Update list
     public void updateList(File[] _list) {
         list = _list;
     }
@@ -68,7 +65,6 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
         return new ViewHolder(context, view);
     }
 
-    // Replace the contents of a view
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Arrays.sort(list);
@@ -83,7 +79,6 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
         viewHolder.textView.setText(file.getName());
     }
 
-    // Return the size of your dataset
     @Override
     public int getItemCount() {
         return list.length;

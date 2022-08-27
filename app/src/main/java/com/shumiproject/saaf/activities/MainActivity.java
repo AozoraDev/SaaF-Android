@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Shutdown the executor and habdler to prevent..... memory leaks?
         handler.removeCallbacksAndMessages(null);
         executor.shutdownNow();
     }
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         .request(this);
     }
     
-    // Show menu when item clicked
     private void menuDialog (RadioList radioList) {
         int logo = (RadioList.stationLogo != 0) ? RadioList.stationLogo : R.drawable.utp;
         
@@ -185,9 +183,9 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         });
         replace.setOnClickListener(v -> {
             handler.postDelayed(() -> {
-                Intent intent = new Intent(this, FilePickerActivity.class);
+                Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
                 intent.putExtra("extension", ".mp3");
-                // I'm not gonna add radiolist to top, so i'm gonna do a little hack
+                // I'm not gonna add radiolist to the top, so i'm gonna do a little hack
                 intent.putExtra("filename", radioList.getFilename());
                 launcher.launch(intent);
                 menuSheet.dismiss();
@@ -197,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         menuSheet.show();
     }
 
-    // Initialize some shit
     private void initialize(Bundle savedInstanceState) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -254,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     // Methods with full of brackets
     // I hate it
     private void open(Intent intent) {
-        // Show loading on first
         loading.show();
     
         executor.execute(() -> {
@@ -276,10 +272,9 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             }
             
             RadioListAdapter adapter = new RadioListAdapter(radio);
-            canCloseFile = true;
+            canCloseFile = true; // Set it to true after the osw is loaded so we can close it if onBackPressed executed.
                 
             handler.post(() -> {
-                // frontend
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setVisibility(View.VISIBLE);
@@ -298,11 +293,9 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                     }
                 });
                 getSupportActionBar().setSubtitle(RadioList.stationName);
-                    
-                // Dismiss loading if all done.
+                
                 loading.dismiss();
             });
-            
         });
     }
     
