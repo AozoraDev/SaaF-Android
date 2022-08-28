@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Environment;
 import android.os.Looper;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import com.shumiproject.saaf.R;
 import com.shumiproject.saaf.utils.RadioList;
 import com.shumiproject.saaf.utils.AudioPlayer;
 import com.shumiproject.saaf.utils.OSW;
+import com.shumiproject.saaf.utils.CheckUpdate;
 import com.shumiproject.saaf.adapters.RadioListAdapter;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     private AlertDialog backPressedDialog, loading;
     private Menu menu;
     private boolean canCloseFile;
+    
     private final int DELAY = 200;
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -122,6 +125,30 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     
     // If everything's sets, just start it
     private void letsGo () {
+        // First, we check update!
+        executor.execute(() -> {
+            CheckUpdate.check();
+            
+            handler.post(() -> {
+                if(CheckUpdate.isUpdateAvailable) {
+                    new MaterialAlertDialogBuilder(this)
+                    .setTitle("SaaF Android v" + CheckUpdate.versionName + " is available!")
+                    .setMessage(CheckUpdate.getChangelog())
+                    .setPositiveButton("Update", (d, v) -> {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        intent.setData(Uri.parse(CheckUpdate.releaseURL + CheckUpdate.versionName));
+                        
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Later", null)
+                    .show();
+                }
+            });
+        });
+        
+        // Then permissions
         if (XXPermissions.isGranted(getApplicationContext(), Permission.MANAGE_EXTERNAL_STORAGE)) {
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(v -> {
