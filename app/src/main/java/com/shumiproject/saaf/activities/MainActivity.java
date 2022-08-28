@@ -125,31 +125,10 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     
     // If everything's sets, just start it
     private void letsGo () {
-        // First, we check update!
-        executor.execute(() -> {
-            CheckUpdate.check();
-            
-            handler.post(() -> {
-                if(CheckUpdate.isUpdateAvailable) {
-                    new MaterialAlertDialogBuilder(this)
-                    .setTitle("SaaF Android v" + CheckUpdate.versionName + " is available!")
-                    .setMessage(CheckUpdate.getChangelog())
-                    .setPositiveButton("Update", (d, v) -> {
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        intent.setData(Uri.parse(CheckUpdate.releaseURL + CheckUpdate.versionName));
-                        
-                        startActivity(intent);
-                    })
-                    .setNegativeButton("Later", null)
-                    .show();
-                }
-            });
-        });
-        
-        // Then permissions
         if (XXPermissions.isGranted(getApplicationContext(), Permission.MANAGE_EXTERNAL_STORAGE)) {
+            // Only check update if all permissions are granted.
+            checkUpdate();
+            
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(v -> {
                 Intent intent = new Intent(this, FilePickerActivity.class);
@@ -349,5 +328,29 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             });
         })
         .show();
+    }
+    
+    private void checkUpdate() {
+        executor.execute(() -> {
+            CheckUpdate.check();
+            
+            handler.post(() -> {
+                if(CheckUpdate.isUpdateAvailable) {
+                    new MaterialAlertDialogBuilder(this)
+                    .setTitle("SaaF Android v" + CheckUpdate.versionName + " is available!")
+                    .setMessage(CheckUpdate.getChangelog())
+                    .setPositiveButton("Update", (d, v) -> {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        intent.setData(Uri.parse(CheckUpdate.releaseURL + CheckUpdate.versionName));
+                        
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Later", null)
+                    .show();
+                }
+            });
+        });
     }
 }
