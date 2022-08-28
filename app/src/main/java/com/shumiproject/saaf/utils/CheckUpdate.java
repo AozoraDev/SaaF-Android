@@ -15,7 +15,7 @@ public class CheckUpdate {
     public static boolean isUpdateAvailable;
     
     public static final String releaseURL = "https://github.com/Shumi-Project/SaaF-Android/releases/tag/";
-    private static final String url = "https://raw.githubusercontent.com/Shumi-Project/SaaF-Android/rework/changelog.json";
+    private static final String url = "https://raw.githubusercontent.com/Shumi-Project/SaaF-Android/main/changelog.json";
     private static OkHttpClient client = new OkHttpClient();
     
     public static void check() {
