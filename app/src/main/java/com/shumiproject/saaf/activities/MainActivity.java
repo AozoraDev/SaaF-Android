@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Environment;
 import android.os.Looper;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.widget.Button;
 import android.widget.TextView;
@@ -85,6 +84,12 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         }
         
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AudioPlayer.pause();
     }
     
     @Override
@@ -161,11 +166,11 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         station.setImageResource(logo);
         title.setText(radioList.getTitle());
         artist.setText(radioList.getArtist());
+        
         play.setOnClickListener(v -> {
             handler.postDelayed(() -> {
             	try {
-                    AudioPlayer player = new AudioPlayer(this, radioList);
-                    player.play();
+                    AudioPlayer.play(this, radioList);
                 } catch (Exception err) {
                 	Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -218,10 +223,8 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         loading = new MaterialAlertDialogBuilder(this)
         .setCancelable(false)
         .setView(View.inflate(this, R.layout.loading, null))
-        // Make the background transparent so it's only show loading
-        .setBackground(new ColorDrawable(0))
         .create();
-
+        
         // Someone said using "setHasFixedSize" can optimize the recyclerview.
         recyclerView.setHasFixedSize(true);
         recyclerView.setVisibility(View.GONE);
@@ -257,13 +260,14 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     // Methods with full of brackets
     // I hate it
     private void open(Intent intent) {
+        String path = intent.getStringExtra("path");
+        String station = intent.getStringExtra("station");
+        
         loading.show();
+        ((TextView) loading.findViewById(R.id.loadingText)).setText("Loading " + station + "...");
     
         executor.execute(() -> {
         	try {
-                String path = intent.getStringExtra("path");
-                String station = intent.getStringExtra("station");
-                
                 radio = RadioList.createList(this, path, station);
             } catch (Exception err) {
             	handler.post(() -> {
@@ -312,6 +316,8 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         .setNegativeButton("NO", null)
         .setPositiveButton("YES", (dialog, which) -> {
             loading.show();
+            ((TextView) loading.findViewById(R.id.loadingText)).setText("Replacing " + filename + "...");
+            
             executor.execute(() -> {
     			try {
             		OSW.replace(path, filename);
@@ -331,7 +337,9 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     }
     
     private void checkUpdate() {
-        executor.execute(() -> {
+        ExecutorService updateExecutor = Executors.newSingleThreadExecutor();
+        
+        updateExecutor.execute(() -> {
             CheckUpdate.check();
             
             handler.post(() -> {
@@ -349,6 +357,8 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                     })
                     .setNegativeButton("Later", null)
                     .show();
+                    
+                    updateExecutor.shutdown();
                 }
             });
         });

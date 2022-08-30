@@ -18,20 +18,15 @@ import com.shumiproject.saaf.R;
 import com.shumiproject.saaf.utils.RadioList;
 
 public class AudioPlayer {
-    private MediaPlayer player;
-    private Context context;
-    private RadioList radioList;
-    private Runnable runnable;
-    private Handler handler;
+    private static MediaPlayer player;
+    private static Handler handler;
+    private static Runnable runnable;
     
-    private final int DELAY = 500;
+    // We need to place anotherPlayButton to the top because pause() and play() need it
+    private static ImageView anotherPlayButton;
+    private static final int DELAY = 500;
     
-    public AudioPlayer(Context context, RadioList radioList) {
-        this.context = context;
-        this.radioList = radioList;
-    }
-    
-    public void play() throws IOException, IllegalArgumentException {
+    public static void play(Context context, RadioList radioList) throws IOException, IllegalArgumentException {
         player = new MediaPlayer();
         
         try (AssetFileDescriptor assetFileDescriptor = RadioList.osw.getAssetFileDescriptor(radioList.getFilename())) {
@@ -50,7 +45,7 @@ public class AudioPlayer {
             TextView max = (TextView) playerDialog.findViewById(R.id.max);
             TextView current = (TextView) playerDialog.findViewById(R.id.current);
             ImageView station = (ImageView) playerDialog.findViewById(R.id.station);
-            ImageView anotherPlayButton = (ImageView) playButton.getChildAt(0);
+            anotherPlayButton = (ImageView) playButton.getChildAt(0);
             SeekBar seekBar = (SeekBar) playerDialog.findViewById(R.id.seekBar);
             
             station.setImageResource(logo);
@@ -60,7 +55,6 @@ public class AudioPlayer {
             playerDialog.setCanceledOnTouchOutside(false);
             playerDialog.show();
             
-            // For looping seekBar
             handler = new Handler(Looper.getMainLooper());
             
             player.setOnPreparedListener(p -> {
@@ -98,25 +92,14 @@ public class AudioPlayer {
                 });
                 
                 playButton.setOnClickListener(v -> {
-                    if (player.isPlaying()) {
-                        anotherPlayButton.setImageResource(R.drawable.play_circle);
-                        handler.removeCallbacks(runnable);
-                        player.pause();
-                    } else {
-                    	anotherPlayButton.setImageResource(R.drawable.pause_circle);
-                        handler.postDelayed(runnable, DELAY);
-                        player.start();
-                    }
+                    if (player.isPlaying()) pause();
+                    else play();
                 });
                 
                 stopButton.setOnClickListener(v -> {
-                    anotherPlayButton.setImageResource(R.drawable.play_circle);
                     seekBar.setProgress(0);
                     player.seekTo(0);
-                    if (player.isPlaying()) {
-                        handler.removeCallbacks(runnable);
-                        player.pause();
-                    }
+                    if (player.isPlaying()) pause();
                 });
                 
                 closeButton.setOnClickListener(v -> playerDialog.dismiss());
@@ -130,7 +113,7 @@ public class AudioPlayer {
         }
     }
     
-    public void release() {
+    private static void release() {
         player.reset();
         player.release();
         player = null;
@@ -139,8 +122,22 @@ public class AudioPlayer {
         handler = null;
     }
     
+    public static void pause() {
+        if (player != null && player.isPlaying()) {
+        	anotherPlayButton.setImageResource(R.drawable.play_circle);
+        	handler.removeCallbacks(runnable);
+        	player.pause();
+        }
+    }
+    
+    private static void play() {
+        anotherPlayButton.setImageResource(R.drawable.pause_circle);
+        handler.postDelayed(runnable, DELAY);
+        player.start();
+    }
+    
     // https://www.11zon.com/zon/android/how-to-play-audio-file-in-android-programmatically.php (Timer Conversion)
-	private String timerConversion(long value) {
+	private static String timerConversion(long value) {
         String audioTime;
     	int dur = (int) value;
     	int hrs = (dur / 3600000);

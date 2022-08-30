@@ -7,5 +7,6 @@
     <string name="replace">Replace</string>
     <string name="title">Title</string>
     <string name="artist">Artist</string>
+    <string name="loading">Loading...</string>
     <string name="no_time">00:00</string>
 </resources>

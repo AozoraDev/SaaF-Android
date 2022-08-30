@@ -6,6 +6,7 @@
    "- Added built-in file chooser.",
    "- Added replace feature.",
    "- Changed menu and player style.",
-   "- Updated UncaughtException handler."
+   "- Updated UncaughtException handler.",
+   "- Fixed slow file loading when the app checking for update."
   ]
 }
