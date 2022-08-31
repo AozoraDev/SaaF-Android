@@ -320,7 +320,11 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             
             executor.execute(() -> {
     			try {
-            		OSW.replace(path, filename);
+            		OSW.replace(path, filename, (index, total) -> {
+                        final String text = "Updating contents... (" + index + "/" + total + ")";
+                        handler.post(() -> ((TextView) loading.findViewById(R.id.loadingText)).setText(text));
+                    });
+                    
                 	handler.post(() -> {
                         Toast.makeText(this, filename + " have been replaced!", Toast.LENGTH_LONG).show();
                         loading.dismiss();

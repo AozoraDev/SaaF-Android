@@ -2,6 +2,7 @@ package com.shumiproject.saaf.utils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -22,19 +23,61 @@ import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.CompressionMethod;
 
 public class OSW {
+    private static Callback callback;
+    
     private static class IDX {
         int compressedSize;
         int length;
         String name;
     }
     
-    public static void replace (String path, String filename) throws IOException {
-        File audio = new File(path);
+    public interface Callback {
+        void onUpdating(int current, int total);
+    }
+    
+    public static void replace (String path, String filename, Callback mCallback) throws IOException {
+        String externalPath = Environment.getExternalStorageDirectory().getPath();
+        String tempDir = externalPath + "/SaaFAndroid/" + RadioList.stationCode + "/temp";
+        callback = mCallback;
         
-        try (ZipFile osw = new ZipFile(RadioList.stationPath)) {
-            osw.addFile(audio, parameter(filename));
+        try (ZipFile osw = new ZipFile(RadioList.stationPath);
+        ZipFile newOsw = new ZipFile(RadioList.stationPath + ".temp")) {
+            // Cannot use this anymore. See https://github.com/srikanth-lingala/zip4j/issues/470
+            // osw.addFile(audio, parameter(filename));
             
-            // Update ZipResourceFile
+            // Instead, we do a little hack.
+            // Not a effective hack tho.
+            File oswFile = osw.getFile();
+            osw.extractAll(tempDir);
+            oswFile.delete();
+            File tempDirFile = new File(tempDir);
+            
+            // All files are extracted
+            // We can now copy the audio file to the temp dir
+            FileInputStream fis = new FileInputStream(path);
+            FileOutputStream fos = new FileOutputStream(tempDir + "/" + filename);
+            byte[] buffer = new byte[1024 * 4];
+            int read = 0;
+            while ((read = fis.read(buffer)) != -1) {
+                fos.write(buffer, 0, read);
+            }
+            // "Why you don't use try-with-resource instead?" - 🤓
+            if (fos != null) fos.close();
+            if (fis != null) fis.close();
+            
+            // After that, compress them into a osw file
+            int filesLength = tempDirFile.list().length;
+            int index = 0;
+            for (File file : tempDirFile.listFiles()) {
+                index += 1;
+                callback.onUpdating(index, filesLength);
+                newOsw.addFile(file, parameter());
+                file.delete();
+            }
+            tempDirFile.delete();
+            
+            // Update filename and ZipResourceFile
+            newOsw.getFile().renameTo(oswFile);
             RadioList.osw = new ZipResourceFile(RadioList.stationPath);
         }
     }
@@ -42,10 +85,9 @@ public class OSW {
     public static void extract (RadioList radioList) throws IOException {
         String externalPath = Environment.getExternalStorageDirectory().getPath();
         File file = new File(externalPath + "/SaaFAndroid/" + RadioList.stationCode);
+        
         String filename = radioList.getFilename();
-        if (!file.exists()) {
-            file.mkdirs();
-        }
+        if (!file.exists()) file.mkdirs();
         
         try (ZipFile osw = new ZipFile(RadioList.stationPath)) {
             osw.extractFile(filename, file.getAbsolutePath());
@@ -104,11 +146,13 @@ public class OSW {
         zipFile.close();
     }
     
-    public static ZipParameters parameter (String filename) {
-        ZipParameters parameter = new ZipParameters();
+    private static ZipParameters parameter() {
+        ZipParameters parameter = null;
+        // Imagine calling new object for 200+ times
+        if (parameter == null) parameter = new ZipParameters();
+        
         parameter.setCompressionLevel(CompressionLevel.NO_COMPRESSION);
         parameter.setCompressionMethod(CompressionMethod.STORE);
-        parameter.setFileNameInZip(filename);
         parameter.setUnixMode(true);
         
         return parameter;
