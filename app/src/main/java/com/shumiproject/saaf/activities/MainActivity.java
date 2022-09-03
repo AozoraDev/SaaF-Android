@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             
             executor.execute(() -> {
     			try {
-            		OSW.replace(path, filename, (index, total) -> {
+            		OSW.replace(getExternalCacheDir(), path, filename, (index, total) -> {
                         final String text = String.format("Updating contents... (%d/%d)", index, total);
                         handler.post(() -> ((TextView) loading.findViewById(R.id.loadingText)).setText(text));
                     });

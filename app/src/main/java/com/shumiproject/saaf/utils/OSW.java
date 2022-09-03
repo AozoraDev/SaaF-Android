@@ -35,9 +35,8 @@ public class OSW {
         void onUpdating(int current, int total);
     }
     
-    public static void replace (String path, String filename, Callback mCallback) throws IOException {
-        String externalPath = Environment.getExternalStorageDirectory().getPath();
-        String tempDir = externalPath + "/SaaFAndroid/" + RadioList.stationCode + "/temp";
+    public static void replace (File cache, String path, String filename, Callback mCallback) throws IOException {
+        String tempDir = cache.getPath() + "/temp";
         callback = mCallback;
         
         try (ZipFile osw = new ZipFile(RadioList.stationPath);
@@ -50,7 +49,6 @@ public class OSW {
             File oswFile = osw.getFile();
             osw.extractAll(tempDir);
             oswFile.delete();
-            File tempDirFile = new File(tempDir);
             
             // All files are extracted
             // We can now copy the audio file to the temp dir
@@ -66,15 +64,14 @@ public class OSW {
             if (fis != null) fis.close();
             
             // After that, compress them into a osw file
-            int filesLength = tempDirFile.list().length;
-            int index = 0;
-            for (File file : tempDirFile.listFiles()) {
-                index += 1;
-                callback.onUpdating(index, filesLength);
-                newOsw.addFile(file, parameter());
-                file.delete();
+            File[] tempFiles = new File(tempDir).listFiles();
+            int filesLength = tempFiles.length;
+            
+            for (int index = 0; index < filesLength; index++) {
+                callback.onUpdating(index + 1, filesLength);
+                newOsw.addFile(tempFiles[index], parameter());
+                tempFiles[index].delete();
             }
-            tempDirFile.delete();
             
             // Update filename and ZipResourceFile
             newOsw.getFile().renameTo(oswFile);
