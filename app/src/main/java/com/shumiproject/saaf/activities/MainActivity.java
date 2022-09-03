@@ -17,8 +17,6 @@ import android.os.Looper;
 import android.net.Uri;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +33,7 @@ import com.shumiproject.saaf.utils.AudioPlayer;
 import com.shumiproject.saaf.utils.OSW;
 import com.shumiproject.saaf.utils.CheckUpdate;
 import com.shumiproject.saaf.adapters.RadioListAdapter;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.shumiproject.saaf.bottomsheet.MenuBottomSheet;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.hjq.permissions.Permission;
@@ -51,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     private boolean canCloseFile;
     
     private final int DELAY = 200;
+    private final String[] items = { "Play", "Extract", "Replace" };
+    private final int[] resources = { R.drawable.play, R.drawable.download, R.drawable.refresh };
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             case R.id.create_idx:
                 try {
                     OSW.createIDX(RadioList.stationPath);
-                    Toast.makeText(this, RadioList.stationCode + ".osw.idx created successfully!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, String.format("%s.osw.idx created successfully!", RadioList.stationCode), Toast.LENGTH_LONG).show();
                 } catch (Exception err) {
                     Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         if (canCloseFile) {
             new MaterialAlertDialogBuilder(this)
             .setCancelable(true)
-            .setMessage("Do you want to close " + RadioList.stationName + " station?")
+            .setMessage(String.format("Do you want to close %s station?", RadioList.stationName))
             .setNegativeButton("NO", null)
             .setPositiveButton("YES", (_which, _dialog) -> {
                 canCloseFile = false;
@@ -123,9 +123,22 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                 RadioList.osw = null;
             })
             .show();
-        } else {
-            backPressedDialog.show();
-        }
+        } else backPressedDialog.show();
+    }
+    
+    // Permission handler
+    @Override
+    public void onGranted(List<String> permissions, boolean all) {
+        letsGo();
+    }
+    
+    @Override
+    public void onDenied(List<String> permissions, boolean never) {
+        new MaterialAlertDialogBuilder(this)
+        .setCancelable(false)
+        .setMessage("This app requires storage access to work properly. Please grant storage permission.")
+        .setPositiveButton("OK", (dialog, which) -> letsGo())
+        .show();
     }
     
     // If everything's sets, just start it
@@ -150,76 +163,20 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         .permission(Permission.MANAGE_EXTERNAL_STORAGE)
         .request(this);
     }
-    
-    private void menuDialog (RadioList radioList) {
-        int logo = (RadioList.stationLogo != 0) ? RadioList.stationLogo : R.drawable.utp;
-        
-        BottomSheetDialog menuSheet = new BottomSheetDialog(this);
-        menuSheet.setContentView(R.layout.menu_bottom);
-        LinearLayout play = (LinearLayout) menuSheet.findViewById(R.id.play);
-        LinearLayout extract = (LinearLayout) menuSheet.findViewById(R.id.extract);
-        LinearLayout replace = (LinearLayout) menuSheet.findViewById(R.id.replace);
-        ImageView station = (ImageView) menuSheet.findViewById(R.id.station);
-        TextView title = (TextView) menuSheet.findViewById(R.id.title);
-        TextView artist = (TextView) menuSheet.findViewById(R.id.artist);
-        
-        station.setImageResource(logo);
-        title.setText(radioList.getTitle());
-        artist.setText(radioList.getArtist());
-        
-        play.setOnClickListener(v -> {
-            handler.postDelayed(() -> {
-            	try {
-                    AudioPlayer.play(this, radioList);
-                } catch (Exception err) {
-                	Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            	menuSheet.dismiss();
-            }, DELAY);
-        });
-        extract.setOnClickListener(v -> {
-            handler.postDelayed(() -> {
-            	try {
-                	OSW.extract(radioList);
-                	String path = Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + RadioList.stationCode;
-                	// Hehe... Don't ask.
-                	path += "/";
-                
-            	    Toast.makeText(this, radioList.getFilename() + " has been extracted to " + path, Toast.LENGTH_LONG).show();
-            	} catch (Exception err) {
-            	    Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-            	}
-                menuSheet.dismiss();
-            }, DELAY);
-        });
-        replace.setOnClickListener(v -> {
-            handler.postDelayed(() -> {
-                Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
-                intent.putExtra("extension", ".mp3");
-                // I'm not gonna add radiolist to the top, so i'm gonna do a little hack
-                intent.putExtra("filename", radioList.getFilename());
-                launcher.launch(intent);
-                menuSheet.dismiss();
-            }, DELAY);
-        });
-        
-        menuSheet.show();
-    }
 
     private void initialize(Bundle savedInstanceState) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         button = (Button) findViewById(R.id.button);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
+        setSupportActionBar(toolbar);
+        
         backPressedDialog = new MaterialAlertDialogBuilder(this)
         .setCancelable(true)
         .setNegativeButton("NO", null)
         .setMessage("Are you sure you want to close this app?")
         .setPositiveButton("YES", (_which, _dialog) -> finish())
         .create();
-            
+        
         loading = new MaterialAlertDialogBuilder(this)
         .setCancelable(false)
         .setView(View.inflate(this, R.layout.loading, null))
@@ -228,21 +185,6 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         // Someone said using "setHasFixedSize" can optimize the recyclerview.
         recyclerView.setHasFixedSize(true);
         recyclerView.setVisibility(View.GONE);
-    }
-    
-    // Permission handler
-    @Override
-    public void onGranted(List<String> permissions, boolean all) {
-        letsGo();
-    }
-    
-    @Override
-    public void onDenied(List<String> permissions, boolean never) {
-        new MaterialAlertDialogBuilder(this)
-        .setCancelable(false)
-        .setMessage("This app requires storage access to work properly. Please grant storage permission.")
-        .setPositiveButton("OK", (dialog, which) -> letsGo())
-        .show();
     }
     
     // activity with result launcher
@@ -275,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                     loading.dismiss();
                 });
                 
-                // Don't execute the code below if error
+                // Don't execute the code below if error happens
                 return;
             }
             
@@ -283,6 +225,8 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             canCloseFile = true; // Set it to true after the osw is loaded so we can close it if onBackPressed executed.
                 
             handler.post(() -> {
+                MenuBottomSheet menuBottomSheet = new MenuBottomSheet(this);
+                
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setVisibility(View.VISIBLE);
@@ -291,12 +235,12 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
                 adapter.setCallback(new RadioListAdapter.Callback() {
                     @Override
                     public void onItemClicked(RadioList radioList) {
-                        menuDialog(radioList);
+                        menuDialog(menuBottomSheet, radioList);
                     }
                     
                     @Override
                     public boolean onItemLongClicked(RadioList radioList) {
-                        menuDialog(radioList);
+                        menuDialog(menuBottomSheet, radioList);
                         return true;
                     }
                 });
@@ -312,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         String path = intent.getStringExtra("path");
          
     	new MaterialAlertDialogBuilder(this)
-        .setMessage("Are you sure you want to replace " + filename + "?")
+        .setMessage(String.format("Are you sure you want to replace %s?", filename))
         .setNegativeButton("NO", null)
         .setPositiveButton("YES", (dialog, which) -> {
             loading.show();
@@ -321,12 +265,12 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             executor.execute(() -> {
     			try {
             		OSW.replace(path, filename, (index, total) -> {
-                        final String text = "Updating contents... (" + index + "/" + total + ")";
+                        final String text = String.format("Updating contents... (%d/%d)", index, total);
                         handler.post(() -> ((TextView) loading.findViewById(R.id.loadingText)).setText(text));
                     });
                     
                 	handler.post(() -> {
-                        Toast.makeText(this, filename + " have been replaced!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, String.format("%s have been replaced!", filename), Toast.LENGTH_LONG).show();
                         loading.dismiss();
                     });
                 } catch (Exception err) {
@@ -340,6 +284,55 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         .show();
     }
     
+    private void menuDialog (MenuBottomSheet menuBottomSheet, RadioList radioList) {
+        final int logo = (RadioList.stationLogo != 0) ? RadioList.stationLogo : R.drawable.utp;
+        
+        menuBottomSheet.setIcon(logo);
+        menuBottomSheet.setTitle(radioList.getTitle());
+        menuBottomSheet.setArtist(radioList.getArtist());
+        menuBottomSheet.setItems(items, resources, v -> {
+            switch ((int) v.getTag()) {
+                case 0:
+                	handler.postDelayed(() -> {
+            			try {
+                    		AudioPlayer.play(this, radioList);
+                		} catch (Exception err) {
+                			Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+                		}
+                        menuBottomSheet.dismiss();
+            		}, DELAY);
+                return;
+                case 1:
+                	handler.postDelayed(() -> {
+            			try {
+                			OSW.extract(radioList);
+                			String path = Environment.getExternalStorageDirectory().getPath() + "/SaaFAndroid/" + RadioList.stationCode;
+                			// Hehe... Don't ask.
+                			path += "/";
+                            
+            	    		Toast.makeText(this, radioList.getFilename() + " has been extracted to " + path, Toast.LENGTH_LONG).show();
+            			} catch (Exception err) {
+            	    		Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+            			}
+                        menuBottomSheet.dismiss();
+            		}, DELAY);
+                return;
+                case 2:
+                	handler.postDelayed(() -> {
+                		Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
+                		intent.putExtra("extension", ".mp3");
+                		// I'm not gonna add radiolist to the top, so i'm gonna do a little hack
+                		intent.putExtra("filename", radioList.getFilename());
+                		launcher.launch(intent);
+                		menuBottomSheet.dismiss();
+            		}, DELAY);
+                return;
+            }
+        });
+        
+        menuBottomSheet.show();
+    }
+    
     private void checkUpdate() {
         ExecutorService updateExecutor = Executors.newSingleThreadExecutor();
         
@@ -349,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
             handler.post(() -> {
                 if(CheckUpdate.isUpdateAvailable) {
                     new MaterialAlertDialogBuilder(this)
-                    .setTitle("SaaF Android v" + CheckUpdate.versionName + " is available!")
+                    .setTitle(String.format("SaaF Android v%s is available!", CheckUpdate.versionName))
                     .setMessage(CheckUpdate.getChangelog())
                     .setPositiveButton("Update", (d, v) -> {
                         Intent intent = new Intent();

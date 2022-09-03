@@ -5,6 +5,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -36,8 +37,10 @@ public class AudioPlayer {
             int logo = (RadioList.stationLogo != 0) ? RadioList.stationLogo : R.drawable.utp;
             
             BottomSheetDialog playerDialog = new BottomSheetDialog(context);
-            playerDialog.setContentView(R.layout.player_bottom);
-            LinearLayout playButton = (LinearLayout) playerDialog.findViewById(R.id.play);
+            playerDialog.setContentView(R.layout.bottom);
+            
+            LinearLayout parent = (LinearLayout) playerDialog.findViewById(R.id.player);
+            LinearLayout playButton = (LinearLayout) playerDialog.findViewById(R.id.pause);
             LinearLayout stopButton = (LinearLayout) playerDialog.findViewById(R.id.stop);
             LinearLayout closeButton = (LinearLayout) playerDialog.findViewById(R.id.cancel);
             TextView title = (TextView) playerDialog.findViewById(R.id.title);
@@ -52,6 +55,7 @@ public class AudioPlayer {
             title.setText(radioList.getTitle());
             artist.setText(radioList.getArtist());
             
+            if (parent.getVisibility() == View.GONE) parent.setVisibility(View.VISIBLE);
             playerDialog.setCanceledOnTouchOutside(false);
             playerDialog.show();
             
@@ -107,6 +111,7 @@ public class AudioPlayer {
             
             playerDialog.setOnDismissListener(v -> {
                 if (player.isPlaying()) player.stop();
+                if (parent.getVisibility() == View.VISIBLE) parent.setVisibility(View.GONE);
                 release();
             });
             player.setOnCompletionListener(p -> playerDialog.dismiss());
