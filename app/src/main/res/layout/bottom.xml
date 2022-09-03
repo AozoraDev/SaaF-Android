@@ -103,6 +103,7 @@
         </LinearLayout>
         
         <LinearLayout
+            android:id="@+id/deco"
             android:background="@drawable/button_surface"
             android:gravity="center"
             android:layout_gravity="center_horizontal"

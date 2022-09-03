@@ -7,6 +7,7 @@
    "- Added replace feature.",
    "- Changed menu and player style.",
    "- Updated UncaughtException handler.",
-   "- Fixed slow file loading when the app checking for update."
+   "- Fixed slow file loading when the app checking for update.",
+   "- Fixed multiple touches"
   ]
 }

@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +48,8 @@ public class MenuBottomSheet {
         LinearLayout layout = (LinearLayout) dialog.findViewById(R.id.layout);
         // Clear all childs to prevent more items
         layout.removeAllViews();
+        // Fix multiple touches
+        layout.setMotionEventSplittingEnabled(false);
         
         for (int index = 0; index < items.length; index++) {
             // Icon
@@ -79,6 +80,7 @@ public class MenuBottomSheet {
             item.addView(text);
             item.setTag(index);
             item.setOnClickListener(v -> callback.onClick(v));
+            
             layout.addView(item);
         }
     }

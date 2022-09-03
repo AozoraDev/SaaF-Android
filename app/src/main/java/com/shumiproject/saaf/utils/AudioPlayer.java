@@ -16,7 +16,6 @@ import java.util.Locale;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.shumiproject.saaf.R;
-import com.shumiproject.saaf.utils.RadioList;
 
 public class AudioPlayer {
     private static MediaPlayer player;
@@ -36,6 +35,7 @@ public class AudioPlayer {
             
             int logo = (RadioList.stationLogo != 0) ? RadioList.stationLogo : R.drawable.utp;
             
+            // TODO Create a class for player bottom sheet
             BottomSheetDialog playerDialog = new BottomSheetDialog(context);
             playerDialog.setContentView(R.layout.bottom);
             
@@ -56,6 +56,8 @@ public class AudioPlayer {
             artist.setText(radioList.getArtist());
             
             if (parent.getVisibility() == View.GONE) parent.setVisibility(View.VISIBLE);
+            // Fix multiple touches
+            ((LinearLayout) playerDialog.findViewById(R.id.deco)).setMotionEventSplittingEnabled(false);
             playerDialog.setCanceledOnTouchOutside(false);
             playerDialog.show();
             
