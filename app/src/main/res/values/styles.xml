@@ -5,19 +5,10 @@
     <item name="colorAccent">@color/colorAccent</item>
 	<item name="colorControlHighlight">@color/colorControlHighlight</item>
 	<item name="colorControlNormal">@color/colorControlNormal</item>
-    <item name="android:navigationBarColor">@color/colorPrimary</item>
-    <item name="bottomSheetDialogTheme">@style/RoundedCornersBottomSheetDialog</item>
+    <item name="android:navigationBarColor">@android:color/transparent</item>
   </style>
   
 	<style name="AppTheme.AppBarOverlay"	parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
 	<style name="AppTheme.PopupOverlay"	parent="ThemeOverlay.MaterialComponents.Dark"/>
-    
-    <style name="RoundedCornersBottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
-    	<item name="bottomSheetStyle">@style/RoundedCornersBottomSheet</item>
-    </style>
-    
-    <style name="RoundedCornersBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-    	<item name="backgroundTint">@android:color/transparent</item>
-    </style>
     
 </resources>
