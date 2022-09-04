@@ -6,15 +6,21 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Environment;
 import android.os.Looper;
+import android.provider.Settings;
 import android.net.Uri;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +30,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
@@ -34,11 +39,7 @@ import com.shumiproject.saaf.adapters.RadioListAdapter;
 import com.shumiproject.saaf.bottomsheet.MenuBottomSheet;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import com.hjq.permissions.Permission;
-import com.hjq.permissions.XXPermissions;
-import com.hjq.permissions.OnPermissionCallback;
-
-public class MainActivity extends AppCompatActivity implements OnPermissionCallback {
+public class MainActivity extends AppCompatActivity {
     private ArrayList<RadioList> radio;
     private Button button;
     private RecyclerView recyclerView;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     private boolean canCloseFile;
     
     private final int DELAY = 200;
+    private final String[] permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
     private final String[] items = { "Play", "Extract", "Replace" };
     private final int[] resources = { R.drawable.play, R.drawable.download, R.drawable.refresh };
     
@@ -126,23 +128,38 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
     }
     
     // Permission handler
-    @Override
-    public void onGranted(List<String> permissions, boolean all) {
+    // https://stackoverflow.com/a/66366102 with some modifications
+    // START
+	private boolean checkPermission() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return Environment.isExternalStorageManager();
+		else {
+            int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+			int result1 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+			return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
+		}
+	}
+    
+	private void requestPermission() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+            permissionLauncher.launch(intent);
+		} else ActivityCompat.requestPermissions(this, permissions, 1000);
+	}
+    
+    ActivityResultLauncher<Intent> permissionLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (ActivityResult result) -> {
         letsGo();
-    }
+    });
     
     @Override
-    public void onDenied(List<String> permissions, boolean never) {
-        new MaterialAlertDialogBuilder(this)
-        .setCancelable(false)
-        .setMessage(res.getString(R.string.storage_permission))
-        .setPositiveButton(res.getString(R.string.ok), (dialog, which) -> letsGo())
-        .show();
-    }
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        letsGo();
+	}
+    // END
     
     // If everything's sets, just start it
     private void letsGo () {
-        if (XXPermissions.isGranted(getApplicationContext(), Permission.MANAGE_EXTERNAL_STORAGE)) {
+        if (checkPermission()) {
             // Only check update if all permissions are granted.
             checkUpdate();
             
@@ -158,9 +175,11 @@ public class MainActivity extends AppCompatActivity implements OnPermissionCallb
         }
     
         // Otherwise, ask permission.
-        XXPermissions.with(this)
-        .permission(Permission.MANAGE_EXTERNAL_STORAGE)
-        .request(this);
+        new MaterialAlertDialogBuilder(this)
+        .setCancelable(false)
+        .setMessage(res.getString(R.string.storage_permission))
+        .setPositiveButton(res.getString(R.string.ok), (dialog, which) -> requestPermission())
+        .show();
     }
 
     private void initialize(Bundle savedInstanceState) {

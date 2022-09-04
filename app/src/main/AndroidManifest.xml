@@ -36,9 +36,6 @@
             android:exported="true"
             android:supportsPictureInPicture="true">
         </activity>
-        <meta-data
-            android:name="ScopedStorage"
-            android:value="true"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.shumiproject.saaf.fileprovider"
