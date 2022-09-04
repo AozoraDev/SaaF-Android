@@ -73,7 +73,7 @@ public class FilePickerActivity extends AppCompatActivity {
         storagePath = mPath;
         if (savedDir == null) savedDir = mPath;
         
-        toolbar.setTitle("Choose a File");
+        toolbar.setTitle(getResources().getString(R.string.choose_file));
         toolbar.setSubtitle(savedDir);
         setSupportActionBar(toolbar);
         

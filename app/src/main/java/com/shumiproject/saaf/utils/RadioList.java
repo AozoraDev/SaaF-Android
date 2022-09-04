@@ -73,6 +73,10 @@ public class RadioList {
             osw = new ZipResourceFile(path);
         }
         
+        if (songs == null || songs.isEmpty()) {
+            throw new IOException("The file is empty or not a valid file");
+        }
+        
         return songs;
     }
 }

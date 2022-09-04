@@ -1,12 +1,42 @@
 <resources>
     <string name="app_name">SaaF Android</string>
+    
+    <!-- Button -->
     <string name="open_osw">Open OSW</string>
     <string name="create_idx">Create IDX</string>
+    
+    <!-- Button on menu -->
     <string name="play">Play</string>
     <string name="extract">Extract</string>
     <string name="replace">Replace</string>
+    
+    <!-- Menu -->
     <string name="title">Title</string>
     <string name="artist">Artist</string>
-    <string name="loading">Loading...</string>
     <string name="no_time">00:00</string>
+    
+    <!-- For toast and dialog -->
+    <string name="idx_created">%s.osw.idx created successfully!</string>
+    <string name="extracted">%1$s has been extracted to %2$s</string>
+    <string name="replaced">%s have been replaced!</string>
+    
+    <string name="update_available">SaaF Android v%s is available!</string>
+    <string name="storage_permission">This app requires storage access to work properly. Please grant storage permission.</string>
+    <string name="close_station">Do you want to close %s station?</string>
+    <string name="close_app">Are you sure you want to close this app?</string>
+    <string name="confirm_replace">Are you sure you want to replace %s?</string>
+    
+    <!-- Loading -->
+    <string name="loading_osw">Loading %s...</string>
+    <string name="replacing">Replacing %s...</string>
+    <string name="updating">Updating contents... (%1$d/%2$d)</string>
+    
+    <!-- Others -->
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="ok">OK</string>
+    <string name="update">UPDATE</string>
+    <string name="later">LATER</string>
+    <string name="loading">Loading...</string>
+    <string name="choose_file">Choose a File</string>
 </resources>
