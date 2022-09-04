@@ -23,8 +23,6 @@ import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.CompressionMethod;
 
 public class OSW {
-    private static Callback callback;
-    
     private static class IDX {
         int compressedSize;
         int length;
@@ -37,7 +35,7 @@ public class OSW {
     
     public static void replace (File cache, String path, String filename, Callback mCallback) throws IOException {
         String tempDir = cache.getPath() + "/temp";
-        callback = mCallback;
+        Callback callback = mCallback;
         
         try (ZipFile osw = new ZipFile(RadioList.stationPath);
         ZipFile newOsw = new ZipFile(RadioList.stationPath + ".temp")) {
