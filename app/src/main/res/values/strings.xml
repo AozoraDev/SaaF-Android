@@ -27,9 +27,9 @@
     <string name="confirm_replace">Are you sure you want to replace %s?</string>
     
     <!-- Loading -->
-    <string name="loading_osw">Loading %s...</string>
-    <string name="replacing">Replacing %s...</string>
-    <string name="updating">Updating contents... (%1$d/%2$d)</string>
+    <string name="loading_osw">Loading %s&#8230;</string>
+    <string name="replacing">Replacing %s&#8230;</string>
+    <string name="updating">Updating contents&#8230; (%1$d/%2$d)</string>
     
     <!-- Others -->
     <string name="yes">YES</string>
@@ -37,6 +37,6 @@
     <string name="ok">OK</string>
     <string name="update">UPDATE</string>
     <string name="later">LATER</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading&#8230;</string>
     <string name="choose_file">Choose a File</string>
 </resources>

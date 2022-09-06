@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+	<issue id="DiscouragedApi" severity="ignore" />
+    <issue id="Overdraw" severity="ignore" />
+    <issue id="UnusedResources" severity="ignore" />
+    <issue id="ContentDescription" severity="ignore" />
+</lint>

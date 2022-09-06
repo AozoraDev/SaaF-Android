@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="@string/title"
-            android:textSize="17dp"
+            android:textSize="17sp"
             android:textStyle="bold"/>
         
         <TextView
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="@string/artist"
-            android:textSize="13dp"/>
+            android:textSize="13sp"/>
         
     
     </LinearLayout>
@@ -102,9 +102,9 @@
         </LinearLayout>
         
         <LinearLayout
-            android:id="@+id/deco"
             android:background="@drawable/button_surface"
             android:gravity="center"
+            android:id="@+id/deco"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"

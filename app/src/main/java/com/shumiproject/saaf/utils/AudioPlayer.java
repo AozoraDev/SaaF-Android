@@ -18,17 +18,20 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.shumiproject.saaf.R;
 
 public class AudioPlayer {
-    private static MediaPlayer player;
-    private static Handler handler;
-    private static Runnable runnable;
+    private MediaPlayer player = new MediaPlayer();
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable runnable;
+    private Context context;
     
     // We need to place anotherPlayButton to the top because pause() and play() need it
-    private static ImageView anotherPlayButton;
-    private static final int DELAY = 500;
+    private ImageView anotherPlayButton;
+    private final int DELAY = 500;
     
-    public static void play(Context context, RadioList radioList) throws IOException, IllegalArgumentException {
-        player = new MediaPlayer();
-        
+    public AudioPlayer(Context context) {
+        this.context = context;
+    }
+    
+    public void play(RadioList radioList) throws IOException, IllegalArgumentException {
         try (AssetFileDescriptor assetFileDescriptor = RadioList.osw.getAssetFileDescriptor(radioList.getFilename())) {
             player.setDataSource(assetFileDescriptor.getFileDescriptor(), assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
         	player.prepareAsync();
@@ -56,12 +59,9 @@ public class AudioPlayer {
             artist.setText(radioList.getArtist());
             
             if (parent.getVisibility() == View.GONE) parent.setVisibility(View.VISIBLE);
-            // Fix multiple touches
-            ((LinearLayout) playerDialog.findViewById(R.id.deco)).setMotionEventSplittingEnabled(false);
+            ((LinearLayout) playerDialog.findViewById(R.id.deco)).setMotionEventSplittingEnabled(false); // Fix multiple touches
             playerDialog.setCanceledOnTouchOutside(false);
             playerDialog.show();
-            
-            handler = new Handler(Looper.getMainLooper());
             
             player.setOnPreparedListener(p -> {
                 anotherPlayButton.setImageResource(R.drawable.pause_circle);
@@ -114,22 +114,30 @@ public class AudioPlayer {
             playerDialog.setOnDismissListener(v -> {
                 if (player.isPlaying()) player.stop();
                 if (parent.getVisibility() == View.VISIBLE) parent.setVisibility(View.GONE);
-                release();
+                reset();
             });
             player.setOnCompletionListener(p -> playerDialog.dismiss());
         }
     }
     
-    private static void release() {
+    private void reset() {
         player.reset();
-        player.release();
-        player = null;
         handler.removeCallbacks(runnable);
-        handler.removeCallbacksAndMessages(null);
-        handler = null;
     }
     
-    public static void pause() {
+    public void release() {
+        player.reset();
+        player.release();
+        handler.removeCallbacks(runnable);
+        handler.removeCallbacksAndMessages(null);
+        
+        // Nullify them
+        player = null;
+        handler = null;
+        runnable = null;
+    }
+    
+    public void pause() {
         if (player != null && player.isPlaying()) {
         	anotherPlayButton.setImageResource(R.drawable.play_circle);
         	handler.removeCallbacks(runnable);
@@ -137,14 +145,14 @@ public class AudioPlayer {
         }
     }
     
-    private static void play() {
+    private void play() {
         anotherPlayButton.setImageResource(R.drawable.pause_circle);
         handler.postDelayed(runnable, DELAY);
         player.start();
     }
     
     // https://www.11zon.com/zon/android/how-to-play-audio-file-in-android-programmatically.php (Timer Conversion)
-	private static String timerConversion(long value) {
+	private String timerConversion(long value) {
         String audioTime;
     	int dur = (int) value;
     	int hrs = (dur / 3600000);

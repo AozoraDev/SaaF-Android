@@ -46,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog backPressedDialog, loading;
     private Menu menu;
     private Resources res;
+    private AudioPlayer player;
     private boolean canCloseFile;
     
     private final int DELAY = 200;
     private final String[] permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
-    private final String[] items = { "Play", "Extract", "Replace" };
     private final int[] resources = { R.drawable.play, R.drawable.download, R.drawable.refresh };
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -73,14 +73,16 @@ public class MainActivity extends AppCompatActivity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.create_idx:
-                try {
-                    OSW.createIDX(RadioList.stationPath);
-                    Toast.makeText(this, String.format(res.getString(R.string.idx_created), RadioList.stationCode), Toast.LENGTH_LONG).show();
-                } catch (Exception err) {
-                    Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
-                }
+        int id = item.getItemId();
+        
+        if (id == R.id.create_idx) {
+            try {
+            	OSW.createIDX(RadioList.stationPath);
+                Toast.makeText(this, String.format(res.getString(R.string.idx_created), RadioList.stationCode), Toast.LENGTH_LONG).show();
+        	} catch (Exception err) {
+                Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            
             return true;
         }
         
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        AudioPlayer.pause();
+        if (player != null) player.pause();
     }
     
     @Override
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
         executor.shutdownNow();
+        launcher.unregister();
     }
 
     @Override
@@ -110,13 +113,14 @@ public class MainActivity extends AppCompatActivity {
             .setPositiveButton(res.getString(R.string.yes), (_which, _dialog) -> {
                 canCloseFile = false;
                 radio.clear();
+                player.release();
                 recyclerView.getAdapter().notifyDataSetChanged();
                 recyclerView.setVisibility(View.GONE);
                 button.setVisibility(View.VISIBLE);
                 menu.findItem(R.id.create_idx).setEnabled(false).setVisible(false);
                 getSupportActionBar().setSubtitle(null);
                 
-                // Nullify static vars for no reason
+                // Nullify (static) vars for no reason
                 // RadioList.stationLogo = null; // Can't nullify int
                 RadioList.stationName = null;
                 RadioList.stationPath = null;
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
             // Only check update if all permissions are granted.
             checkUpdate();
             
+            permissionLauncher.unregister();
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(v -> {
                 Intent intent = new Intent(this, FilePickerActivity.class);
@@ -239,10 +244,11 @@ public class MainActivity extends AppCompatActivity {
                 // Don't execute the code below if error happens
                 return;
             }
-        
+            
         	RadioListAdapter adapter = new RadioListAdapter(radio);
         	canCloseFile = true; // Set it to true after the osw is loaded so we can close it if onBackPressed executed.
-        
+            player = new AudioPlayer(this);
+            
         	handler.post(() -> {
         		MenuBottomSheet menuBottomSheet = new MenuBottomSheet(this);
         		button.setVisibility(View.GONE);
@@ -304,6 +310,7 @@ public class MainActivity extends AppCompatActivity {
     
     private void menuDialog (MenuBottomSheet menuBottomSheet, RadioList radioList) {
         final int logo = (RadioList.stationLogo != 0) ? RadioList.stationLogo : R.drawable.utp;
+        final String[] items = { res.getString(R.string.play), res.getString(R.string.extract), res.getString(R.string.replace) };
         
         menuBottomSheet.setIcon(logo);
         menuBottomSheet.setTitle(radioList.getTitle());
@@ -313,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                 	handler.postDelayed(() -> {
             			try {
-                    		AudioPlayer.play(this, radioList);
+                    		player.play(radioList);
                 		} catch (Exception err) {
                 			Toast.makeText(this, "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                 		}
