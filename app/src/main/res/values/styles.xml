@@ -5,9 +5,14 @@
     <item name="colorAccent">@color/colorAccent</item>
 	<item name="colorControlHighlight">@color/colorControlHighlight</item>
 	<item name="colorControlNormal">@color/colorControlNormal</item>
+    <item name="android:colorBackground">@color/colorBackground</item>
     <item name="android:navigationBarColor">@android:color/transparent</item>
   </style>
   
+	<style name="AppTheme.Starting" parent="Theme.SplashScreen">
+    	<item name="postSplashScreenTheme">@style/AppTheme</item>
+        <item name="windowSplashScreenBackground">@color/colorBackground</item>
+    </style>
 	<style name="AppTheme.AppBarOverlay"	parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
 	<style name="AppTheme.PopupOverlay"	parent="ThemeOverlay.MaterialComponents.Dark"/>
     
