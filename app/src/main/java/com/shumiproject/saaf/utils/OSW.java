@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -64,6 +65,7 @@ public class OSW {
             // After that, compress them into a osw file
             File[] tempFiles = new File(tempDir).listFiles();
             int filesLength = tempFiles.length;
+            Arrays.sort(tempFiles);
             
             for (int index = 0; index < filesLength; index++) {
                 callback.onUpdating(index + 1, filesLength);

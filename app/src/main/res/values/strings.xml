@@ -31,6 +31,10 @@
     <string name="replacing">Replacing %s&#8230;</string>
     <string name="updating">Updating contents&#8230; (%1$d/%2$d)</string>
     
+    <!-- More settings -->
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    
     <!-- Others -->
     <string name="yes">YES</string>
     <string name="no">NO</string>
