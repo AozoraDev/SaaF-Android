@@ -37,7 +37,7 @@ import java.util.concurrent.ExecutorService;
 import com.shumiproject.saaf.R;
 import com.shumiproject.saaf.utils.*;
 import com.shumiproject.saaf.adapters.RadioListAdapter;
-import com.shumiproject.saaf.bottomsheet.MenuBottomSheet;
+import com.shumiproject.saaf.bottomsheet.*;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MainActivity extends AppCompatActivity {
@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
             }
             
             return true;
+        } else if (id == R.id.about) {
+            new AboutBottomSheet(this).show();
         }
         
         return super.onOptionsItemSelected(item);
