@@ -40,9 +40,9 @@
     <string name="opensource">Open Source</string>
     <string name="thanks_to">Thanks to</string>
     <string name="thanks_list">
-        - LSDsl for the idx implementation.
+        - LSDsl for the IDX implementation.
     </string>
-    <string name="more_info">This app is licensed under the GNU General Public License v3.0</string>
+    <string name="more_info">Running on %1$s architecture</string>
     
     <!-- You dont need to include this if you want to translate this app -->
     <!-- START -->
@@ -64,4 +64,5 @@
     <string name="later">LATER</string>
     <string name="loading">Loading&#8230;</string>
     <string name="choose_file">Choose a File</string>
+    <string name="unimplemented">This feature is not implemented yet</string>
 </resources>

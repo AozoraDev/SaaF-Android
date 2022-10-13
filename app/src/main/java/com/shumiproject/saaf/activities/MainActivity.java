@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.os.Looper;
 import android.provider.Settings;
 import android.net.Uri;
+import android.text.method.LinkMovementMethod;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,12 +40,14 @@ import com.shumiproject.saaf.utils.*;
 import com.shumiproject.saaf.adapters.RadioListAdapter;
 import com.shumiproject.saaf.bottomsheet.*;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<RadioList> radio;
     private Button button;
     private RecyclerView recyclerView;
     private AlertDialog backPressedDialog, loading;
+    private BottomSheetDialog aboutDialog;
     private Menu menu;
     private Resources res;
     private AudioPlayer player;
@@ -87,7 +90,13 @@ public class MainActivity extends AppCompatActivity {
             
             return true;
         } else if (id == R.id.about) {
-            new AboutBottomSheet(this).show();
+            aboutDialog.show();
+            
+            return true;
+        } else if (id == R.id.settings) {
+            Toast.makeText(this, res.getString(R.string.unimplemented), Toast.LENGTH_LONG).show();
+            
+            return true;
         }
         
         return super.onOptionsItemSelected(item);
@@ -209,6 +218,13 @@ public class MainActivity extends AppCompatActivity {
         .setCancelable(false)
         .setView(View.inflate(this, R.layout.loading, null))
         .create();
+        
+        aboutDialog = new BottomSheetDialog(this);
+        aboutDialog.setContentView(R.layout.about);
+        String moreInfo = res.getString(R.string.more_info);
+        ((TextView) aboutDialog.findViewById(R.id.more)).setText(String.format(moreInfo, System.getProperty("os.arch")));
+        ((TextView) aboutDialog.findViewById(R.id.hyperlinks)).setMovementMethod(LinkMovementMethod.getInstance());
+        aboutDialog.create();
         
         // Someone said using "setHasFixedSize" can optimize the recyclerview.
         recyclerView.setHasFixedSize(true);
