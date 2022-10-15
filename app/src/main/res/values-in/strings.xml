@@ -39,9 +39,7 @@
     <string name="by">Oleh AozoraDev (Shumi Project)</string>
     <string name="opensource">Sumber Terbuka</string>
     <string name="thanks_to">Terima kasih kepada</string>
-    <string name="thanks_list">
-        - LSDsl untuk implementasi fitur IDX nya.
-    </string>
+    <string name="thanks_list">- LSDsl untuk implementasi fitur IDX nya.\n- FontAwesome untuk ikon branding nya.</string>
     <string name="more_info">Berjalan pada arsitektur %s</string>
     
     <!-- Others -->

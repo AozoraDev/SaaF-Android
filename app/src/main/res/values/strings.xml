@@ -39,22 +39,11 @@
     <string name="by">By AozoraDev (Shumi Project)</string>
     <string name="opensource">Open Source</string>
     <string name="thanks_to">Thanks to</string>
-    <string name="thanks_list">
-        - LSDsl for the IDX implementation.
-    </string>
+    <string name="thanks_list">- LSDsl for the IDX feature implementation.\n- FontAwesome for the branding icons.</string>
     <string name="more_info">Running on %s architecture</string>
     
     <!-- You dont need to include this if you want to translate this app -->
-    <!-- START -->
-    <string name="opensource_list">
-        - <a href="https://android.googlesource.com/platform/frameworks/support">Android Jetpack</a> (Apache License 2.0)\n
-        - <a href="https://github.com/material-components/material-components-android">Material</a> (Apache License 2.0)\n
-        - <a href="https://sourceforge.net/projects/ini4j/">ini4j</a> (Apache License 2.0)\n
-        - <a href="https://github.com/srikanth-lingala/zip4j">zip4j</a> (Apache License 2.0)\n
-        - <a href="https://github.com/square/okhttp">OkHttp3</a> (Apache License 2.0)\n
-        - <a href="https://github.com/square/leakcanary">LeakCanary</a> (Apache License 2.0)
-    </string>
-    <!-- END -->
+    <string name="opensource_list">- <a href="https://android.googlesource.com/platform/frameworks/support">Android Jetpack</a> (Apache License 2.0)\n- <a href="https://github.com/material-components/material-components-android">Material</a> (Apache License 2.0)\n- <a href="https://sourceforge.net/projects/ini4j/">ini4j</a> (Apache License 2.0)\n- <a href="https://github.com/srikanth-lingala/zip4j">zip4j</a> (Apache License 2.0)\n- <a href="https://github.com/square/okhttp">OkHttp3</a> (Apache License 2.0)\n- <a href="https://github.com/square/leakcanary">LeakCanary</a> (Apache License 2.0)</string>
     
     <!-- Others -->
     <string name="yes">YES</string>

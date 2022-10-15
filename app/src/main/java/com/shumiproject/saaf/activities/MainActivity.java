@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.text.method.LinkMovementMethod;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
     private final int DELAY = 200;
     private final String[] permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
     private final int[] resources = { R.drawable.play, R.drawable.download, R.drawable.refresh };
+    
+    // Visit us!
+    final String GITHUB = "https://github.com/Shumi-Project/SaaF-Android/";
+    final String WEBSITE = "https://shumi-project.github.io/";
+    final String DISCORD = "https://discord.gg/aHHVRu7fKZ";
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -222,8 +228,14 @@ public class MainActivity extends AppCompatActivity {
         aboutDialog = new BottomSheetDialog(this);
         aboutDialog.setContentView(R.layout.about);
         String moreInfo = res.getString(R.string.more_info);
+        
         ((TextView) aboutDialog.findViewById(R.id.more)).setText(String.format(moreInfo, System.getProperty("os.arch")));
-        ((TextView) aboutDialog.findViewById(R.id.hyperlinks)).setMovementMethod(LinkMovementMethod.getInstance());
+        ((TextView) aboutDialog.findViewById(R.id.hyperlinks)).setMovementMethod(LinkMovementMethod.getInstance()); // Make the hyperlink clickable
+        
+        aboutDialog.findViewById(R.id.github).setOnClickListener(v -> open(GITHUB));
+        aboutDialog.findViewById(R.id.website).setOnClickListener(v -> open(WEBSITE));
+        aboutDialog.findViewById(R.id.discord).setOnClickListener(v -> open(DISCORD));
+        
         aboutDialog.create();
         
         // Someone said using "setHasFixedSize" can optimize the recyclerview.
@@ -245,6 +257,13 @@ public class MainActivity extends AppCompatActivity {
     
     // Methods with full of brackets
     // I hate it
+    private void open(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+        
+    }
+    
     private void open(Intent intent) {
         String path = intent.getStringExtra("path");
         String station = intent.getStringExtra("station");

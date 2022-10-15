@@ -44,6 +44,37 @@
     </LinearLayout>
     
     <LinearLayout
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="15dp">
+        
+        <ImageView
+            android:id="@+id/discord"
+            android:layout_height="30dp"
+            android:layout_marginEnd="15dp"
+            android:layout_width="30dp"
+            android:src="@drawable/discord"/>
+        
+        <ImageView
+            android:id="@+id/github"
+            android:layout_height="30dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_width="30dp"
+            android:src="@drawable/github"/>
+        
+        <ImageView
+            android:id="@+id/website"
+            android:layout_height="30dp"
+            android:layout_marginStart="15dp"
+            android:layout_width="30dp"
+            android:src="@drawable/globe"/>
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -110,8 +141,8 @@
         android:padding="15dp">
         
         <TextView
-            android:id="@+id/more"
             android:gravity="center"
+            android:id="@+id/more"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="@string/more_info"
