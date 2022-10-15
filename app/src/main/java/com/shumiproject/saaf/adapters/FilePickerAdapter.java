@@ -59,7 +59,6 @@ public class FilePickerAdapter extends RecyclerView.Adapter<FilePickerAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        viewGroup.setMotionEventSplittingEnabled(false);
         View view = LayoutInflater.from(context).inflate(R.layout.layout_filepicker, viewGroup, false);
         
         return new ViewHolder(context, view);

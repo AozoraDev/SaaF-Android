@@ -48,8 +48,6 @@ public class MenuBottomSheet {
         LinearLayout layout = (LinearLayout) dialog.findViewById(R.id.layout);
         // Clear all childs to prevent more items
         layout.removeAllViews();
-        // Fix multiple touches
-        layout.setMotionEventSplittingEnabled(false);
         
         for (int index = 0; index < items.length; index++) {
             // Icon

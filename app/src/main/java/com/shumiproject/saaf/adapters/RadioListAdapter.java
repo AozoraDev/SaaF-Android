@@ -56,7 +56,6 @@ public class RadioListAdapter extends RecyclerView.Adapter<RadioListAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        viewGroup.setMotionEventSplittingEnabled(false);
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_list, viewGroup, false);
 
         return new ViewHolder(view);

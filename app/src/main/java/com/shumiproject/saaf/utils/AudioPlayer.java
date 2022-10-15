@@ -59,7 +59,6 @@ public class AudioPlayer {
             artist.setText(radioList.getArtist());
             
             if (parent.getVisibility() == View.GONE) parent.setVisibility(View.VISIBLE);
-            ((LinearLayout) playerDialog.findViewById(R.id.deco)).setMotionEventSplittingEnabled(false); // Fix multiple touches
             playerDialog.setCanceledOnTouchOutside(false);
             playerDialog.show();
             
