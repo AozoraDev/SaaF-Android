@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">SaaF Android</string>
+    
+    <!-- Button -->
+    <string name="open_osw">Buka OSW</string>
+    <string name="create_idx">Buat IDX</string>
+    
+    <!-- Button on menu -->
+    <string name="play">Mainkan</string>
+    <string name="extract">Ekstrak</string>
+    <string name="replace">Timpa</string>
+    
+    <!-- Menu -->
+    <string name="title">Judul</string>
+    <string name="artist">Artis</string>
+    <string name="no_time">00:00</string>
+    
+    <!-- For toast and dialog -->
+    <string name="idx_created">%s.osw.idx berhasil dibuat!</string>
+    <string name="extracted">%1$s telah diekstrak ke %2$s</string>
+    <string name="replaced">%s berhasil ditimpa!</string>
+    
+    <string name="update_available">SaaF Android v%s telah tersedia!</string>
+    <string name="storage_permission">App ini membutuhkan akses ke penyimpanan agar dapat berfungsi dengan baik. Mohon izinkan akses ke penyimpanan.</string>
+    <string name="close_station">Apakah kamu ingin menutup stasiun %s?</string>
+    <string name="close_app">Apakah kamu yakin ingin menutup app ini?</string>
+    <string name="confirm_replace">Apakah kamu yakin ingin menimpa %s?</string>
+    
+    <!-- Loading -->
+    <string name="loading_osw">Memuat %s&#8230;</string>
+    <string name="replacing">Menimpa %s&#8230;</string>
+    <string name="updating">Memperbarui konten&#8230; (%1$d/%2$d)</string>
+    
+    <!-- More settings -->
+    <string name="settings">Pengaturan</string>
+    <string name="about">Tentang</string>
+    
+    <!-- About -->
+    <string name="by">Oleh AozoraDev (Shumi Project)</string>
+    <string name="opensource">Sumber Terbuka</string>
+    <string name="thanks_to">Terima kasih kepada</string>
+    <string name="thanks_list">
+        - LSDsl untuk implementasi fitur IDX nya.
+    </string>
+    <string name="more_info">Berjalan pada arsitektur %s</string>
+    
+    <!-- Others -->
+    <string name="yes">IYA</string>
+    <string name="no">TIDAK</string>
+    <string name="ok">OK</string>
+    <string name="update">PERBARUI</string>
+    <string name="later">NANTI</string>
+    <string name="loading">Memuat&#8230;</string>
+    <string name="choose_file">Pilih Filenya</string>
+    <string name="unimplemented">Fitur ini belum diimplementasikan</string>
+</resources>

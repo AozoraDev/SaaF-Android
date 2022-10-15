@@ -42,7 +42,7 @@
     <string name="thanks_list">
         - LSDsl for the IDX implementation.
     </string>
-    <string name="more_info">Running on %1$s architecture</string>
+    <string name="more_info">Running on %s architecture</string>
     
     <!-- You dont need to include this if you want to translate this app -->
     <!-- START -->
