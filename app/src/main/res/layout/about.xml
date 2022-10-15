@@ -47,29 +47,56 @@
         android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:padding="15dp">
+        android:padding="10dp">
         
-        <ImageView
+        <LinearLayout
+            android:background="@drawable/circle_button"
             android:id="@+id/discord"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
-            android:layout_width="30dp"
-            android:src="@drawable/discord"/>
+            android:padding="3dp"
+            android:layout_width="wrap_content">
+            
+            <ImageView
+                android:layout_height="33dp"
+                android:layout_width="33dp"
+                android:src="@drawable/discord"/>
+            
         
-        <ImageView
+        </LinearLayout>
+        
+        <LinearLayout
+            android:background="@drawable/circle_button"
             android:id="@+id/github"
-            android:layout_height="30dp"
+            android:padding="3dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:layout_marginStart="15dp"
-            android:layout_width="30dp"
-            android:src="@drawable/github"/>
+            android:layout_width="wrap_content">
+            
+            <ImageView
+                android:layout_height="33dp"
+                android:layout_width="33dp"
+                android:src="@drawable/github"/>
+            
         
-        <ImageView
+        </LinearLayout>
+        
+        <LinearLayout
+            android:background="@drawable/circle_button"
             android:id="@+id/website"
-            android:layout_height="30dp"
+            android:padding="3dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_width="30dp"
-            android:src="@drawable/globe"/>
+            android:layout_width="wrap_content">
+            
+            <ImageView
+                android:layout_height="33dp"
+                android:layout_width="33dp"
+                android:src="@drawable/globe"/>
+            
+        
+        </LinearLayout>
         
     
     </LinearLayout>
