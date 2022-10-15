@@ -37,6 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
 import com.shumiproject.saaf.R;
+import com.shumiproject.saaf.BuildConfig;
 import com.shumiproject.saaf.utils.*;
 import com.shumiproject.saaf.adapters.RadioListAdapter;
 import com.shumiproject.saaf.bottomsheet.*;
@@ -229,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         aboutDialog.setContentView(R.layout.about);
         String moreInfo = res.getString(R.string.more_info);
         
-        ((TextView) aboutDialog.findViewById(R.id.more)).setText(String.format(moreInfo, System.getProperty("os.arch")));
+        ((TextView) aboutDialog.findViewById(R.id.more)).setText(String.format(moreInfo, BuildConfig.VERSION_NAME, System.getProperty("os.arch")));
         ((TextView) aboutDialog.findViewById(R.id.hyperlinks)).setMovementMethod(LinkMovementMethod.getInstance()); // Make the hyperlink clickable
         
         aboutDialog.findViewById(R.id.github).setOnClickListener(v -> open(GITHUB));

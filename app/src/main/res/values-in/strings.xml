@@ -40,7 +40,7 @@
     <string name="opensource">Sumber Terbuka</string>
     <string name="thanks_to">Terima kasih kepada</string>
     <string name="thanks_list">- LSDsl untuk implementasi fitur IDX.\n- FontAwesome untuk ikon branding.</string>
-    <string name="more_info">Berjalan pada arsitektur %s</string>
+    <string name="more_info">v%1$s\nBerjalan pada arsitektur %2$s</string>
     
     <!-- Others -->
     <string name="yes">IYA</string>
