@@ -49,10 +49,83 @@
     </LinearLayout>
     
     <LinearLayout
-        android:id="@+id/layout"
+        android:id="@+id/menu"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:visibility="gone">
+        
+        <LinearLayout
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="12dp"
+            android:tag="play">
+            
+            <ImageView
+                android:layout_height="25dp"
+                android:layout_width="25dp"
+                android:src="@drawable/play"/>
+            
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:text="@string/play"
+                android:textStyle="bold"/>
+            
+        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="12dp"
+            android:tag="extract">
+            
+            <ImageView
+                android:layout_height="25dp"
+                android:layout_width="25dp"
+                android:src="@drawable/download"/>
+            
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:text="@string/extract"
+                android:textStyle="bold"/>
+            
+        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="12dp"
+            android:tag="replace">
+            
+            <ImageView
+                android:layout_height="25dp"
+                android:layout_width="25dp"
+                android:src="@drawable/refresh"/>
+            
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:text="@string/replace"
+                android:textStyle="bold"/>
+            
+        
+        </LinearLayout>
+        
+    
+    </LinearLayout>
     
     <LinearLayout
         android:id="@+id/player"

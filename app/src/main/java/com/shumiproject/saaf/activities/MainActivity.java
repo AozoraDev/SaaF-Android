@@ -23,10 +23,8 @@ import android.os.Environment;
 import android.os.Looper;
 import android.provider.Settings;
 import android.net.Uri;
-import android.text.method.LinkMovementMethod;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.ImageView;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,19 +35,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
 import com.shumiproject.saaf.R;
-import com.shumiproject.saaf.BuildConfig;
 import com.shumiproject.saaf.utils.*;
 import com.shumiproject.saaf.adapters.RadioListAdapter;
 import com.shumiproject.saaf.bottomsheet.*;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<RadioList> radio;
     private Button button;
     private RecyclerView recyclerView;
     private AlertDialog backPressedDialog, loading;
-    private BottomSheetDialog aboutDialog;
+    private AboutBottomSheet aboutDialog;
     private Menu menu;
     private Resources res;
     private AudioPlayer player;
@@ -58,11 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private final int DELAY = 200;
     private final String[] permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
     private final int[] resources = { R.drawable.play, R.drawable.download, R.drawable.refresh };
-    
-    // Visit us!
-    final String GITHUB = "https://github.com/Shumi-Project/SaaF-Android/";
-    final String WEBSITE = "https://shumi-project.github.io/";
-    final String DISCORD = "https://discord.gg/aHHVRu7fKZ";
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -226,17 +217,7 @@ public class MainActivity extends AppCompatActivity {
         .setView(View.inflate(this, R.layout.loading, null))
         .create();
         
-        aboutDialog = new BottomSheetDialog(this);
-        aboutDialog.setContentView(R.layout.about);
-        String moreInfo = res.getString(R.string.more_info);
-        
-        ((TextView) aboutDialog.findViewById(R.id.more)).setText(String.format(moreInfo, BuildConfig.VERSION_NAME, System.getProperty("os.arch")));
-        ((TextView) aboutDialog.findViewById(R.id.hyperlinks)).setMovementMethod(LinkMovementMethod.getInstance()); // Make the hyperlink clickable
-        
-        aboutDialog.findViewById(R.id.github).setOnClickListener(v -> open(GITHUB));
-        aboutDialog.findViewById(R.id.website).setOnClickListener(v -> open(WEBSITE));
-        aboutDialog.findViewById(R.id.discord).setOnClickListener(v -> open(DISCORD));
-        
+        aboutDialog = new AboutBottomSheet(this);
         aboutDialog.create();
         
         // Someone said using "setHasFixedSize" can optimize the recyclerview.
@@ -258,13 +239,6 @@ public class MainActivity extends AppCompatActivity {
     
     // Methods with full of brackets
     // I hate it
-    private void open(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        startActivity(intent);
-        
-    }
-    
     private void open(Intent intent) {
         String path = intent.getStringExtra("path");
         String station = intent.getStringExtra("station");
@@ -350,14 +324,13 @@ public class MainActivity extends AppCompatActivity {
     
     private void menuDialog (MenuBottomSheet menuBottomSheet, RadioList radioList) {
         final int logo = (RadioList.stationLogo != 0) ? RadioList.stationLogo : R.drawable.utp;
-        final String[] items = { res.getString(R.string.play), res.getString(R.string.extract), res.getString(R.string.replace) };
         
         menuBottomSheet.setIcon(logo);
         menuBottomSheet.setTitle(radioList.getTitle());
         menuBottomSheet.setArtist(radioList.getArtist());
-        menuBottomSheet.setItems(items, resources, v -> {
-            switch ((int) v.getTag()) {
-                case 0:
+        menuBottomSheet.setOnClickListener(v -> {
+            switch ((String) v.getTag()) {
+                case "play":
                 	handler.postDelayed(() -> {
             			try {
                     		player.play(radioList);
@@ -367,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
                         menuBottomSheet.dismiss();
             		}, DELAY);
                 return;
-                case 1:
+                case "extract":
                 	handler.postDelayed(() -> {
             			try {
                 			OSW.extract(radioList);
@@ -383,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                         menuBottomSheet.dismiss();
             		}, DELAY);
                 return;
-                case 2:
+                case "replace":
                 	handler.postDelayed(() -> {
                 		Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
                 		intent.putExtra("extension", ".mp3");
