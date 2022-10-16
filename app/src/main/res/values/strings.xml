@@ -1,20 +1,57 @@
 <resources>
     <string name="app_name">SaaF Android</string>
+    
+    <!-- Button -->
     <string name="open_osw">Open OSW</string>
-    <string name="loading">Loading&#8230;</string>
     <string name="create_idx">Create IDX</string>
-    <string name="about">About</string>
+    
+    <!-- Button on menu -->
     <string name="play">Play</string>
-    <string name="discord">Discord</string>
-    <string name="youtube">Youtube</string>
-    <string name="github">Github</string>
-    <string name="twitter">Twitter</string>
-    <string name="pause">Pause</string>
-    <string name="no_time">--:--</string>
-    <string name="donate">Donate Me!</string>
-    <string name="show_vi">Show Visualizer</string>
-    <string name="about_name">Aozora</string>
-    <string name="set_theme">Set Theme</string>
+    <string name="extract">Extract</string>
+    <string name="replace">Replace</string>
+    
+    <!-- Menu -->
+    <string name="title">Title</string>
+    <string name="artist">Artist</string>
+    <string name="no_time">00:00</string>
+    
+    <!-- For toast and dialog -->
+    <string name="idx_created">%s.osw.idx created successfully!</string>
+    <string name="extracted">%1$s has been extracted to %2$s</string>
+    <string name="replaced">%s have been replaced!</string>
+    
+    <string name="update_available">SaaF Android v%s is available!</string>
+    <string name="storage_permission">This app requires storage access to work properly. Please grant storage permission.</string>
+    <string name="close_station">Do you want to close %s station?</string>
+    <string name="close_app">Are you sure you want to close this app?</string>
+    <string name="confirm_replace">Are you sure you want to replace %s?</string>
+    
+    <!-- Loading -->
+    <string name="loading_osw">Loading %s&#8230;</string>
+    <string name="replacing">Replacing %s&#8230;</string>
+    <string name="updating">Updating contents&#8230; (%1$d/%2$d)</string>
+    
+    <!-- More settings -->
     <string name="settings">Settings</string>
-    <string name="about_title">(Owner of Shumi Project)</string>
+    <string name="about">About</string>
+    
+    <!-- About -->
+    <string name="by">By AozoraDev (Shumi Project)</string>
+    <string name="opensource">Open Source</string>
+    <string name="thanks_to">Thanks to</string>
+    <string name="thanks_list">- LSDsl for the IDX feature implementation.\n- FontAwesome for the branding icons.</string>
+    <string name="more_info">v%1$s\nRunning on %2$s architecture</string>
+    
+    <!-- You dont need to include this if you want to translate this app -->
+    <string name="opensource_list">- <a href="https://android.googlesource.com/platform/frameworks/support">Android Jetpack</a> (Apache License 2.0)\n- <a href="https://github.com/material-components/material-components-android">Material</a> (Apache License 2.0)\n- <a href="https://sourceforge.net/projects/ini4j/">ini4j</a> (Apache License 2.0)\n- <a href="https://github.com/srikanth-lingala/zip4j">zip4j</a> (Apache License 2.0)\n- <a href="https://github.com/square/okhttp">OkHttp3</a> (Apache License 2.0)\n- <a href="https://github.com/square/leakcanary">LeakCanary</a> (Apache License 2.0)</string>
+    
+    <!-- Others -->
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="ok">OK</string>
+    <string name="update">UPDATE</string>
+    <string name="later">LATER</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="choose_file">Choose a File</string>
+    <string name="unimplemented">This feature is not implemented yet</string>
 </resources>

@@ -1,14 +1,14 @@
 {
- "versionName": "1.0-alpha2",
+ "versionName": "1.0-alpha3",
  "versionCode": 1,
  "changelog": [
-   "- Show the file name in list.",
-   "- Show only audio title when selecting audio.",
-   "- Fix the app always asking storage permission on Android 10.",
-   "- Pauses the radio player when leaving the app (such as during a phone call).",
-   "- Dismiss radio player when back button is pressed.",
-   "- Checks if there is an update every time you open the app.",
-   "- Added copy title option when selecting audio.",
-   "- Fix the app cannot open the file from Download or Media."
+   "- SaaF Android is now owned by Shumi Project. You'll need to download the latest version on Github and delete the version you currently have.",
+   "- Added built-in file chooser.",
+   "- Added replace feature.",
+   "- Added splashscreen.",
+   "- Changed menu and player style.",
+   "- Updated UncaughtException handler.",
+   "- Fixed slow file loading when the app checking for update.",
+   "- Fixed multiple touches."
   ]
 }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color  name="colorPrimary">#B00B69</color>
-    <color  name="colorPrimaryDark">#B00B69</color>
-    <color  name="colorAccent">#B00B69</color>
-    <color  name="colorControlHighlight">#B00B69</color>
-    <color  name="colorControlNormal">#B00B69</color>
+	<color  name="colorBottomSheetBackground">#353535</color>
+    <color  name="colorBackground">#121212</color>
+    <color  name="colorPrimary">#7C72A8</color>
+    <color  name="colorPrimaryDark">#7C72A8</color>
+    <color  name="colorAccent">#7C72A8</color>
+    <color  name="colorControlHighlight">#7C72A8</color>
+    <color  name="colorControlNormal">#FFFFFF</color>
 </resources>

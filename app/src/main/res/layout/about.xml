@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+    
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:src="@drawable/grapple"/>
+    
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+        
+        <ImageView
+            android:layout_height="70dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="70dp"
+            android:src="@mipmap/ic_launcher"/>
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="#ffffffff"
+            android:textSize="20sp"/>
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/by"
+            android:textColor="#baffffff"
+            android:textSize="13sp"/>
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="10dp">
+        
+        <LinearLayout
+            android:background="@drawable/circle_button"
+            android:id="@+id/discord"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:padding="3dp"
+            android:layout_width="wrap_content">
+            
+            <ImageView
+                android:layout_height="33dp"
+                android:layout_width="33dp"
+                android:src="@drawable/discord"/>
+            
+        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:background="@drawable/circle_button"
+            android:id="@+id/github"
+            android:padding="3dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_width="wrap_content">
+            
+            <ImageView
+                android:layout_height="33dp"
+                android:layout_width="33dp"
+                android:src="@drawable/github"/>
+            
+        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:background="@drawable/circle_button"
+            android:id="@+id/website"
+            android:padding="3dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_width="wrap_content">
+            
+            <ImageView
+                android:layout_height="33dp"
+                android:layout_width="33dp"
+                android:src="@drawable/globe"/>
+            
+        
+        </LinearLayout>
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="7dp">
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/opensource"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
+        
+        <View
+            android:background="@android:color/darker_gray"
+            android:layout_height="1dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"/>
+        
+        <TextView
+            android:id="@+id/hyperlinks"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/opensource_list"/>
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="7dp">
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/thanks_to"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
+        
+        <View
+            android:background="@android:color/darker_gray"
+            android:layout_height="1dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"/>
+        
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/thanks_list"/>
+        
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:padding="15dp">
+        
+        <TextView
+            android:gravity="center"
+            android:id="@+id/more"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/more_info"
+            android:textSize="10sp"/>
+        
+    
+    </LinearLayout>
+    
+
+</LinearLayout>
