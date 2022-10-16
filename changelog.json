@@ -5,10 +5,10 @@
    "- SaaF Android is now owned by Shumi Project. You'll need to download the latest version on Github and delete the version you currently have.",
    "- Added built-in file chooser.",
    "- Added replace feature.",
-   "- Added splashscreen",
+   "- Added splashscreen.",
    "- Changed menu and player style.",
    "- Updated UncaughtException handler.",
    "- Fixed slow file loading when the app checking for update.",
-   "- Fixed multiple touches"
+   "- Fixed multiple touches."
   ]
 }
